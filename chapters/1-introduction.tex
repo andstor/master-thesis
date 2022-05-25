@@ -1,0 +1,35 @@
+\chapter{Introduction}
+
+\begin{comment}
+*Some sentences (two to three) of 
+    Research background 
+    Research motivation 
+    Summarize the state of the art and state of the practice 
+    To argue that your study is the world most interesting topic
+    Research questions
+    Research methods 
+    Research results and main contributions
+*Structure of the thesis
+\end{comment}
+
+
+The art of computer programming is an ever-evolving field. The field has transformed from punchcards to writing assembly code. With the introduction of the C programming language, the field sky-rocketed. Since then, a number of new languages have been introduced, and the art of programming has become a complex and ever-changing field. Today, computer systems are all around us and permeates every aspect of our lives. However, constructing such systems is a hard and time-consuming task. A number of tools and methods have been developed to increase the productivity of programmers, as well as to making programming more accessible to everyone. 
+
+Recent advancements in large-scale transformer-based language models have successfully been used for generating code. Automatic code generation is a new and exciting technology that opens up a new world of possibilities for software developers. One example is GitHub Copilot. Copilot uses these models to generate code for a given programming language. The tool is based on a deep learning model, named Codex by OpenAI, that has been trained on a large corpus of code. This enables developers to significantly speed up productivity. In addition, it makes programming more accessible to everyone by significantly reducing the threshold for using various language syntax' and libraries. Another recent contribution is AlphaCode, a code generation tool for generating novel code solutions to programming competitions.
+
+A machine learning model is only as good as the data it is fed. These large-scale transformers needs huge amounts of data in  order to be trained. Normally, this data is collected from all available open source code. A problem with this, is that a lot of this code contains security problems. This can be everything from exposed API keys, to exploitable vulnerabilities. Autocomplete tools like GitHub Copilot must therefore be used with extreme caution.
+
+In order to better secure automatic code generation, this thesis purposes a novel approach for use of \acrshort{ml} models in large-scale transformer based code generation pipelines to ensure secure generated code. In order to demonstrate the approach, this thesis will focus on generating secure code for smart contracts (Solidity). Smart contracts have an exceptional high demand for security, as vulnerabilities can not be fixed after a contract is deployed. Due to most blockchains' monetary and anonymous nature, they pose as a desirable target for adversaries and manipulators \cite{atzei2017survey}. Further, \acrshortpl{sc} tend to  be rather short and simple, making a good fit for generated code. The research questions addressed in this thesis are:
+\begin{itemize}
+    \item RQ1 How to generate secure code with transformer-based language models?
+    \item RQ2 How to generate smart contract code?
+\end{itemize}
+
+The specific contributions of this thesis are as follows:
+\begin{itemize}
+    \item Fine-tuned transformer-based language model for \acrlong{sc} code generation.
+    \item Novel secure code generation method.
+    \item Identification of open issues, possible solutions to mitigate these issues, and future directions to advance the state of research in the domain.
+\end{itemize}
+
+The rest of this paper is organized as follows. \cref{chap:background} describes the background of the project. The research related to this document is commented in \cref{chap:related-work}. \cref{chap:research-method} describes the methods used to implement the secure code generation. \cref{chap:results} describes the results of the project, and \cref{chap:discussion} discuss the findings. Identified future work is presented in \cref{chap:future-work}. \cref{chap:conclusion} presents final remarks and concludes the thesis.

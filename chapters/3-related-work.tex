@@ -1,0 +1,101 @@
+\chapter{Related work}
+\label{chap:related-work}
+
+Make a literature review based on code synthesis / code auto completion. This would include both the main topic "code synthesis", as well as code comments for optimal code completion.
+
+Code completion vs code synthesis vs automatic code generation vs intellisense.
+
+Python: docstring  - structured comment first line under function  definition
+C++: Doxygen
+Java: javadoc
+JS: JSDoc
+
+TS=("code" AND ("completion" OR "generation" OR "synthesis" ))
+
+TS=("code" AND ("auto-completion" OR "generation" OR "synthesis" ) AND comment)
+\section{Code synthesis}
+
+
+
+
+
+
+
+
+\section{Code comment analysis}
+
+Several papers on generating code comments from source code are available. The following is a list of the most popular papers.
+
+However, to the best of my knowledge, there is no paper investigating how to best write comments for auto-generating code. There are however, 
+
+
+
+\section{OLD}
+This chapter provides a short overview of state-of-the-art secondary studies related to \acrfull{sc} vulnerability analysis and detection. This is various literature that presents a survey or literature review nature.
+
+\newcommand*\emptycirc[1][1ex]{\tikz\draw (0,0) circle (#1);} 
+\newcommand*\halfcirc[1][1ex]{%
+  \begin{tikzpicture}
+  \draw[fill] (0,0)-- (90:#1) arc (90:270:#1) -- cycle ;
+  \draw (0,0) circle (#1);
+  \end{tikzpicture}}
+\newcommand*\fullcirc[1][1ex]{\tikz\fill (0,0) circle (#1);} 
+
+%\begin{sidewaystable}
+    \begin{ThreePartTable}
+        \newcolumntype{Y}{>{\centering\arraybackslash}X}
+        \newcolumntype{R}{>{\raggedright\arraybackslash}X}
+        \def\arraystretch{1.5}
+        \setlength\tabcolsep{6pt} % <--- important, (default 6pt)
+        \setlength{\LTleft}{-20cm plus -1fill}
+        \setlength{\LTright}{\LTleft}
+        \footnotesize
+        \begin{center}
+        \begin{TableNotes}
+            \item[a] \label{tn:ml-name} Name of the tool or method. If no name exists, a short description or "--" is used.
+        \end{TableNotes}
+        \keepXColumns
+        \begin{tabularx}{1\textwidth}{clRRRRR}
+                \caption{Existing ML-based smart contract vulnerability detection tools.}\label{tab:ml-tools}\\
+                \toprule
+                \textbf{Refs.} & \textbf{Year} & \textbf{Name.\tnotex{tn:ml-name}} & \textbf{Method} & \textbf{Feature engineering} &  \textbf{Capability} & \textbf{Input}\\
+                \hline
+                \endfirsthead
+                \caption{(\textit{Continued}) Existing static smart contract vulnerability detection tools.}\\
+                \toprule
+                \textbf{Refs.} & \textbf{Year} & \textbf{Name.\tnotex{tn:ml-name}} & \textbf{Method} & \textbf{Feature engineering} &  \textbf{Capability} & \textbf{Input}\\
+                \hline
+            \endhead
+                \midrule
+                \multicolumn{7}{r}{\small(\textit{Continued on next page})}\\
+            \endfoot
+                \insertTableNotes\\
+            \endlastfoot
+            
+            \cite{huang2018hunting} & \citeyear{huang2018hunting} & Color-inspried & \acrshort{cnn} & RGB image  & Multi-label & EVM Bytecode\\
+            \cite{tann2019safer} & \citeyear{tann2019safer} & Sequential learning & \acrshort{lstm} & Opcode embedding & Binary decision & EVM Opcode\\
+            \cite{momeni2019machine} & \citeyear{momeni2019machine} & -- & \acrshort{ast} & \acrshort{ast} statistics & Multi binary decision & Solidity \\
+            \cite{gogineni2020multiclass} & \citeyear{gogineni2020multiclass} & NLP-inspried & \acrshort{awd-lstm} & Opcode embedding & Multi-class & EVM Opcode\\
+            \cite{zhuang2020smart} & \citeyear{zhuang2020smart} & Graph NN-based & \acrshort{gnn} & Normalized Graph & Multi-class & Solidity\\
+            \cite{xing2020anew} & \citeyear{xing2020anew} & Slicing matrix & \acrshort{cnn}, \acrshort{rf} & \# opcode occurrence & Multi-class & EVM bytecode\\
+            \cite{qian2020towards} & \citeyear{qian2020towards} & -- &  \acrshort{att-blstm} & Contract snippet, word embedding & Reentrancy & Solidity \\
+            \cite{xu2021security} & \citeyear{xu2021security} & -- & \acrshort{ast} & \# common child nodes & Multi-class & Solidity \\
+            \cite{mi2021vscl} & \citeyear{mi2021vscl} & VSCL & \acrshort{dnn} & CFG, N-gram model & Binary decision & EVM bytecode\\
+            \cite{zhao2021gan} & \citeyear{zhao2021gan} & -- & \acrshort{gan} & Code embedding & Binary decision & EVM bytecode\\
+            \cite{lutz2021escort} & \citeyear{lutz2021escort} & ESCORT & \acrshort{lstm}, transfer learning & Word embedding & Multi-label & EVM Bytecode\\
+            \cite{wang2021contractward} & \citeyear{wang2021contractward} & ContractWard & \acrshort{dt} & Bigram model & Binary decision & EVM Opcode\\
+            
+            \bottomrule
+        \end{tabularx}
+        \end{center}
+    
+    \end{ThreePartTable}
+    %\end{sidewaystable}
+
+
+\section{Program synthesis}
+\label{sec:program-synthesis}
+
+\section{Code comment analysis}
+\label{sec:code-comment-analysis}
+

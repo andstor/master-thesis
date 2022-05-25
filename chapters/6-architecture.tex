@@ -1,0 +1,101 @@
+\chapter{Architecture}
+\label{chap:architecture}
+This chapter presents the results of this thesis. The chapter starts with ... the research questions defined in \cref{sec:research-questions}.
+
+Why did I select this model?
+
+\subsection{GPT-J}
+\label{sec:gpt-j}
+
+
+\begin{table}
+    %\newcolumntype{Y}{>{\centering\arraybackslash}X}
+    \def\arraystretch{1.5}
+    \small
+    \centering
+    \caption{Hyper parameters for GPT-J model}
+    \label{tab:inclusion-exclusion-criteria}
+    \begin{tabularx}{\textwidth}{XX}
+        \toprule
+        \textbf{Hyper parameter} & \\
+        \midrule
+        \_name\_or\_path & EleutherAI/gpt-j-6B\\
+        activation\_function & gelu\_new\\
+        architectures & GPTJForCausalLM\\
+        attn\_pdrop & 0.0\\
+        bos\_token\_id & 50256\\
+        embd\_pdrop & 0.0\\
+        eos\_token\_id & 50256\\
+        gradient\_checkpointing & false\\
+        initializer\_range & 0.02\\
+        layer\_norm\_epsilon & 1e-05\\
+        model\_type & gptj\\
+        n\_embd & 4096\\
+        n\_head & 16\\
+        n\_inner & null\\
+        n\_layer & 28\\
+        n\_positions & 2048\\
+        resid\_pdrop & 0.0\\
+        rotary & true\\
+        rotary\_dim & 64\\
+        scale\_attn\_weights & true\\
+        summary\_activation & null\\
+        summary\_first\_dropout & 0.1\\
+        summary\_proj\_to\_labels & true\\
+        summary\_type & cls\_index\\
+        summary\_use\_proj & true\\
+        tie\_word\_embeddings & false\\
+        tokenizer\_class & "GPT2Tokenizer"\\
+        transformers\_version & "4.19.0.dev0"\\
+        use\_cache & true\\
+        vocab\_size & 50400\\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+
+\begin{table}
+    %\newcolumntype{Y}{>{\centering\arraybackslash}X}
+    \def\arraystretch{1.5}
+    \small
+    \centering
+    \caption{Inclusion and exclusion criteria.}
+    \label{tab:inclusion-exclusion-criteria}
+    \begin{tabularx}{\textwidth}{XX}
+        \toprule
+        \textbf{Hyper parameter} & \\
+        \midrule
+        stage & 2\\
+        contiguous\_gradients & true\\
+        reduce\_scatter & true\\
+        reduce\_bucket\_size & 2.000000e+08\\
+        allgather\_partitions & true\\
+        allgather\_bucket\_size & 2.000000e+08\\
+        overlap\_comm & true\\
+        load\_from\_fp32\_weights & true\\
+        elastic\_checkpoint & false\\
+        offload\_param & null\\
+        \midrule
+        offload\_optimizer & device: null\\
+        & nvme\_path: null\\
+        & buffer\_count: 4\\
+        & pin\_memory: false\\
+        & pipeline\_read: false\\
+        & pipeline\_write: false\\
+        & fast\_init: false\\
+        \midrule
+        sub\_group\_size & 1.000000e+09\\
+        prefetch\_bucket\_size & 5.000000e+07\\
+        param\_persistence\_threshold & 1.000000e+05\\
+        max\_live\_parameters & 1.000000e+09\\
+        max\_reuse\_distance & 1.000000e+09\\
+        gather\_16bit\_weights\_on\_model\_save & false\\
+        ignore\_unused\_parameters & true\\
+        round\_robin\_gradients & false\\
+        legacy\_stage1 & false\\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+
+

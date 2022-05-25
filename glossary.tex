@@ -1,0 +1,158 @@
+
+\usepackage{xparse}
+\DeclareDocumentCommand{\newdualentry}{ O{} O{} m m m m } {
+    \newglossaryentry{gls-#3}{name={#5},text={#5\glsadd{#3}},
+        description={#6},#1
+    }
+    \newacronym[see={[Glossary:]{gls-#3}},name={#4},#2]{#3}{#4\glsadd{gls-#3}}{#5}
+} % as per http://en.wikibooks.org/wiki/LaTeX/Glossary
+
+\makeglossaries % Prepare for adding glossary entries
+
+% ----------------------
+% ----- Glossaries -----
+% ----------------------
+
+\newglossaryentry{solidity}
+{
+    name=Solidity,
+    description={Solidity is a \acrlong{sc} language developed for Ethereum}
+}
+
+\newglossaryentry{chaincode}
+{
+    name=chaincode,
+    description={Chaincode is the Hyperledger Fabric equivalent of \acrlongpl{sc}}
+}
+
+\newglossaryentry{gas}
+{
+    name=gas,
+    description={Gas in crypto refers to the computational effort required to execute operations. This is normally paid in the blockchain's platform cryptocurrency}
+}
+
+\newglossaryentry{llvm}
+{
+    name=LLVM,
+    description={A compiler toolchain providing a complete infrastructure for creating compiler frontends and backends}
+}
+
+\newglossaryentry{llvmir}
+{
+    name=LLVM-IR,
+    description={LLVM-IR is the intermediate representation of the LLVM compiler toolchain}
+}
+
+\newglossaryentry{f-star}
+{
+    name=F*,
+    description={General-purpose functional programming language with effects aimed at program verification}
+}
+
+\newglossaryentry{bibtex}
+{
+    name=BibTeX,
+    description={File format for storing bibliographic information}
+}
+
+\newglossaryentry{bytecode}
+{
+    name=bytecode,
+    description={Bytecode is computer object code that is processed by a program (VM)s}
+}
+
+\newglossaryentry{dapp}
+{
+    name=dapp,
+    description={A decentralized application is a computer application that runs on a decentralized computing system}
+}
+\newglossaryentry{smt-solver}
+{
+    name=SMT solver,
+    description={A tool for solving a \acrlong{smt} problem for a practical subset of inputs}
+}
+
+\newglossaryentry{z3}
+{
+    name=Z3,
+    description={A theorem prover (SMT solver) from Microsoft Research}
+}
+
+\newglossaryentry{oracle}
+{
+    name=oracle,
+    description={Entities that connect blockchains to external systems, enabling smart contracts to execute based upon inputs and outputs from the real world}
+}
+
+\newglossaryentry{deep-learning}
+{
+    name=deep learning,
+    description={Deep learning is a field of computer science, artificial intelligence, and statistics that deals with the learning of representations, particularly for purposes of machine learning and natural language processing}
+}
+
+\newglossaryentry{fork}
+{
+    name=fork,
+    description={A blockchain thath diverges into two potential paths is called a fork}
+}
+
+
+% --------------------
+% ----- Acronyms -----
+% --------------------
+
+\newacronym{sc}{SC}{Smart Contract}
+\newacronym{dao}{DAO}{Decentralized Autonomous Organization}
+\newacronym{ml}{ML}{Machine Learning}
+\newacronym{slr}{SLR}{Systematic Literature Review}
+\newacronym{cfg}{CFG}{Control Flow Graph}
+\newacronym{ast}{AST}{Abstract Syntax Tree}
+\newacronym{abi}{ABI}{Application Binary Interface}
+\newacronym{rf}{RF}{Random Forest}
+\newacronym{dt}{DT}{Desision Tree}
+\newacronym{svm}{SVM}{Support Vewctor Machine}
+\newacronym{dnn}{DNN}{Deep Neural Network}
+\newacronym{cnn}{CNN}{Convolutional Neural Network}
+\newacronym{knn}{KNN}{K-Nearest Neighbor}
+\newacronym{sgd}{SGD}{Stochastic Gradient Descent}
+\newacronym{gan}{GAN}{Generative Adversarial Network}
+\newacronym{gnn}{GNN}{Graph Neural Network}
+\newacronym{lstm}{LSTM}{Long Short-Term Memory}
+\newacronym{att-blstm}{Att-BLSTM}{Attention-Based Bidirectional Long Short-Term Memory}
+\newacronym{awd-lstm}{AWD-LSTM}{Average Stochastic Gradient Descent Weighted Dropped LSTM}
+\newacronym{tfidf}{TFIDF}{Term Frequency–Inverse Document Frequency}
+\newacronym{iot}{IoT}{Internet of Things}
+\newacronym{pdg}{PDG}{Program Dependency Graph}
+\newacronym{ssg}{SSG}{Symbolic Semantic Graphs}
+\newacronym{nlp}{NLP}{Natural Language Processing}
+\newacronym{dbft}{dBFT}{delegated Byzantine Fault Tolerance}
+\newacronym{pbft}{PBFT}{Practical Byzantine Fault Tolerance}
+\newacronym{pos}{PoS}{Proof of Stake}
+\newacronym{pow}{PoW}{Proof of Work}
+\newacronym{dpos}{DPoS}{Delegated Proof of Stake}
+\newacronym{lpos}{LPoS}{Leased Proof of Stake}
+\newacronym{poa}{PoA}{Proof of Authority}
+
+% -----------------------
+% ----- Dual entries -----
+% -----------------------
+
+\newdualentry{nft} % label
+  {NFT}            % abbreviation
+  {Non Fungible Tokens}  % long form
+  {A type of token that is unique} % description
+
+  \newdualentry{ir} % label
+  {IR}            % abbreviation
+  {Intermediate Representation}  % long form
+  {A representation for use as an intermediate step} % description
+  
+  \newdualentry{wos} % label
+  {WoS}            % abbreviation
+  {Web of Science}  % long form
+  {Scientific citation database} % description
+  
+  \newdualentry{smt} % label
+  {SMT}            % abbreviation
+  {Satisfiability Modulo Theories}  % long form
+  {The problem of determining whether a mathematical formula is satisfiable} % description

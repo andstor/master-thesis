@@ -1,0 +1,119 @@
+\chapter{Data}
+\label{chap:datasets}
+This chapter introduces the necessary background information for this study. First, a brief introduction to blockchain technology is provided in \cref{sec:blockchain} and then the concept of \acrfullpl{sc} is introduced in \cref{sec:smart-contract}. Finally, in \cref{sec:smart-contract-vulnerabilities}, the most popular \acrshort{sc} vulnerabilities are described.
+
+\section{Smart contract downloader}
+\label{sec:smart-contract-downloader}
+\url{https://github.com/andstor/smart-contract-downloader}
+
+
+The largest provider of verified \acrshortpl{sc} is Etherscan. This website provides a list of all verified \acrshortpl{sc} on the blockchain. More on their service...... Etherscan provides a API for downloading verified Smart Contracts. The API is available at \url{https://api.etherscan.io/api}.
+
+In order to download the \acrshortpl{sc} from Etherscan, a tool we need to provide the \acrshortpl{sc} address. The address is the first part of the \acrshortpl{sc} code. The address is the first part of the \acrshortpl{sc} code.
+
+The following code snippet is a Google BigQuery query. It will select all \acrshortpl{sc} addresses on the Ethereum blockchain that has at least one transaction. This query was run on the 1st of April 2022, and the result was downloaded as a CSV file, and is available at \url{https://huggingface.co/datasets/andstor/smart_contracts/blob/main/contract_addresses.csv}. The CSV file is then used to download the \acrshortpl{sc} from Etherscan.
+
+\begin{lstlisting}[
+    caption={Google BigQuery query for selecting all \acrlong{sc} addresses on Ethereum that has at least one transaction.},
+    label=lst:reentrancy,
+    language=SQL]
+SELECT contracts.address, COUNT(1) AS tx_count
+FROM `bigquery-public-data.crypto_ethereum.contracts` AS contracts
+JOIN `bigquery-public-data.crypto_ethereum.transactions` AS transactions 
+      ON (transactions.to_address = contracts.address)
+GROUP BY contracts.address
+ORDER BY tx_count DESC
+}
+\end{lstlisting}
+
+\section{Datasets}
+Describe the  PILE...  It consists  of among others a lot of data from GitHub. HHowever, only x\% of the data is smart contracts (Solidity). Hence there is a need  for a dataset made up of smart contracts. --> existing datasets....
+
+\subsection{Verified Smart Contracts}
+\label{sec:verified-smart-contracts}
+\url{https://github.com/andstor/verified-smart-contracts}
+\url{https://huggingface.co/datasets/andstor/smart_contracts}
+
+
+Filtering is done by applying a token-based similarity algorithm, named Jacard Index. Thte algorithm  is computationally efficient and can be used to filter out \acrshortpl{sc} that are not similar to the query. The Jacard Index is a measure of the similarity between two sets. The Jacard Index is defined as the ratio of the size of the intersection to the size of the union of the two sets.....
+
+\makeatletter
+\newcommand\thefontsize[1]{{#1 The current font size is: \f@size pt\par}}
+\makeatother
+
+\thefontsize\tiny
+\thefontsize\footnotesize
+\thefontsize\small
+\thefontsize\normalsize
+\thefontsize\large
+
+\extractcolorspecs{red!50}{\model}{\mycolor}
+\convertcolorspec{\model}{\mycolor}{rgb}\tmp\tmp
+
+\extractcolorspecs{green!30!white}{\model}{\mycolor}
+\convertcolorspec{\model}{\mycolor}{rgb}\tmp\tmp
+
+\extractcolorspecs{blue!30!white}{\model}{\mycolor}
+\convertcolorspec{\model}{\mycolor}{rgb}\tmp\tmp
+
+\printinunitsof{in}\prntlen{\textwidth}
+
+Subsets:
+\subsubsection{Raw}
+\label{sec:verified-smart-contracts-raw}
+
+
+\begin{figure}[ht]
+    \centering
+    \input{figures/security_levels.pgf}
+    \caption{Doughnut chart over security levels, where each level occurs at least once in the \acrshort{sc}. The inner ring shows the distribution of the occurrences of each level. The outer ring shows the additional security levels for each contract. For example, "HML" means that the contract has at least three vulnerabilities with the corresponding "High", "Medium", and "Low" security levels.}
+\end{figure}
+
+
+
+\begin{figure}[ht]
+    \centering
+    \input{figures/vulnerabilities_bar.pgf}
+    \caption{Histogram \small x of verified \acrshortpl{sc} on Ethereum}
+\end{figure}
+
+
+\begin{figure}[ht]
+    \centering
+    \input{figures/iris.pgf}
+    \caption{lol}
+\end{figure}
+
+
+
+
+\subsubsection{Flattened}
+\label{sec:verified-smart-contracts-flattened}
+
+\subsubsection{Inflated}
+\label{sec:verified-smart-contracts-inflated}
+
+\subsubsection{Parsed}
+\label{sec:verified-smart-contracts-parsed}
+
+
+
+\subsection{Verified Smart Contracts Audit}
+\label{sec:verified-smart-contracts-audit}
+\url{https://github.com/andstor/verified-smart-contracts-audit}
+\url{https://huggingface.co/datasets/andstor/smart_contracts_audit}
+
+Subsets:
+\subsubsection{SoliDetector}
+\label{sec:verified-smart-contracts-audit-solidector}
+
+\subsubsection{Slither}
+\label{sec:verified-smart-contracts-audit-slither}
+
+
+
+\subsection{Smart Contract Comments}
+\label{sec:verified-smart-contracts-comments}
+
+\url{https://huggingface.co/datasets/andstor/smart_contract_comments}
+See \cref{sec:code-comment-clustering} for more information.

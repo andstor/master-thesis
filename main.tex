@@ -1,0 +1,71 @@
+\documentclass[american,titlepage,oneside]{ntnuthesis}
+
+\usepackage{pdflscape}
+\usepackage{layouts}
+
+\usepackage{titling}
+
+\pretitle{
+    \begin{flushleft}
+    \huge
+}
+\title{\textbf{Secure code synthesis}}
+\posttitle{\end{flushleft}}
+\shorttitle{Secure code synthesis}
+\preauthor{\begin{flushleft}
+    \vspace{2cm}\LARGE
+}
+\author{André Storhaug}
+\postauthor{\par\end{flushleft}}
+\shortauthor{A. Storhaug}
+\predate{\begin{flushleft}\Large}
+\date{\textbf{Spring 2022}\\
+    \vfill\large Master of Science in Computer Science\\
+    Supervisor: Jingyue Li - Associate Professor at NTNU\\
+    \vspace{1cm}\large\textbf{NTNU}\\
+    \normalsize Norwegian University of Science and Technology\\
+    Faculty of Information Technology and Electrical Engineering\\
+    Department of Computer Science
+}
+\postdate{\par\end{flushleft}}
+
+
+\addbibresource{refs.bib}
+
+\input{glossary.tex} % add glossary and acronym lists before document
+
+\begin{document}
+
+\input{chapters/0a-abstract.tex}
+\input{chapters/0b-sammendrag.tex}
+\input{chapters/0c-acknowledgement.tex}
+
+\tableofcontents
+\listoffigures
+\listoftables
+\lstlistoflistings
+
+\printglossary[type=\acronymtype] % Print acronyms
+\printglossary                    % Print glossary
+%\listoftodos
+
+\input{chapters/1-introduction}
+\input{chapters/2-background.tex}
+\input{chapters/3-related-work.tex}
+\input{chapters/4-method.tex}
+\input{chapters/5-data.tex}
+\input{chapters/6-architecture.tex}
+\input{chapters/7-results.tex}
+\input{chapters/8-discussion.tex}
+\input{chapters/9-future-work.tex}
+\input{chapters/10-conclusion.tex}
+
+\chapter*{\bibname}
+\printbibliography[heading=none]
+
+%\input{chapters/papers.tex}
+
+\appendix
+%\input{appendices/a-appendix.tex}
+
+\end{document}
