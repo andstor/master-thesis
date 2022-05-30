@@ -1,0 +1,40 @@
+[andstorh@idun-05-14 ~]$ top
+
+top - 00:42:57 up 53 days, 23 min,  1 user,  load average: 24.40, 17.60, 14.84
+Tasks: 819 total,  11 running, 808 sleeping,   0 stopped,   0 zombie
+%Cpu(s): 21.0 us,  0.2 sy,  0.0 ni, 78.7 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem : 1546121.+total, 1346599.+free, 118985.5 used,  80537.1 buff/cache
+MiB Swap:      0.0 total,      0.0 free,      0.0 used. 1351546.+avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND        
+2299297 andstorh  20   0  123.8g  17.4g   6.9g R 106.2   1.2   9400:55 python         
+2299290 andstorh  20   0  124.9g  17.5g   6.9g R 100.0   1.2   9323:50 python         
+2299291 andstorh  20   0  124.1g  17.4g   6.9g R 100.0   1.2   9307:57 python         
+2299292 andstorh  20   0  124.3g  17.5g   7.0g R 100.0   1.2   9402:00 python         
+2299293 andstorh  20   0  124.1g  17.5g   7.0g R 100.0   1.2   9292:36 python         
+2299294 andstorh  20   0  124.3g  17.5g   7.0g R 100.0   1.2   9401:37 python         
+2299295 andstorh  20   0  124.3g  17.4g   6.9g R 100.0   1.2   9281:21 python         
+2299296 andstorh  20   0  123.8g  17.4g   6.9g R 100.0   1.2   9402:33 python         
+2299298 andstorh  20   0  123.9g  17.3g   6.8g R 100.0   1.1   9307:40 python         
+2299299 andstorh  20   0  124.2g  17.4g   6.9g R 100.0   1.2   9412:37 python         
+2299246 andstorh  20   0 4498232 121156   4172 S   6.2   0.0   0:42.54 python         
+      1 root      20   0  238320   8392   5452 S   0.0   0.0   0:45.53 systemd        
+      2 root      20   0       0      0      0 S   0.0   0.0   0:08.61 kthreadd       
+      3 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_gp         
+      4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_par_gp     
+      6 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/0:0H-e+
+     10 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 mm_percpu_wq   
+     11 root      20   0       0      0      0 S   0.0   0.0   0:43.99 ksoftirqd/0    
+     12 root      20   0       0      0      0 I   0.0   0.0  32:28.15 rcu_sched      
+     13 root      rt   0       0      0      0 S   0.0   0.0   0:04.48 migration/0    
+     14 root      rt   0       0      0      0 S   0.0   0.0   0:00.62 watchdog/0     
+     15 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/0        
+     16 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/1        
+     17 root      rt   0       0      0      0 S   0.0   0.0   0:03.34 watchdog/1     
+     18 root      rt   0       0      0      0 S   0.0   0.0   0:10.06 migration/1    
+     19 root      20   0       0      0      0 S   0.0   0.0   0:14.75 ksoftirqd/1    
+     21 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/1:0H-e+
+     23 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/2        
+     24 root      rt   0       0      0      0 S   0.0   0.0   0:02.23 watchdog/2     
+     25 root      rt   0       0      0      0 S   0.0   0.0   0:04.21 migration/2    
+     26 root      20   0       0      0      0 S   0.0   0.0   0:23.60 ksoftirqd/2    

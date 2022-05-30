@@ -7,6 +7,8 @@
     \newacronym[see={[Glossary:]{gls-#3}},name={#4},#2]{#3}{#4\glsadd{gls-#3}}{#5}
 } % as per http://en.wikibooks.org/wiki/LaTeX/Glossary
 
+\newcommand\acrfullr[2][]{\acrshort[#1]{#2} (\acrlong[#1]{#2})}
+
 \makeglossaries % Prepare for adding glossary entries
 
 % ----------------------
@@ -93,8 +95,16 @@
 \newglossaryentry{fork}
 {
     name=fork,
-    description={A blockchain thath diverges into two potential paths is called a fork}
+    description={A blockchain that diverges into two potential paths is called a fork}
 }
+
+\newglossaryentry{docstring}
+{
+    name=docstring,
+    description={Python function documentation strings}
+}
+
+
 
 
 % --------------------
@@ -132,6 +142,7 @@
 \newacronym{dpos}{DPoS}{Delegated Proof of Stake}
 \newacronym{lpos}{LPoS}{Leased Proof of Stake}
 \newacronym{poa}{PoA}{Proof of Authority}
+\newacronym{pcfg}{PCFG}{Probabilistic context-free grammar}
 
 % -----------------------
 % ----- Dual entries -----
@@ -156,3 +167,14 @@
   {SMT}            % abbreviation
   {Satisfiability Modulo Theories}  % long form
   {The problem of determining whether a mathematical formula is satisfiable} % description
+
+  \newdualentry{bleu} % label
+  {BLEU}            % abbreviation
+  {BiLingual Evaluation Understudy}  % long form
+  {Metric for automatically evaluating machine-translated text} % description
+
+  \newdualentry{rouge-l} % label
+  {BLEU score}            % abbreviation
+  {BiLingual Evaluation Understudy score}  % long form
+  {Metric for automatically evaluating machine-translated text} % description
+

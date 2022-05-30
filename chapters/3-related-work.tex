@@ -1,6 +1,12 @@
 \chapter{Related work}
 \label{chap:related-work}
 
+This chapter presents related research in the field of source code synthesis. This includes works related to dataset construction, model implementations, model inference guiding, and different approaches to code synthesis. 
+
+First, various methods for source code synthesis are presented. Then follows a section on various model implementations, and   on the generation of datasets, and a section on the generation of models.
+
+
+
 Make a literature review based on code synthesis / code auto completion. This would include both the main topic "code synthesis", as well as code comments for optimal code completion.
 
 Code completion vs code synthesis vs automatic code generation vs intellisense.
@@ -13,12 +19,152 @@ JS: JSDoc
 TS=("code" AND ("completion" OR "generation" OR "synthesis" ))
 
 TS=("code" AND ("auto-completion" OR "generation" OR "synthesis" ) AND comment)
+
+spsp
+
+
+
+\section{Language models}
+\label{sec:language-models}
+The problem of generating code is fundamentally a language modeling problem. Language modeling is the task of predicting the next word in a text given the previous words. This section begins with presenting some of the earlier techniques, followed by surveying more recent and state-of-the-art language models.
+
+
+The first few language models came in the form of n-grams, a term first referenced by \textcite{shannon1948ngram}. An n-gram is a contiguous sequence of n items from a given sample of text. Most early approaches employed n-grams with smoothing to handle unseen n-grams \textcite{kneser1995improved}.
+
+
+
+\subsection{Non-context models}
+\subsection{Context aware models}
+
+
+
+\subsection{Word embeddings}
+
+
+
+Tomas Mikolov's Word2vec (google team),
+Stanford University's GloVe
+GN-GloVe (genderneutral) ->point tto thte bias problem off datasets -> link to insecure code on  github
+
+
+
+\subsection{Neural language models}
+N-grams
+
+CoVe (Contextualized Word Vectors) needs "fixed" prettrained dataset :: Learned in Translation: Contextualized Word Vectors
+
+ELMo biLM
+
+Universal Language Model Fine-tuning (ULMFiT) :: introduced the concept of fine-tuning the language model.
+
+OpenAI’s Gener- ative Pre-training Transformer (GPT)
+
+GPT-2, improved version of GPT. Works withoutfinettuning. (concerns of it being used to generate unintended or malicious content - delayed release)
+
+Bidirectional Encoder Representations from Transformers (BERT) - > bidirectttional, in comparison to GPT
+
+BERT is a bimodal Transformer with 12 layers, 768 dimentional hidden states, and 12 attention heads.
+
+-----
+GPT-3 (Codex)
+
+GPT-J (Opensoursed)
+
+
 \section{Code synthesis}
+This section presents some of the various approaches to code synthesis. 
+
+Code synthesis is ... 
+
+One of the earlier classical works used a probabilistic \acrfull{pcfg} \cite{allamanis2015bimodal}.
+
+\textcite{hindle2012natural} investigated whether code could be modeled by statistical language models. In particular, the authors used an n-gram model. They argue that "programs that real people actually write are mostly simple and rather repetitive, and thus they have usefully predictable statistical properties". They found that code is more predictable than natural languages. DeepCoder by \textcite{balog2017deepcoder} focused on solving programming competition-style problems. They trained a neural network for predicting properties of source code, which could be used for guiding program search.
+
+\subsection{Code semantics}
+Programs can also be synthesized by leveraging the semantics of the code. \textcite{alon2018code2vec} purposes a tool named code2vec. It is a neural network model for representing snippets of code as continuously distributed vectors, or "code embeddings". The authors leverage the semantic structure of code by passing serialized \acrfullpl{ast} into a neural network. Code2seq \cite{alon2018code2seq} builds on the works of \textcite{alon2018code2vec} which focuses on natural language sequence generation from code snippets. The authors use an encoder-decoder LSTM model and rely on \acrshortpl{ast} for code snippets. The model is trained on three Java corpuses small, medium, and large, achieving a \glossary{F1} score of 50.64, 53.23, and 59.19, respectively. However, the model is limited to only considering the immediately surrounding context. Pythia by \textcite{svyatkovskiy2019pyhia} is able to generate ranked lists of method and API recommendations to be used by software developers at edit time. The code completion system is based on \acrshortpl{ast} and uses Word2vec for producing code embeddings of Python code. These code embeddings are then used to train a \gls{lstm} model. The model is evaluated on a dataset of 15.8 million method calls extracted from real-world source code, achieving an accuracy of 92\%.
+
+\subsection{Transformers for code synthesis}
+Inspired by the success of large natural language models such as ELMo, GPT, BERT, XLNet, and RoBERa (CITATION), large-scale Transformer models have been applied in the domains of code synthesis. \textcite{feng2020codebert} proposes a new approach to code synthesis by training the BERT transformer model on Python \gls{docstring} paired with functions. The resulting 125M parameter transformer model, named CodeBERT \cite{feng2020codebert}, achieves strong results on code-search and code-to-text generation. The authors also observe that models that leverage code semantics (\acrshortpl{ast}) can produce slightly better results. CodeGPT by \cite{lu2021codexglue} provides text-to-code generation by training several monolingual GPT-2 transformer models on Python functions and Java methods. For each programming language, one model was pretrained from scratch, while another was finetuned on the code corpus, using the standard GPT-2 vocabulary and natural language understanding ability. The Java models was evaluated on the CONCODE \todo{citation} dataset, achieving a state-of-the-art performance \acrshort{bleu} score \cite{papineni2002bleu} of 28.69 for the model trained from scratch, and 32.79 for the finetuned version. Another model version based on GPT-2 is GPT-C by \textcite{svyatkovskiy2020intellicode}. The 366M parameter-sized model is trained on a code corpus consisting of 1.2 billion lines of source code in Python, C\#, JavaScript and TypeScript programming languages. The Python-only model reportedly achieves a \glossary{rouge-l} precision of 0.80 and recall of 0.86. PyMT5 \textcite{colin2020pymt5} is based on the T5 model. The model can predict whole methods from natural language documentation strings (docstrings) and summarize code into docstrings of any common style. For method generation, PyMT5 achieves a \gls{bleu} score of 8.59 and a \glossary{rouge-l} F-score of 24.8 on the CodeSearchNet \todo{cite} test set.
+
+The model complexity of transformers has recently sky-rocketed, with model sizes growing to several tens of billions of parameters. GPT-J, a 6 billion parameter model trained on The Pile, an 825GB dataset. The Pile features many disparate domains, including books, GitHub repositories, webpages, chat logs, and medical, physics, math, computer science, and philosophy papers, making it one of the most extensive and diverse datasets available. The pretrained version of GPT-J is also publicly available. Codex by \textcite{chen2021codex} is a 12 billion parameter model based on GPT. It was trained on 54 million GitHub repositories, and a production version of Codex powers GitHub Copilot \todo{cite}. The model solves 28.8\% of the problems in the HumanEval dataset \todo{cite}, while GPT-3 solves 0\% and GPT-J solves 11.4\%. Google DeepMind's AlphaCode is 41.4 billion parameters and is the first AI to reach a competitive level in programming competitions. AlphaCode was tested against challenges curated by Codeforces \todo{cite}, a competitive coding platform. It achieved an averaged ranking of 54.3\% across 10 contests. The authors found that repeated sampling on the same problem significantly increased the probability of a correct solution.
+
+
+
+\newcommand*\emptycirc[1][1ex]{\tikz\draw (0,0) circle (#1);} 
+\newcommand*\halfcirc[1][1ex]{%
+  \begin{tikzpicture}
+  \draw[fill] (0,0)-- (90:#1) arc (90:270:#1) -- cycle ;
+  \draw (0,0) circle (#1);
+  \end{tikzpicture}}
+\newcommand*\fullcirc[1][1ex]{\tikz\fill (0,0) circle (#1);} 
+
+
+%\begin{sidewaystable}
+\begin{ThreePartTable}
+    \todo{Add input, ouputt, meetric ,  language and model info to table}
+    \newcolumntype{Y}{>{\centering\arraybackslash}X}
+    \newcolumntype{R}{>{\raggedright\arraybackslash}X}
+    \def\arraystretch{1.5}
+    \setlength\tabcolsep{6pt} % <--- important, (default 6pt)
+    \setlength{\LTleft}{-20cm plus -1fill}
+    \setlength{\LTright}{\LTleft}
+    \footnotesize
+    \begin{center}
+    \begin{TableNotes}
+        \item[a] \label{tn:ml-name} Name of the tool or method. If no name exists, a short description or "--" is used.
+    \end{TableNotes}
+    \keepXColumns
+    \begin{tabularx}{1\textwidth}{clRRRRR}
+            \caption{Existing language models.}\label{tab:ml-tools}\\
+            \toprule
+            \textbf{Refs.} & \textbf{Year} & \textbf{Model\tnotex{tn:ml-name}} & \textbf{Metrics} & \textbf{Languages} &  \textbf{Input} & \textbf{Output}\\
+            \hline
+            \endfirsthead
+            \caption{(\textit{Continued}) Existing static smart contract vulnerability detection tools.}\\
+            \toprule
+            \textbf{Refs.} & \textbf{Year} & \textbf{Model\tnotex{tn:ml-name}} & \textbf{Metrics} & \textbf{Languages} &  \textbf{Input} & \textbf{Output}\\
+            \hline
+        \endhead
+            \midrule
+            \multicolumn{7}{r}{\small(\textit{Continued on next page})}\\
+        \endfoot
+            \insertTableNotes\\
+        \endlastfoot
+        
+        \cite{} & \citeyear{} & GPT & \acrshort{bleu} & Python  & Docstring & Code\\
+        
+        \bottomrule
+    \end{tabularx}
+    \end{center}
+
+\end{ThreePartTable}
+%\end{sidewaystable}
+
+\section{Bias in language models}
+Include security as a bias. Discuss for example gender bias (ex. male vs female jobs) due to datasets.... Same goes with vulnerablilities.. Include stats from gitthub securitty??
+
+
+
+\section{Smart contract code generation}
+Some old-school models? I know various methods for programming smart contracs exists.. Maybe some graphical solutions?
+
+\section{Datasets}
+CodeXGLUE - Microsoft
+
+CodeNet - IBM
 
 
 
 
 
+
+% vvvvvvvv VIKTIG vvvvvvvvvv
+
+autoregressive generation tasks
+see https://arxiv.org/pdf/2005.08025.pdf for structuring thesisl....!!!!
+
+see dockstring analysis 2.3 of https://arxiv.org/pdf/2010.03150.pdf for clustering comments....
+%^^^^^^^^ VIKTIG ^^^^^^^^
 
 
 
@@ -33,64 +179,6 @@ However, to the best of my knowledge, there is no paper investigating how to bes
 \section{OLD}
 This chapter provides a short overview of state-of-the-art secondary studies related to \acrfull{sc} vulnerability analysis and detection. This is various literature that presents a survey or literature review nature.
 
-\newcommand*\emptycirc[1][1ex]{\tikz\draw (0,0) circle (#1);} 
-\newcommand*\halfcirc[1][1ex]{%
-  \begin{tikzpicture}
-  \draw[fill] (0,0)-- (90:#1) arc (90:270:#1) -- cycle ;
-  \draw (0,0) circle (#1);
-  \end{tikzpicture}}
-\newcommand*\fullcirc[1][1ex]{\tikz\fill (0,0) circle (#1);} 
-
-%\begin{sidewaystable}
-    \begin{ThreePartTable}
-        \newcolumntype{Y}{>{\centering\arraybackslash}X}
-        \newcolumntype{R}{>{\raggedright\arraybackslash}X}
-        \def\arraystretch{1.5}
-        \setlength\tabcolsep{6pt} % <--- important, (default 6pt)
-        \setlength{\LTleft}{-20cm plus -1fill}
-        \setlength{\LTright}{\LTleft}
-        \footnotesize
-        \begin{center}
-        \begin{TableNotes}
-            \item[a] \label{tn:ml-name} Name of the tool or method. If no name exists, a short description or "--" is used.
-        \end{TableNotes}
-        \keepXColumns
-        \begin{tabularx}{1\textwidth}{clRRRRR}
-                \caption{Existing ML-based smart contract vulnerability detection tools.}\label{tab:ml-tools}\\
-                \toprule
-                \textbf{Refs.} & \textbf{Year} & \textbf{Name.\tnotex{tn:ml-name}} & \textbf{Method} & \textbf{Feature engineering} &  \textbf{Capability} & \textbf{Input}\\
-                \hline
-                \endfirsthead
-                \caption{(\textit{Continued}) Existing static smart contract vulnerability detection tools.}\\
-                \toprule
-                \textbf{Refs.} & \textbf{Year} & \textbf{Name.\tnotex{tn:ml-name}} & \textbf{Method} & \textbf{Feature engineering} &  \textbf{Capability} & \textbf{Input}\\
-                \hline
-            \endhead
-                \midrule
-                \multicolumn{7}{r}{\small(\textit{Continued on next page})}\\
-            \endfoot
-                \insertTableNotes\\
-            \endlastfoot
-            
-            \cite{huang2018hunting} & \citeyear{huang2018hunting} & Color-inspried & \acrshort{cnn} & RGB image  & Multi-label & EVM Bytecode\\
-            \cite{tann2019safer} & \citeyear{tann2019safer} & Sequential learning & \acrshort{lstm} & Opcode embedding & Binary decision & EVM Opcode\\
-            \cite{momeni2019machine} & \citeyear{momeni2019machine} & -- & \acrshort{ast} & \acrshort{ast} statistics & Multi binary decision & Solidity \\
-            \cite{gogineni2020multiclass} & \citeyear{gogineni2020multiclass} & NLP-inspried & \acrshort{awd-lstm} & Opcode embedding & Multi-class & EVM Opcode\\
-            \cite{zhuang2020smart} & \citeyear{zhuang2020smart} & Graph NN-based & \acrshort{gnn} & Normalized Graph & Multi-class & Solidity\\
-            \cite{xing2020anew} & \citeyear{xing2020anew} & Slicing matrix & \acrshort{cnn}, \acrshort{rf} & \# opcode occurrence & Multi-class & EVM bytecode\\
-            \cite{qian2020towards} & \citeyear{qian2020towards} & -- &  \acrshort{att-blstm} & Contract snippet, word embedding & Reentrancy & Solidity \\
-            \cite{xu2021security} & \citeyear{xu2021security} & -- & \acrshort{ast} & \# common child nodes & Multi-class & Solidity \\
-            \cite{mi2021vscl} & \citeyear{mi2021vscl} & VSCL & \acrshort{dnn} & CFG, N-gram model & Binary decision & EVM bytecode\\
-            \cite{zhao2021gan} & \citeyear{zhao2021gan} & -- & \acrshort{gan} & Code embedding & Binary decision & EVM bytecode\\
-            \cite{lutz2021escort} & \citeyear{lutz2021escort} & ESCORT & \acrshort{lstm}, transfer learning & Word embedding & Multi-label & EVM Bytecode\\
-            \cite{wang2021contractward} & \citeyear{wang2021contractward} & ContractWard & \acrshort{dt} & Bigram model & Binary decision & EVM Opcode\\
-            
-            \bottomrule
-        \end{tabularx}
-        \end{center}
-    
-    \end{ThreePartTable}
-    %\end{sidewaystable}
 
 
 \section{Program synthesis}

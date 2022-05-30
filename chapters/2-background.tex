@@ -2,8 +2,8 @@
 \label{chap:background}
 This chapter introduces the necessary background information for this study. First, a brief introduction to blockchain technology is provided in \cref{sec:blockchain} and then the concept of \acrfullpl{sc} is introduced in \cref{sec:smart-contract}. Finally, in \cref{sec:smart-contract-vulnerabilities}, the most popular \acrshort{sc} vulnerabilities are described.
 
-\section{Transfer learning}
-\label{sec:transfer-learning}
+%\section{Transfer learning}
+%\label{sec:transfer-learning}
 
 \section{Natural language processing}
 \label{sec:natural-language-processing}
@@ -16,6 +16,22 @@ This chapter introduces the necessary background information for this study. Fir
 
 \subsubsection{Word2Vec}
 \label{sec:vord2vec}
+Or word embedding? as secttion.
+https://ai.stackexchange.com/questions/26739/what-is-the-difference-between-a-language-model-and-a-word-embedding
+
+Word Embeddings does not consider context, Language Models does.
+For e.g Word2Vec, GloVe, or fastText, there exists one fixed vector per word.
+
+
+The sentence:
+
+Kill him, don't wait for me.
+
+and
+
+Don't kill him, wait for me.
+
+If one averages the word embeddings, they would  produce the same vector. However,  in reality thheir meaning  (semantic) is very  diffferent.
 
 \subsubsection{Term frequency-inverse document frequency}
 \label{sec:tf-idf}
@@ -23,6 +39,8 @@ This chapter introduces the necessary background information for this study. Fir
 
 \section{Machine Learning}
 \label{sec:machine-learning}
+\todo{Rewrite}
+\acrfull{ml} is the study of computer algorithms that can automatically improve through the use of data. \acrshort{ml} algorithms create a model based on training data. This model is then used to predict the outcome of new unseen data without being explicitly programmed to do so.
 
 \subsection{Machine learning models}
 \label{sec:machine-learning-models}
@@ -50,6 +68,8 @@ This chapter introduces the necessary background information for this study. Fir
 \section{Transformer}
 \label{sec:transformer}
 
+\section{Data parallelism}
+\label{sec:data-parallelism}
 
 \section{Performance metric}
 \label{sec:performance-metric}
@@ -63,9 +83,56 @@ This chapter introduces the necessary background information for this study. Fir
 \subsection{F1-score}
 \label{sec:f1-score}
 
-\subsection{Blue-score}
-\label{sec:blue-score}
+\section{Machine translation metrics}
+\label{sec:machine-translation-metrics}
 
+\subsection{\textsc{Bleu}}
+\label{sec:blue-score}
+\acrfullr{bleu} by \textcite{papineni2002bleu} is a metric for automatically evaluating machine-translated text. \acrshort{bleu} scores are between 0 and 1. A value of 0 means there is no overlap with the reference translation, while a value of 1 means that the translation perfectly overlaps. A score of 0.6 or 0.7 is considered the best you can achieve. The method is based on n-gram matching, where n-grams in the reference translation are matched against n-grams in the translation. The matches are position-independent. The more matches, the higher the score.\\
+
+\noindent For example, consider the following two translations:\\
+
+\indent Candidate: \underline{on} \underline{the} \underline{mat} \underline{the} \underline{cat} sat.\\
+\indent Reference: \underline{The} \underline{cat} is \underline{on} \underline{the} \underline{mat}.\\
+
+\noindent The unigram precision \(\left(p_1\right) = 5/6\)\\
+
+\noindent However, machine translations tend to generate an abundance of reasonable words, which could result in an inaccurately high precision. To combat this, \acrshort{bleu} uses something called modified precision. The modification consists of clipping the occurrence of an n-gram to the maximum number the n-gram occurs in the reference. These clipped precision scores \(\left(p_n\right)\) are then calculated for n-grams up to length \(N\), normally 1-grams through 4-grams. They are then combined by computing the geometric average precision. In addition, positive weights \(w_n\) are used, normally set to \(w_n = 1/N\).
+
+\begin{equation}
+    \label{eq:geometric-average-precision}
+    \text{Geometric Average Precision $\left(N\right)$} = \exp \left( \sum_{n=1}^{N} w_n \log{p_n} \right)
+\end{equation}
+
+\noindent \acrshort{bleu} also introduces a brevity penalty for penalizing translations that are shorter than the reference.
+
+\begin{equation}
+    \label{eqn:brevity-penalty}
+    \text{Brevity Penalty} = 
+    \begin{cases}
+        1 & \text{if } c > r\\
+        e^{\left(1-r/c \right)} & \text{if } c \le r
+    \end{cases}
+\end{equation}
+
+\noindent The final \acrshort{bleu} score is then computed as:
+
+\begin{equation}
+    \label{eqn:bleu}
+    \textsc{Bleu} = \text{Brevity Penalty} \cdot \text{Geometric Average Precision Scores $\left(N\right)$}
+\end{equation}
+
+
+
+\subsection{\textsc{CodeBleu}}
+\label{sec:code-bleu}
+https://arxiv.org/pdf/2009.10297.pdf
+
+Maybe implement this for Solidity??
+
+
+\subsection{\textsc{ROUGE}}
+\label{sec:rouge-score}
 
 \section{String metric}
 \label{sec:string-metric}
@@ -82,62 +149,6 @@ Typically, blockchains are managed by a peer-to-peer network, resulting in a pub
 
 The blockchain technology was popularized by Bitcoin in 2008. Satoshi Nakamoto introduced the formal idea of blockchain as a peer-to-peer electronic cash system. It enabled users to conduct transactions without the need for a central authority. From Bitcoin sprang several other cryptocurrencies and blockchain platforms such as Ethereum, Litescoin, and Ripple. \cref{tab:blockchain-platforms} shows an overview of the different blockchain platforms, including the different consensus protocols, programming languages, and execution environments used. It also shows the different types of blockchains, including public, private, and hybrid. If the platform also supplies a native currency (cryptocurrency), this is also shown.
 
-%\begin{sidewaystable}
-\begin{landscape}
-\begin{ThreePartTable}
-    \newcolumntype{Y}{>{\centering\arraybackslash}X}
-    \newcolumntype{R}{>{\raggedright\arraybackslash}X}
-    \def\arraystretch{1.5}
-    \setlength\tabcolsep{6pt} % <--- important, (default 6pt)
-    \setlength{\LTleft}{-20cm plus -1fill}
-    \setlength{\LTright}{\LTleft}
-    \footnotesize
-    \begin{center}
-    \begin{TableNotes}
-        \item[a] \label{tn:currency-description} Name of the cryptocurrency. If none exists "--" is used.
-    \end{TableNotes}
-    \keepXColumns
-    \begin{tabularx}{\linewidth}{cRRRRRl}
-            \caption{Comparison of blockchain platforms.}\label{tab:blockchain-platforms}\\
-            \toprule
-            \textbf{Refs.} & \textbf{Platform} & \textbf{Consensus} & \textbf{Runtime env.} & \textbf{Smart Contract Language} & \textbf{Type} & \textbf{Cryptocurrency\tnotex{tn:currency-description}}\\
-            \hline
-        \endfirsthead
-            \caption{(\textit{Continued}) Comparison of blockchain platforms.}\\
-            \toprule
-            \textbf{Refs.} & \textbf{Platform} & \textbf{Consensus} & \textbf{Runtime env.} & \textbf{Smart Contract Language} & \textbf{Type} & \textbf{Cryptocurrency\tnotex{tn:currency-description}}\\
-            \hline
-        \endhead
-            \midrule
-            \multicolumn{7}{r}{\small(\textit{Continued on next page})}\\
-        \endfoot
-            \insertTableNotes\\
-        \endlastfoot
-        
-        \cite{ethereum} & Ethereum & \acrshort{pow} and \acrshort{pos} & Ethereum virtual machine (EVM) & Solidity & Public & Ether \\
-        \cite{ethereumclassic} & Ethereum Classic & \acrshort{pow} & Ethereum virtual machine (EVM) & Solidity & Public & Ether \\
-        \cite{bitcoin} & Bitcoin & \acrshort{pow} & Bitcoin script engine & Bitcoin script language & Public & Bitcoin \\
-        \cite{hyperledger-fabric} & Hyperledger Fabric & \acrshort{pbft} & Docker & Go, Node.js, Java, Kotlin, Python & Permissioned & -- \\
-        \cite{eos} & EOS & \acrshort{dpos} & WASM & C++ & Public & EOS \\
-        \cite{neo} & NEO & \acrshort{dbft} & NEO virtual machine (NeoVM) & C\#, Java, Go, Python & Public & NEO \\
-        \cite{corda} & Corda & \acrshort{pbft} & Deterministic JVM sandbox & CorDapp Design Language (CDL) & Permissioned & -- \\
-        \cite{tezos} & Tezos & \acrshort{pos} & Interprets Michelson & Michelson & Public & Tez (XTZ) \\
-        \cite{tron} & TRON & \acrshort{dpos} & TRON virtual machine (TVM) & TRON Solidity & Public & Tronix (TRX). \\
-        \cite{aeternity} & Æternity & Hybrid \acrshort{pos} \acrshort{pow} & Aeternity EVM (AEVM) and Fast æternity Transaction Engine (FATE) & Sophia & Public & Aeternity (AE) \\
-        \cite{rchain} & RChain & \acrshort{pos} & Rho Virtual Machine & Rholang & Hybrid & REV \\
-        \cite{cardano} & Cardano & \acrshort{pos} & Ethereum virtual machine EVM & Plutus (Functional) & Public & -- \\
-        \cite{aergo} & Aergo & \acrshort{dpos} & AERGO Virtual Machine (AVM) & Aergo Smart Contract Language (ASCL) & Hybrid & AERGO \\
-        \cite{qtum} & QTUM & \acrshort{pos} & Qtum x86 virtual machine & Solidity & Public & QTUM \\
-        \cite{waves} & Waves & \acrshort{lpos} & Interprets RIDE & RIDE & Permissioned & Waves \\
-        \cite{vechain} & Vechain & \acrshort{poa} & Custom EVM & Solidity & Hybrid & VeChain Token (VET) \\
-
-        \bottomrule
-    \end{tabularx}
-    \end{center}
-
-\end{ThreePartTable}
-\end{landscape}
-%\end{sidewaystable}
 
 \subsection{Ethereum blockchain}
 \label{sec:ethereum}
@@ -145,6 +156,8 @@ The blockchain technology was popularized by Bitcoin in 2008. Satoshi Nakamoto i
 
 \section{Smart Contract}
 \label{sec:smart-contract}
+\todo{Rewrite and adapt to vulnerabilities SoliDetector can detect.}
+
 The term "\acrlong{sc}" was introduced with the Ethereum platform in 2014. A \acrfull{sc} is a program that is executed on a blockchain, enabling non-trusting parties to create an \textit{agreement}. \acrshortpl{sc} have enabled several interesting new concepts, such as \acrfull{nft} and entirely new business models. Since Ethereum's introduction of \acrshortpl{sc}, the platform has kept its market share as the most popular \acrshort{sc} blockchain platform. Ethereum is a open, decentralized platform that allows users to create, store, and transfer digital assets. Solidity is a programming language that is used to write smart contracts in Ethereum. Solidity is compiled down to bytecode, which is then deployed and stored on the blockchain. Ethereum also introduces the concept of gas. Ethereum describes gas as follows: \textquote{It is the fuel that allows it to operate, in the same way that a car needs gasoline to run.} \cite{ethereum2021gas}. The gas is used to pay for the cost of running the smart contract. This protects against malicious actors spamming the network \cite{ethereum2021gas}. The gas is paid in Wei, which is the smallest unit of Ethereum. Due to the immutable nature of blockchain technology, once a smart contract is deployed, it cannot be changed. This can have serious security implications, as vulnerable contracts can not be updated.
 
 \subsection{Security Vulnerabilities}
@@ -211,6 +224,7 @@ function withdraw() external {
 
 \section{Vulnerability detection}
 \label{sec:vulnerability-detection}
+\todo{Remove section}
 Many tools and methods for vulnerability detection have been developed over recent years. This includes both static and dynamic vulnerability techniques, as well as tools based on \acrfull{ml}. These tools can be categorized in terms of their primary function. This includes symbolic execution, syntax analysis, abstract interpretation, data flow analysis, fuzzy testing, and machine learning. In the following sections, the identified vulnerability detection tools are summarized, compared, and analyzed in detail.
 
 \subsection{Symbolic execution}
@@ -232,8 +246,4 @@ Data flow analysis is a method for analyzing computer programs by gathering info
 \subsubsection{Fuzzy testing}
 \label{sec:fuzzy-testing}
 Fuzzing is an automated testing technique for analyzing computer programs. The technique involves supplying invalid, unexpected, or random data inputs to a program in order to uncover bugs. The program is then monitored during execution for unexpected behavior such as crashes, errors, or failing built-in code assertions.
-
-\subsubsection{Machine learning}
-\label{sec:machine-learning}
-\acrfull{ml} is the study of computer algorithms that can automatically improve through the use of data. \acrshort{ml} algorithms create a model based on training data. This model is then used to predict the outcome of new unseen data without being explicitly programmed to do so. Machine learning is a powerful tool for detecting vulnerabilities, as the following section shows.
 

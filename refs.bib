@@ -8,6 +8,229 @@
 
 
 
+@inproceedings{kneser1995improved,
+  author    = {Kneser, R. and Ney, H.},
+  booktitle = {1995 International Conference on Acoustics, Speech, and Signal Processing},
+  title     = {Improved backing-off for M-gram language modeling},
+  year      = {1995},
+  volume    = {1},
+  number    = {},
+  pages     = {181-184 vol.1},
+  doi       = {10.1109/ICASSP.1995.479394}
+}
+
+
+@article{shannon1948ngram,
+  author  = {Shannon, C. E.},
+  journal = {The Bell System Technical Journal},
+  title   = {A mathematical theory of communication},
+  year    = {1948},
+  volume  = {27},
+  number  = {3},
+  pages   = {379-423},
+  doi     = {10.1002/j.1538-7305.1948.tb01338.x}
+}
+
+@article{Bengio2003,
+  author     = {Bengio, Yoshua and Ducharme, R\'{e}jean and Vincent, Pascal and Janvin, Christian},
+  title      = {A Neural Probabilistic Language Model},
+  year       = {2003},
+  issue_date = {3/1/2003},
+  publisher  = {JMLR.org},
+  volume     = {3},
+  number     = {null},
+  issn       = {1532-4435},
+  abstract   = {A goal of statistical language modeling is to learn the joint probability function of sequences of words in a language. This is intrinsically difficult because of the curse of dimensionality: a word sequence on which the model will be tested is likely to be different from all the word sequences seen during training. Traditional but very successful approaches based on n-grams obtain generalization by concatenating very short overlapping sequences seen in the training set. We propose to fight the curse of dimensionality by learning a distributed representation for words which allows each training sentence to inform the model about an exponential number of semantically neighboring sentences. The model learns simultaneously (1) a distributed representation for each word along with (2) the probability function for word sequences, expressed in terms of these representations. Generalization is obtained because a sequence of words that has never been seen before gets high probability if it is made of words that are similar (in the sense of having a nearby representation) to words forming an already seen sentence. Training such large models (with millions of parameters) within a reasonable time is itself a significant challenge. We report on experiments using neural networks for the probability function, showing on two text corpora that the proposed approach significantly improves on state-of-the-art n-gram models, and that the proposed approach allows to take advantage of longer contexts.},
+  journal    = {J. Mach. Learn. Res.},
+  month      = {mar},
+  pages      = {1137-1155},
+  numpages   = {19}
+}
+
+
+
+@inproceedings{allamanis2015bimodal,
+  abstract   = {We consider the problem of building probabilistic models that jointly model short natural language utterances and source code snippets. The aim is to bring together recent work on statistical modelling of source code and work on bimodal models of images and natural language. The resulting models are useful for a variety of tasks that involve natural language and source code. We demonstrate their performance on two retrieval tasks: retrieving source code snippets given a natural language query, and retrieving natural language descriptions given a source code query (i.e., source code captioning). The experiments show there to be promise in this direction, and that modelling the structure of source code is helpful towards the retrieval tasks.},
+  author     = {Allamanis, Miltos and Tarlow, Daniel and Gordon, Andy and Wei, Yi},
+  booktitle  = {International Conference on Machine Learning},
+  month      = {August},
+  pages      = {2123-3132},
+  title      = {Bimodal Modelling of Source Code and Natural Language},
+  url        = {https://www.microsoft.com/en-us/research/publication/bimodal-modelling-of-source-code-and-natural-language/},
+  year       = {2015},
+  bdsk-url-1 = {https://www.microsoft.com/en-us/research/publication/bimodal-modelling-of-source-code-and-natural-language/}
+}
+
+
+
+
+@misc{alon2018code2vec,
+  doi       = {10.48550/ARXIV.1803.09473},
+  url       = {https://arxiv.org/abs/1803.09473},
+  author    = {Alon, Uri and Zilberstein, Meital and Levy, Omer and Yahav, Eran},
+  keywords  = {Machine Learning (cs.LG), Artificial Intelligence (cs.AI), Programming Languages (cs.PL), Machine Learning (stat.ML), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  title     = {code2vec: Learning Distributed Representations of Code},
+  publisher = {arXiv},
+  year      = {2018},
+  copyright = {arXiv.org perpetual, non-exclusive license}
+}
+
+
+@inproceedings{hindle2012natural,
+  author    = {Hindle, Abram and Barr, Earl T. and Su, Zhendong and Gabel, Mark and Devanbu, Premkumar},
+  title     = {On the Naturalness of Software},
+  year      = {2012},
+  isbn      = {9781467310673},
+  publisher = {IEEE Press},
+  abstract  = {Natural languages like English are rich, complex, and powerful. The highly creative and graceful use of languages like English and Tamil, by masters like Shakespeare and Avvaiyar, can certainly delight and inspire. But in practice, given cognitive constraints and the exigencies of daily life, most human utterances are far simpler and much more repetitive and predictable. In fact, these utterances can be very usefully modeled using modern statistical methods. This fact has led to the phenomenal success of statistical approaches to speech recognition, natural language translation, question-answering, and text mining and comprehension. We begin with the conjecture that most software is also natural, in the sense that it is created by humans at work, with all the attendant constraints and limitations---and thus, like natural language, it is also likely to be repetitive and predictable. We then proceed to ask whether a) code can be usefully modeled by statistical language models and b) such models can be leveraged to support software engineers. Using the widely adopted n-gram model, we provide empirical evidence supportive of a positive answer to both these questions. We show that code is also very repetitive, and in fact even more so than natural languages. As an example use of the model, we have developed a simple code completion engine for Java that, despite its simplicity, already improves Eclipse's completion capability. We conclude the paper by laying out a vision for future research in this area.},
+  booktitle = {Proceedings of the 34th International Conference on Software Engineering},
+  pages     = {837-847},
+  numpages  = {11},
+  location  = {Zurich, Switzerland},
+  series    = {ICSE '12}
+}
+
+
+@inproceedings{balog2017deepcoder,
+  abstract   = {We develop a first line of attack for solving programming competition-style problems from input-output examples using deep learning. The approach is to train a neural network to predict properties of the program that generated the outputs from the inputs. We use the neural network's predictions to augment search techniques from the programming languages community, including enumerative search and an SMT-based solver. Empirically, we show that our approach leads to an order of magnitude speedup over the strong non-augmented baselines and a Recurrent Neural Network approach, and that we are able to solve problems of difficulty comparable to the simplest problems on programming competition websites.
+                
+                Get the code on GitHub >},
+  author     = {Balog, Matej and Gaunt, Alexander and Brockschmidt, Marc and Nowozin, Sebastian and Tarlow, Daniel},
+  booktitle  = {Proceedings of ICLR'17},
+  month      = {March},
+  title      = {DeepCoder: Learning to Write Programs},
+  url        = {https://www.microsoft.com/en-us/research/publication/deepcoder-learning-write-programs/},
+  year       = {2017},
+  bdsk-url-1 = {https://www.microsoft.com/en-us/research/publication/deepcoder-learning-write-programs/}
+}
+
+@article{alon2018code2seq,
+  author     = {Uri Alon and
+                Omer Levy and
+                Eran Yahav},
+  title      = {code2seq: Generating Sequences from Structured Representations of
+                Code},
+  journal    = {CoRR},
+  volume     = {abs/1808.01400},
+  year       = {2018},
+  url        = {http://arxiv.org/abs/1808.01400},
+  eprinttype = {arXiv},
+  eprint     = {1808.01400},
+  timestamp  = {Sun, 02 Sep 2018 15:01:56 +0200},
+  biburl     = {https://dblp.org/rec/journals/corr/abs-1808-01400.bib},
+  bibsource  = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{svyatkovskiy2019pyhia,
+  doi       = {10.1145/3292500.3330699},
+  url       = {https://doi.org/10.1145%2F3292500.3330699},
+  year      = {2019},
+  month     = {jul},
+  publisher = {{ACM}},
+  author    = {Alexey Svyatkovskiy and Ying Zhao and Shengyu Fu and Neel Sundaresan},
+  title     = {Pythia: {AI}-assisted Code Completion System},
+  booktitle = {Proceedings of the 25th {ACM} {SIGKDD} International Conference on Knowledge Discovery and Data Mining}
+}
+
+@misc{svyatkovskiy2020intellicode,
+  doi       = {10.48550/ARXIV.2005.08025},
+  url       = {https://arxiv.org/abs/2005.08025},
+  author    = {Svyatkovskiy, Alexey and Deng, Shao Kun and Fu, Shengyu and Sundaresan, Neel},
+  keywords  = {Computation and Language (cs.CL), Software Engineering (cs.SE), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  title     = {IntelliCode Compose: Code Generation Using Transformer},
+  publisher = {arXiv},
+  year      = {2020},
+  copyright = {arXiv.org perpetual, non-exclusive license}
+}
+
+@misc{feng2020codebert,
+  doi       = {10.48550/ARXIV.2002.08155},
+  url       = {https://arxiv.org/abs/2002.08155},
+  author    = {Feng, Zhangyin and Guo, Daya and Tang, Duyu and Duan, Nan and Feng, Xiaocheng and Gong, Ming and Shou, Linjun and Qin, Bing and Liu, Ting and Jiang, Daxin and Zhou, Ming},
+  keywords  = {Computation and Language (cs.CL), Programming Languages (cs.PL), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  title     = {CodeBERT: A Pre-Trained Model for Programming and Natural Languages},
+  publisher = {arXiv},
+  year      = {2020},
+  copyright = {arXiv.org perpetual, non-exclusive license}
+}
+
+@inproceedings{papineni2002bleu,
+  author    = {Papineni, Kishore and Roukos, Salim and Ward, Todd and Zhu, Wei-Jing},
+  title     = {BLEU: A Method for Automatic Evaluation of Machine Translation},
+  year      = {2002},
+  publisher = {Association for Computational Linguistics},
+  address   = {USA},
+  url       = {https://doi.org/10.3115/1073083.1073135},
+  doi       = {10.3115/1073083.1073135},
+  abstract  = {Human evaluations of machine translation are extensive but expensive. Human evaluations can take months to finish and involve human labor that can not be reused. We propose a method of automatic machine translation evaluation that is quick, inexpensive, and language-independent, that correlates highly with human evaluation, and that has little marginal cost per run. We present this method as an automated understudy to skilled human judges which substitutes for them when there is need for quick or frequent evaluations.},
+  booktitle = {Proceedings of the 40th Annual Meeting on Association for Computational Linguistics},
+  pages     = {311-318},
+  numpages  = {8},
+  location  = {Philadelphia, Pennsylvania},
+  series    = {ACL '02}
+}
+
+
+@article{colin2020pymt5,
+  author     = {Colin B. Clement and
+                Dawn Drain and
+                Jonathan Timcheck and
+                Alexey Svyatkovskiy and
+                Neel Sundaresan},
+  title      = {PyMT5: multi-mode translation of natural language and Python code
+                with transformers},
+  journal    = {CoRR},
+  volume     = {abs/2010.03150},
+  year       = {2020},
+  url        = {https://arxiv.org/abs/2010.03150},
+  eprinttype = {arXiv},
+  eprint     = {2010.03150},
+  timestamp  = {Tue, 13 Oct 2020 15:25:23 +0200},
+  biburl     = {https://dblp.org/rec/journals/corr/abs-2010-03150.bib},
+  bibsource  = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+
+@misc{lu2021codexglue,
+  doi       = {10.48550/ARXIV.2102.04664},
+  url       = {https://arxiv.org/abs/2102.04664},
+  author    = {Lu, Shuai and Guo, Daya and Ren, Shuo and Huang, Junjie and Svyatkovskiy, Alexey and Blanco, Ambrosio and Clement, Colin and Drain, Dawn and Jiang, Daxin and Tang, Duyu and Li, Ge and Zhou, Lidong and Shou, Linjun and Zhou, Long and Tufano, Michele and Gong, Ming and Zhou, Ming and Duan, Nan and Sundaresan, Neel and Deng, Shao Kun and Fu, Shengyu and Liu, Shujie},
+  keywords  = {Software Engineering (cs.SE), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  title     = {CodeXGLUE: A Machine Learning Benchmark Dataset for Code Understanding and Generation},
+  publisher = {arXiv},
+  year      = {2021},
+  copyright = {arXiv.org perpetual, non-exclusive license}
+}
+
+
+@misc{chen2021codex,
+  doi       = {10.48550/ARXIV.2107.03374},
+  url       = {https://arxiv.org/abs/2107.03374},
+  author    = {Chen, Mark and Tworek, Jerry and Jun, Heewoo and Yuan, Qiming and Pinto, Henrique Ponde de Oliveira and Kaplan, Jared and Edwards, Harri and Burda, Yuri and Joseph, Nicholas and Brockman, Greg and Ray, Alex and Puri, Raul and Krueger, Gretchen and Petrov, Michael and Khlaaf, Heidy and Sastry, Girish and Mishkin, Pamela and Chan, Brooke and Gray, Scott and Ryder, Nick and Pavlov, Mikhail and Power, Alethea and Kaiser, Lukasz and Bavarian, Mohammad and Winter, Clemens and Tillet, Philippe and Such, Felipe Petroski and Cummings, Dave and Plappert, Matthias and Chantzis, Fotios and Barnes, Elizabeth and Herbert-Voss, Ariel and Guss, William Hebgen and Nichol, Alex and Paino, Alex and Tezak, Nikolas and Tang, Jie and Babuschkin, Igor and Balaji, Suchir and Jain, Shantanu and Saunders, William and Hesse, Christopher and Carr, Andrew N. and Leike, Jan and Achiam, Josh and Misra, Vedant and Morikawa, Evan and Radford, Alec and Knight, Matthew and Brundage, Miles and Murati, Mira and Mayer, Katie and Welinder, Peter and McGrew, Bob and Amodei, Dario and McCandlish, Sam and Sutskever, Ilya and Zaremba, Wojciech},
+  keywords  = {Machine Learning (cs.LG), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  title     = {Evaluating Large Language Models Trained on Code},
+  publisher = {arXiv},
+  year      = {2021},
+  copyright = {arXiv.org perpetual, non-exclusive license}
+}
+
+@inproceedings{papineni2002bleu,
+  author    = {Papineni, Kishore and Roukos, Salim and Ward, Todd and Zhu, Wei-Jing},
+  title     = {BLEU: A Method for Automatic Evaluation of Machine Translation},
+  year      = {2002},
+  publisher = {Association for Computational Linguistics},
+  address   = {USA},
+  url       = {https://doi.org/10.3115/1073083.1073135},
+  doi       = {10.3115/1073083.1073135},
+  abstract  = {Human evaluations of machine translation are extensive but expensive. Human evaluations can take months to finish and involve human labor that can not be reused. We propose a method of automatic machine translation evaluation that is quick, inexpensive, and language-independent, that correlates highly with human evaluation, and that has little marginal cost per run. We present this method as an automated understudy to skilled human judges which substitutes for them when there is need for quick or frequent evaluations.},
+  booktitle = {Proceedings of the 40th Annual Meeting on Association for Computational Linguistics},
+  pages     = {311-318},
+  numpages  = {8},
+  location  = {Philadelphia, Pennsylvania},
+  series    = {ACL '02}
+}
+
 @online{mueller2018mythril,
   author        = {Mueller, Bernhard},
   date-added    = {2021-11-15 05:07:32 +0100},

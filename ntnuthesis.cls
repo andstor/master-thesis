@@ -183,6 +183,8 @@ margin=\parindent
 %\usetikzlibrary[patterns,shapes.arrows]
 
 \RequirePackage{pgfplots, pgfplotstable}
+
+%\usepgfplotslibrary{external}
 %\usepgfplotslibrary[groupplots,dateplot]
 %\pgfplotsset{compat=newest}
 %\unexpanded\def\startgroupplot{\groupplot}
