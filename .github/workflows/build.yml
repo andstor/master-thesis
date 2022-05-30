@@ -17,6 +17,7 @@ jobs:
         with:
           root_file: main.tex
           extra_system_packages: "perl-file-which"
+          latexmk_shell_escape: true
 
       - name: Commit pdf
         run: |
