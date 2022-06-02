@@ -180,6 +180,8 @@ margin=\parindent
 \usetikzlibrary{calc}
 \usetikzlibrary{arrows, arrows.meta}
 \usetikzlibrary{patterns}
+\usetikzlibrary{fit,backgrounds,decorations.pathreplacing}
+
 %\usetikzlibrary[patterns,shapes.arrows]
 
 \RequirePackage{pgfplots, pgfplotstable}
