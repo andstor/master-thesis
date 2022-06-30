@@ -60,7 +60,17 @@ The actual code filtering is done by applying a token-based similarity algorithm
 \section{Datasets}
 This section describes the datasets used and created in this study.
 
+\subsection{The Pile}
+\label{sec:the-pile}
 Describe the  PILE...  It consists of among others, a lot of data from GitHub. HHowever, only x\% of the data is smart contracts (Solidity). Hence there is a need for a dataset made up of smart contracts. --> existing datasets....
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/Treemap-of-Pile-components-by-effective-size.png}
+    \caption{Treemap of Pile components by effective size. SOURCE FROM THEPILE paper}
+    \label{fig:flowchart}
+\end{figure}
+
 
 \subsection{Verified Smart Contracts}
 \label{sec:verified-smart-contracts}
@@ -194,6 +204,7 @@ For easy use of the dataset for casual language modeling training, a "plain\_tex
 
 \subsection{Verified Smart Contracts Audit}
 \label{sec:verified-smart-contracts-audit}
+
 \url{https://github.com/andstor/verified-smart-contracts-audit}
 \url{https://huggingface.co/datasets/andstor/smart_contracts_audit}
 
@@ -213,5 +224,20 @@ See \cref{sec:code-comment-clustering} for more information.
 \begin{figure}[ht]
     \centering
     \input{figures/2d_cluster_marginals.pgf}
+    \caption{Histogram \small x of verified \acrshortpl{sc} on Ethereum}
+\end{figure}
+
+
+
+\begin{figure}[ht]
+    \centering
+    \input{figures/elbow.pgf}
+    \caption{Histogram \small x of verified \acrshortpl{sc} on Ethereum}
+\end{figure}
+
+
+\begin{figure}[ht]
+    \centering
+    \input{figures/pca_explained_variance.pgf}
     \caption{Histogram \small x of verified \acrshortpl{sc} on Ethereum}
 \end{figure}

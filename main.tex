@@ -1,9 +1,11 @@
-\documentclass[american,titlepage,oneside]{ntnuthesis}
+\documentclass[american,oneside]{ntnuthesis}
+%\documentclass[american,titlepage,oneside]{ntnuthesis}
 
 \usepackage{pdflscape}
 \usepackage{layouts}
 \usepackage{titling}
-
+\usepackage{float}
+\usepackage{svg}
 
 %\usepgfplotslibrary{external}
 %\tikzexternalize[prefix=figures/,optimize command away=\includepdf]
@@ -40,6 +42,8 @@
 
 \begin{document}
 
+\includepdf[pages=-]{metadata/front-cover.pdf}
+
 \input{chapters/0a-abstract.tex}
 \input{chapters/0b-sammendrag.tex}
 \input{chapters/0c-acknowledgement.tex}
@@ -58,8 +62,8 @@
 \input{chapters/3-related-work.tex}
 \input{chapters/4-method.tex}
 \input{chapters/5-data.tex}
-\input{chapters/6-language-model.tex}
-\input{chapters/7-results.tex}
+\input{chapters/6-language-modeling.tex}
+\input{chapters/7-experiments-and-results.tex}
 \input{chapters/8-discussion.tex}
 \input{chapters/9-future-work.tex}
 \input{chapters/10-conclusion.tex}
@@ -72,4 +76,5 @@
 \appendix
 %\input{appendices/a-appendix.tex}
 
+\includepdf[pages=-]{metadata/back-cover.pdf}
 \end{document}
