@@ -19,14 +19,17 @@ Recent advancements in large-scale transformer-based language models have succes
 
 A machine learning model is only as good as the data it is fed. These large-scale transformers needs huge amounts of data in  order to be trained. Normally, this data is collected from all available open source code. A problem with this, is that a lot of this code contains security problems. This can be everything from exposed API keys, to exploitable vulnerabilities. Autocomplete tools like GitHub Copilot must therefore be used with extreme caution.
 
-In order to better secure automatic code generation, this thesis purposes a novel approach for use of \acrshort{ml} models in large-scale transformer based code generation pipelines to ensure secure generated code. In order to demonstrate the approach, this thesis will focus on generating secure code for smart contracts (Solidity). Smart contracts have an exceptional high demand for security, as vulnerabilities can not be fixed after a contract is deployed. Due to most blockchains' monetary and anonymous nature, they pose as a desirable target for adversaries and manipulators \cite{atzei2017survey}. Further, \acrshortpl{sc} tend to  be rather short and simple, making a good fit for generated code. The research questions addressed in this thesis are:
+To better secure automatic code generation, this thesis purposes a novel approach for use of \acrshort{ml} models in large-scale transformer-based code generation pipelines to ensure secure generated code. To demonstrate the approach, this thesis will focus on generating secure code for smart contracts (Solidity). Smart contracts have an exceptionally high demand for security, as vulnerabilities can not be fixed after a contract is deployed. Due to most blockchains' monetary and anonymous nature, they pose as a desirable target for adversaries and manipulators \cite{atzei2017survey}. Further, \acrshortpl{sc} tends to be rather short and simple, making it a good fit for generated code. The research questions addressed in this thesis are:
 \begin{itemize}
     \item RQ1 How to generate secure code with transformer-based language models?
     \item RQ2 How to generate smart contract code?
 \end{itemize}
 
+
+\noindent
 The specific contributions of this thesis are as follows:
 \begin{itemize}
+    \item The currently largest smart contract dataset.
     \item Fine-tuned transformer-based language model for \acrlong{sc} code generation.
     \item Novel secure code generation method.
     \item Identification of open issues, possible solutions to mitigate these issues, and future directions to advance the state of research in the domain.

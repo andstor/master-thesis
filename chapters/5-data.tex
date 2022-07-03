@@ -143,7 +143,18 @@ The following command prooduces the flattened dataset:
 }
 \end{lstlisting}
 
+\begin{figure}[htbp]
+    \centering
+    \input{figures/flattened_security_levels.pgf}
+    \caption{Doughnut chart over the distribution of the vulnerability severities in the flattened dataset at different granularity levels, where each level occurs at least once in the \acrshort{sc}. The outer ring shows the additional security levels for each contract. For example, "HML" means that the contract has at least three vulnerabilities with the corresponding "High", "Medium", and "Low" security levels.}
+\end{figure}
 
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/flattened_vulnerabilities_bar.pgf}
+    \caption{Distribution of vulnerabilities in the flattened dataset.}
+\end{figure}
 
 \subsubsection{Inflated}
 \label{sec:verified-smart-contracts-inflated}
@@ -182,17 +193,17 @@ dupes=5217191/5403136 (96.56%)
       
 \end{lstlisting}
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
     \centering
-    \input{figures/security_levels.pgf}
-    \caption{Doughnut chart over security levels, where each level occurs at least once in the \acrshort{sc}. The inner ring shows the distribution of the occurrences of each level. The outer ring shows the additional security levels for each contract. For example, "HML" means that the contract has at least three vulnerabilities with the corresponding "High", "Medium", and "Low" security levels.}
+    \input{figures/inflated_security_levels.pgf}
+    \caption{Doughnut chart over the distribution of the vulnerability severities in the inflated dataset at different granularity levels, where each level occurs at least once in the \acrshort{sc}. The inner ring shows the distribution of the occurrences of each level. The outer ring shows the additional security levels for each contract. For example, "HML" means that the contract has at least three vulnerabilities with the corresponding "High", "Medium", and "Low" security levels.}
 \end{figure}
 
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
     \centering
-    \input{figures/vulnerabilities_bar.pgf}
-    \caption{Histogram \small x of verified \acrshortpl{sc} on Ethereum}
+    \input{figures/inflated_vulnerabilities_bar.pgf}
+    \caption{Distribution of vulnerabilities in the inflated dataset.}
 \end{figure}
 
 \subsubsection{Plain text}

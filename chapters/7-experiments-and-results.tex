@@ -1,15 +1,79 @@
 % Or call it Research results?
 
 \chapter{Experiments and Results}
-\label{chap:results}
-This chapter presents the results of this thesis. The chapter starts with ... the research questions defined in \cref{sec:research-questions}.
+\label{chap:experiments-and-results}
+This chapter presents the experiments and results that have been conducted. The experiments are grouped by research question. First, experiment \textbf{E1} takes on research question 1 regarding automatic smart contract code synthesis. It compares the performance of pre-trained transformer-based language models on the verified smart contract dataset. Experiment \textbf{E2} focuses on the security of smart contract code generation, tackling research question 2. It compares the security of a fine-tuned model utilizing security conditioning purposed in \cref{sec:security-conditioning}. This section presents three sub-experiments:
+\begin{enumerate}[label=\textbf{E2.\arabic*.}, leftmargin=1.5cm]
+    \item Compares security performance based on providing entire class context from audited verified smart contract dataset.
+    \item Compares security performance based on using only comments as input context from audited verified smart contract dataset.
+    \item Compares security performance based on testing a custom vulnerability-inclined dataset.
+\end{enumerate}
 
-\section{Benchmarks}
-\todo{Include banchmarks?}
+The last experiment \textbf{E3} takes on research question 3 regarding how to best formulate the input for automatic smart contract code synthesis.
 
-\subsection{SmartBugs}
-Cut at manual positiions.
+\section{E1 - Automatic Smart Contract Code Synthesis}
+\label{sec:e1-automatic-smart-contract-code-synthesis}
 
+\subsubsection{Goal}
+\subsubsection{Method and Data}
+\subsubsection{Results and Discussion}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/wandb-train-loss-gpt-j-smart-contract.png}
+    \caption{Training and evaluation loss during model training.}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/wandb-train-eval-gpt-j-smart-contract.png}
+    \caption{Evaluation accuracy during model training.}
+\end{figure}
+
+
+\section{E2 - Security Conditioning}
+\label{sec:e2-security-conditioning}
+This section presents the results and discussion of the sub-experiments of experiment \textbf{E2}. Experiment \textbf{E2} focuses on the security of smart contract code generation, tackling research question 2. It compares the security of a fine-tuned model with and without utilizing security conditioning purposed in \cref{sec:security-conditioning}. The following three sub-experiments are all based on the same fine-tuned models, but uses different evaluation method.
+
+\subsubsection{Goal}
+\subsubsection{Method and Data}
+\subsubsection{Results and Discussion}
+
+
+\subsection{E2.1 - Complete Class Context}
+\label{sec:e2.1-complete-class-context}
+
+\subsubsection{Goal}
+\subsubsection{Method and Data}
+\subsubsection{Results and Discussion}
+
+
+\subsection{E2.2 - Comment Context}
+\label{sec:e2.2-comment-context}
+
+\subsubsection{Goal}
+\subsubsection{Method and Data}
+\subsubsection{Results and Discussion}
+
+\subsection{E2.3 - Inclined Vulnerabilities}
+\label{sec:e2.3-inclined-vulnerabilities}
+
+\subsubsection{Goal}
+\subsubsection{Method and Data}
+\subsubsection{Results and Discussion}
+
+\section{E3 - Formulation of Inputs}
+\label{sec:e3-formulation-of-inputs}
+
+\subsubsection{Goal}
+\subsubsection{Method and Data}
+\subsubsection{Results and Discussion}
+
+
+
+\todo{Move relevant stuff below to method chapter (experiment plan)}
+
+\todo{Move to datasets?)}
 \subsection{InclinedVulnerabilities}
 Custom dataset containing multiple hand written INCOMPLETE contracts that MAY produce vulnerabilities.
 
@@ -29,20 +93,6 @@ The Levenshtein distance measures how many single-character edits  including ins
 
 
 Get logits from a model  prediction to visualize the distribution of the predicted probabilities.
-
-\section{Training}
-
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=\textwidth]{figures/wandb-train-loss-gpt-j-smart-contract.png}
-    \caption{svg image}
-\end{figure}
-
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=\textwidth]{figures/wandb-train-eval-gpt-j-smart-contract.png}
-    \caption{svg image}
-\end{figure}
 
 \section{Quantitative evaluation}
 
@@ -73,6 +123,9 @@ Huugging face emojie as transformer model!
 
 
 \section{Model weigts}
+THIS USES AN INDUCTIVE ANALYSIS. Fix methodology chapter. ADD as Experiment 4?
 
 Can  we  find structures in the eriht? Neural  view? bertviz? That resembles AST equivalent?
 
+Answers to research questions
+Evaluation of the answers
