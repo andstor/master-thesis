@@ -1,6 +1,6 @@
 \chapter{Background}
 \label{chap:background}
-This chapter introduces the necessary background information for this study. First, a brief introduction to blockchain technology is provided in \cref{sec:blockchain} and then the concept of \acrfullpl{sc} is introduced in \cref{sec:smart-contract}. Finally, in \cref{sec:smart-contract-vulnerabilities}, the most popular \acrshort{sc} vulnerabilities are described.
+This chapter introduces the necessary background information for this study. A brief introduction to blockchain technology is provided in \cref{sec:blockchain}. Then, the concept of \acrfullpl{sc} is introduced in \cref{sec:smart-contract}. Finally, in \cref{sec:smart-contract-vulnerabilities}, the most popular \acrshort{sc} vulnerabilities are described.
 
 %\section{Transfer learning}
 %\label{sec:transfer-learning}
@@ -65,7 +65,7 @@ Finish with RNNs and LSTM.??
 
 \section{Transformer}
 \label{sec:transformer}
-A transformer is a deep learning model. It is designed to process sequential data and adopts the mechanism of self-attention. The Transformer model architecture was introduced in \citeyear{vaswani2017attention} by \textcite{vaswani2017attention}. Unlike more traditional attention-based models such as \acrshortpl{rnn}, transformers do not include any recurrence or convolutions. This allows the model to process the entire input all at once, solely relying on attention. It solves the vanishing gradient problem of recurrent models, where long-range dependencies within the input are not accurately captured. It also allows the model to be significantly more parallelized, making training on huge datasets feasible. Because of this, pre-trained systems such as \acrfullpl{bert} and \acrshortpl{gpt} were developed. These models are pre-trained on a large corpus of text, such as Wikipedia Corpus and Common Crawl, and effectively predict the next word in a sentence. Further, the models can be fine-tuned on a new dataset to improve their performance on more specialized tasks.
+A transformer is a deep learning model. It is designed to process sequential data and adopts the mechanism of self-attention. The Transformer model architecture was introduced in \citeyear{vaswani2017attention} by \textcite{vaswani2017attention}. Unlike more traditional attention-based models such as \acrfullpl{rnn}, transformers do not include any recurrence or convolutions. This allows the model to process the entire input all at once, solely relying on attention. It solves the vanishing gradient problem of recurrent models, where long-range dependencies within the input are not accurately captured. It also allows the model to be significantly more parallelized, making training on huge datasets feasible. Because of this, pre-trained systems such as \acrfullpl{bert} and \acrshortpl{gpt} were developed. These models are pre-trained on a large corpus of text, such as Wikipedia Corpus and Common Crawl, and effectively predict the next word in a sentence. Further, the models can be fine-tuned on a new dataset to improve their performance on more specialized tasks.
 
 \subsection{Attention}
 
@@ -165,11 +165,12 @@ By splitting the query, key, and value parameters in N-ways (logically), each wi
 \label{sec:training}
 A Transformer model typically undergoes something called self-supervised learning. This is an intermediary between both unsupervised- and supervised learning. This normally conforms to unsupervised pre-training the model on a large set of data. Then, the model is fine-tuned on a (usually) smaller dataset of labeled data.
 
-In contrast to the unsupervised training, where the target sequence comprises the predicted transformer output, the supervised training is done by feeding the Transformer the complete input- and target language sequence directly. The input sequence is fed to the encoder, while the target sequence is fed to the decoder.
+In contrast to the unsupervised training, where the target sequence comprises the predicted transformer output, the supervised training is done by feeding the complete input- and target language sequence directly into the Transformer. The input sequence is fed to the encoder, while the target sequence is fed to the decoder.
 
 \subsection{Inference}
 \label{sec:transformer-inference}
 For making inference, the Transformer is only fed the input sequence. The encoder is run on the input sequence, and the encoder output is fed to the decoder. Since no encoder ouput is available at the firs timestep, the decoder is fed a special "<start>" token. The decoder output is then fed back into the decoder again. This process is repeated until the decoder output encounters a special "<stop>" token.
+\todo{More concrete example to explain this. Maybe an figure?}
 
 
 \section{Data parallelism}
@@ -251,11 +252,11 @@ Maybe implement this for Solidity??
 
 \section{Blockchain}
 \label{sec:blockchain}
-A blockchain is a growing list of records that are linked together by a cryptographic hash. Each record is called a block. The blocks contain a cryptographic hash of the previous block, a timestamp, and transactional data. By time-stamping a block, this proves that the transaction data existed when the block was published in order to get into its hash. Since all blocks contains the hash of the previous block, they end up forming a chain. In order to tamper with a block in the chain, this also requires altering all subsequent blocks. Blockchains are therefore resistant to modification. The longer the chain, the more secure it is.
+The blockchain technology was popularized by Bitcoin in 2008. Satoshi Nakamoto introduced the formal idea of blockchain as a peer-to-peer electronic cash system. It enabled users to conduct transactions without the need for a central authority. A blockchain is a growing list of records that are linked together by a cryptographic hash. Each record is called a block. The blocks contain a cryptographic hash of the previous block, a timestamp, and transactional data. By time-stamping a block, this proves that the transaction data existed when the block was published in order to get into its hash. Since all blocks contains the hash of the previous block, they end up forming a chain. In order to tamper with a block in the chain, this also requires altering all subsequent blocks. Blockchains are therefore resistant to modification. The longer the chain, the more secure it is.
 
-Typically, blockchains are managed by a peer-to-peer network, resulting in a publicly distributed ledger. The network is composed of nodes that are connected to each other. The nodes collectively adhere to a protocol in order to communicate and validate new blocks. Blockchain records are possible to alter through a \gls{fork}. However, blockchains can be considered secure by design and presents a distributed computing system with high Byzantine fault tolerance \cite{sankar2017survey}.
+Typically, blockchains are managed by a peer-to-peer network, resulting in a publicly distributed ledger. The network is composed of nodes that are connected to each other. The nodes collectively adhere to a protocol in order to communicate and validate new blocks. Blockchain records are possible to alter through a \gls{fork}. However, blockchains can be considered secure by design and present a distributed computing system with high Byzantine fault tolerance \cite{sankar2017survey}.
 
-The blockchain technology was popularized by Bitcoin in 2008. Satoshi Nakamoto introduced the formal idea of blockchain as a peer-to-peer electronic cash system. It enabled users to conduct transactions without the need for a central authority. From Bitcoin sprang several other cryptocurrencies and blockchain platforms such as Ethereum, Litescoin, and Ripple. \cref{tab:blockchain-platforms} shows an overview of the different blockchain platforms, including the different consensus protocols, programming languages, and execution environments used. It also shows the different types of blockchains, including public, private, and hybrid. If the platform also supplies a native currency (cryptocurrency), this is also shown.
+From Bitcoin sprang several other cryptocurrencies and blockchain platforms such as Ethereum, Litescoin, and Ripple. \cref{tab:blockchain-platforms} shows an overview of the different blockchain platforms, including the different consensus protocols, programming languages, and execution environments used. It also shows the different types of blockchains, including public, private, and hybrid.
 
 
 \subsection{Ethereum blockchain}
@@ -279,7 +280,7 @@ Integer overflow and underflows happen when an arithmetic operation reaches the 
 In blockchain systems, there is no guarantee on the execution order of transactions. A miner can influence the outcome of a transaction due to its own reordering criteria. For example, a transaction that is dependent on another transaction to be executed first may not be executed. This can be exploited by malicious actors. 
 
 \subsubsection{Broken Access Control}
-Access Control issues are common in most systems, not just smart contracts. However, due to the monetary nature and openness of most \acrshortpl{sc}, properly enforcing access controls are essential. Broken access control can, for example, occur due to wrong visibility settings, giving attackers a relatively straightforward way to access contracts' private assets. However, the bypass methods are sometimes more subtle. For example, in Solidity, reckless use of \lstinline[language=Solidity]!delegatecall! in proxy libraries, or the use of the deprecated \lstinline[language=Solidity]!tx.origin! might result in broken access control. \cref{lst:broken-access-control} shows a simple Solidity contract where anyone is able to trigger the contract's self-destruct.
+Access Control issues are common in most systems, not just smart contracts. However, due to the monetary nature and openness of most \acrshortpl{sc}, properly enforcing access controls are essential. Broken access control can, for example, occur due to wrong visibility settings, giving attackers a relatively straightforward way to access contracts' private assets. However, the bypass methods are sometimes more subtle. For example, in Solidity, reckless use of \lstinline[language=Solidity]!delegatecall! in proxy libraries, or the use of the deprecated \lstinline[language=Solidity]!tx.origin! might result in broken access control. \cref{lst:broken-access-control} shows a simple Solidity contract where anyone is able to trigger the contract's self-destruct, which makes the code vulnerable.
 
 \begin{lstlisting}[
     caption={Access control vulnerable Solidity \acrlong{sc} code},
@@ -328,30 +329,3 @@ function withdraw() external {
     balances[msg.sender] = 0;
 }   
 \end{lstlisting}
-
-
-\section{Vulnerability detection}
-\label{sec:vulnerability-detection}
-\todo{Remove section}
-Many tools and methods for vulnerability detection have been developed over recent years. This includes both static and dynamic vulnerability techniques, as well as tools based on \acrfull{ml}. These tools can be categorized in terms of their primary function. This includes symbolic execution, syntax analysis, abstract interpretation, data flow analysis, fuzzy testing, and machine learning. In the following sections, the identified vulnerability detection tools are summarized, compared, and analyzed in detail.
-
-\subsection{Symbolic execution}
-\label{sec:symbolic-execution}
-Symbolic execution is a method for analyzing a computer program in order to determine what inputs cause each part of a program to execute. Symbolic execution requires the program to run. During the execution of the program, symbolic values are used instead of concrete values. The program execution arrives at expressions in terms of symbols for expressions and variables, as well as constraints expressed as symbols for each possible outcome of each conditional branch of the program. Finally, the possible inputs, expressed as symbols, that trigger a branch can be determined by solving the constraints.
-
-\subsubsection{syntax analysis}
-\label{sec:syntax-analysis}
-Syntax analysis is a technique for analyzing computer programs by analyzing the syntactical features of a computer program. This usually involves some kind of pattern matching where the source code is first parsed into a tree structure. This tree is then analyzed by looking for vulnerable patterns while traversing the tree.
-
-\subsubsection{Abstract interpretation}
-\label{sec:abstract-interpretation}
-Abstract interpretation is a method to analyze computer programs by soundly approximating the semantics of a computer program. This results in a superset of the concrete program semantics. Normally, this is then used to automatically extract information about the possible executions of computer programs.
-
-\subsubsection{Data flow analysis}
-\label{sec:data-flow-analysis}
-Data flow analysis is a method for analyzing computer programs by gathering information about the flow of data through the source code. This is done by collecting all the possible set of values calculated at different points through a computer program. This method is able to analyze large programs, compared to, for example, symbolic execution.
-
-\subsubsection{Fuzzy testing}
-\label{sec:fuzzy-testing}
-Fuzzing is an automated testing technique for analyzing computer programs. The technique involves supplying invalid, unexpected, or random data inputs to a program in order to uncover bugs. The program is then monitored during execution for unexpected behavior such as crashes, errors, or failing built-in code assertions.
-

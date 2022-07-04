@@ -59,7 +59,7 @@ Universal Language Model Fine-tuning (ULMFiT) :: introduced the concept of fine-
 
 OpenAI’s Gener- ative Pre-training Transformer (GPT)
 
-GPT-2, improved version of GPT. Works withoutfinettuning. (concerns of it being used to generate unintended or malicious content - delayed release)
+GPT-2, improved version of GPT. Works without fine-tuning. (concerns of it being used to generate unintended or malicious content - delayed release)
 
 Bidirectional Encoder Representations from Transformers (BERT) - > bidirectttional, in comparison to GPT
 
@@ -85,9 +85,9 @@ Programs can also be synthesized by leveraging the semantics of the code. \textc
 
 \subsection{Transformers for code synthesis}
 \label{sec:transformers-for-code-synthesis}
-Inspired by the success of large natural language models such as ELMo, GPT, BERT, XLNet, and RoBERa (CITATION), large-scale Transformer models have been applied in the domains of code synthesis. \textcite{feng2020codebert} proposes a new approach to code synthesis by training the BERT transformer model on Python \gls{docstring} paired with functions. The resulting 125M parameter transformer model, named CodeBERT \cite{feng2020codebert}, achieves strong results on code-search and code-to-text generation. The authors also observe that models that leverage code semantics (\acrshortpl{ast}) can produce slightly better results. CodeGPT by \cite{lu2021codexglue} provides text-to-code generation by training several monolingual GPT-2 transformer models on Python functions and Java methods. For each programming language, one model was pretrained from scratch, while another was finetuned on the code corpus, using the standard GPT-2 vocabulary and natural language understanding ability. The Java models was evaluated on the CONCODE \todo{citation} dataset, achieving a state-of-the-art performance \acrshort{bleu} score \cite{papineni2002bleu} of 28.69 for the model trained from scratch, and 32.79 for the finetuned version. Another model version based on GPT-2 is GPT-C by \textcite{svyatkovskiy2020intellicode}. The 366M parameter-sized model is trained on a code corpus consisting of 1.2 billion lines of source code in Python, C\#, JavaScript and TypeScript programming languages. The Python-only model reportedly achieves a \gls{rouge-l} precision of 0.80 and recall of 0.86. PyMT5 \textcite{colin2020pymt5} is based on the T5 model. The model can predict whole methods from natural language documentation strings (docstrings) and summarize code into docstrings of any common style. For method generation, PyMT5 achieves a \gls{bleu} score of 8.59 and a \gls{rouge-l} F-score of 24.8 on the CodeSearchNet \todo{cite} test set.
+Inspired by the success of large natural language models such as ELMo, GPT, BERT, XLNet, and RoBERa (CITATION), large-scale Transformer models have been applied in the domains of code synthesis. \textcite{feng2020codebert} proposes a new approach to code synthesis by training the BERT transformer model on Python \gls{docstring} paired with functions. The resulting 125M parameter transformer model, named CodeBERT \cite{feng2020codebert}, achieves strong results on code-search and code-to-text generation. The authors also observe that models that leverage code semantics (\acrshortpl{ast}) can produce slightly better results. CodeGPT by \cite{lu2021codexglue} provides text-to-code generation by training several monolingual GPT-2 transformer models on Python functions and Java methods. For each programming language, one model was pre-trained from scratch, while another was fine-tuned on the code corpus, using the standard GPT-2 vocabulary and natural language understanding ability. The Java models was evaluated on the CONCODE \todo{citation} dataset, achieving a state-of-the-art performance \acrshort{bleu} score \cite{papineni2002bleu} of 28.69 for the model trained from scratch, and 32.79 for the fine-tuned version. Another model version based on GPT-2 is GPT-C by \textcite{svyatkovskiy2020intellicode}. The 366M parameter-sized model is trained on a code corpus consisting of 1.2 billion lines of source code in Python, C\#, JavaScript and TypeScript programming languages. The Python-only model reportedly achieves a \gls{rouge-l} precision of 0.80 and recall of 0.86. PyMT5 \textcite{colin2020pymt5} is based on the T5 model. The model can predict whole methods from natural language documentation strings (docstrings) and summarize code into docstrings of any common style. For method generation, PyMT5 achieves a \gls{bleu} score of 8.59 and a \gls{rouge-l} F-score of 24.8 on the CodeSearchNet \todo{cite} test set.
 
-The model complexity of transformers has recently sky-rocketed, with model sizes growing to several tens of billions of parameters. GPT-J, a 6 billion parameter model trained on The Pile, an 825GB dataset. The Pile features many disparate domains, including books, GitHub repositories, webpages, chat logs, and medical, physics, math, computer science, and philosophy papers, making it one of the most extensive and diverse datasets available. The pretrained version of GPT-J is also publicly available. Codex by \textcite{chen2021codex} is a 12 billion parameter model based on GPT. It was trained on 54 million GitHub repositories, and a production version of Codex powers GitHub Copilot \todo{cite}. The model solves 28.8\% of the problems in the HumanEval dataset \todo{cite}, while GPT-3 solves 0\% and GPT-J solves 11.4\%. Google DeepMind's AlphaCode is 41.4 billion parameters and is the first AI to reach a competitive level in programming competitions. AlphaCode was tested against challenges curated by Codeforces \todo{cite}, a competitive coding platform. It achieved an averaged ranking of 54.3\% across 10 contests. The authors found that repeated sampling on the same problem significantly increased the probability of a correct solution.
+The model complexity of transformers has recently sky-rocketed, with model sizes growing to several tens of billions of parameters. GPT-J, a 6 billion parameter model trained on The Pile, an 825GB dataset. The Pile features many disparate domains, including books, GitHub repositories, webpages, chat logs, and medical, physics, math, computer science, and philosophy papers, making it one of the most extensive and diverse datasets available. The pre-trained version of GPT-J is also publicly available. Codex by \textcite{chen2021codex} is a 12 billion parameter model based on GPT. It was trained on 54 million GitHub repositories, and a production version of Codex powers GitHub Copilot \todo{cite}. The model solves 28.8\% of the problems in the HumanEval dataset \todo{cite}, while GPT-3 solves 0\% and GPT-J solves 11.4\%. Google DeepMind's AlphaCode is 41.4 billion parameters and is the first AI to reach a competitive level in programming competitions. AlphaCode was tested against challenges curated by Codeforces \todo{cite}, a competitive coding platform. It achieved an averaged ranking of 54.3\% across 10 contests. The authors found that repeated sampling on the same problem significantly increased the probability of a correct solution.
 
 
 
@@ -225,3 +225,30 @@ However, to the best of my knowledge, there is no paper investigating how to bes
 SmartBugs
 
 Most of the available tools only work on special versions of Solidity. ... Why use SoliDetector?
+
+
+\section{Vulnerability detection}
+\label{sec:vulnerability-detection}
+\todo{Remove section}
+Many tools and methods for vulnerability detection have been developed over recent years. This includes both static and dynamic vulnerability techniques, as well as tools based on \acrfull{ml}. These tools can be categorized in terms of their primary function. This includes symbolic execution, syntax analysis, abstract interpretation, data flow analysis, fuzzy testing, and machine learning. In the following sections, the identified vulnerability detection tools are summarized, compared, and analyzed in detail.
+
+\subsection{Symbolic execution}
+\label{sec:symbolic-execution}
+Symbolic execution is a method for analyzing a computer program in order to determine what inputs cause each part of a program to execute. Symbolic execution requires the program to run. During the execution of the program, symbolic values are used instead of concrete values. The program execution arrives at expressions in terms of symbols for expressions and variables, as well as constraints expressed as symbols for each possible outcome of each conditional branch of the program. Finally, the possible inputs, expressed as symbols, that trigger a branch can be determined by solving the constraints.
+
+\subsubsection{syntax analysis}
+\label{sec:syntax-analysis}
+Syntax analysis is a technique for analyzing computer programs by analyzing the syntactical features of a computer program. This usually involves some kind of pattern matching where the source code is first parsed into a tree structure. This tree is then analyzed by looking for vulnerable patterns while traversing the tree.
+
+\subsubsection{Abstract interpretation}
+\label{sec:abstract-interpretation}
+Abstract interpretation is a method to analyze computer programs by soundly approximating the semantics of a computer program. This results in a superset of the concrete program semantics. Normally, this is then used to automatically extract information about the possible executions of computer programs.
+
+\subsubsection{Data flow analysis}
+\label{sec:data-flow-analysis}
+Data flow analysis is a method for analyzing computer programs by gathering information about the flow of data through the source code. This is done by collecting all the possible set of values calculated at different points through a computer program. This method is able to analyze large programs, compared to, for example, symbolic execution.
+
+\subsubsection{Fuzzy testing}
+\label{sec:fuzzy-testing}
+Fuzzing is an automated testing technique for analyzing computer programs. The technique involves supplying invalid, unexpected, or random data inputs to a program in order to uncover bugs. The program is then monitored during execution for unexpected behavior such as crashes, errors, or failing built-in code assertions.
+

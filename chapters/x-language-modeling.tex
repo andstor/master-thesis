@@ -26,7 +26,7 @@ To load the GPT-J model in float32 precision, one would need at least 2x the mod
 
 GPU needs around 40GB of GPU memory to load the model. For training/fine-tuning the model, it would require significantly more GPU RAM. For example, the Adam optimizer makes four copies of the model: model, gradients, average and the squared average of gradients. Hence, it would take 4x model size GPU memory, even with mixed precision as gradient updates are in fp32. Further, this doesn't include the activations and data batches which would require some more GPU RAM. Hence, solutions like DeepSpeed needs to be used for training/fine-tuning such large models.
 
-If a GPU with mixed precision capabilities (architecture Pascal or more recent) is available, one can use mixed precision training with PyTorch 1.6.0 or later, or by installing the Apex library for previous versions. Just add the flag --fp16 to your command! If you have an NVIDIA “Ampere” GPU architecture, you can use Brain Floting Point (BF16) by passing the flag --bf16. Using mixed precision training usually results in 2x-speedup for training with the same final results.
+If a GPU with mixed precision capabilities (architecture Pascal or more recent) is available, one can use mixed precision training with PyTorch 1.6.0 or later, or by installing the Apex library for previous versions. If using an NVIDIA “Ampere” GPU architecture, the Brain Floting Point (BF16) floating-point format can be used. Using mixed precision training usually results in 2x-speedup for training with the same final results.
 
 \section{Pre-training}
 \label{sec:pretraining}
