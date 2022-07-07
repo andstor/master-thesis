@@ -3,6 +3,7 @@
 This chapter presents the research method used in this thesis. Firstly, the research motivation is presented, followed by the research questions defined for this thesis. The research method and design are explained in the third section. The fourth section presents an overview of the research implementation. Finally, the fifth section presents the various tools and libraries used for this thesis.
 
 \section{Research Motivation}
+\label{sec:research-motivation}
 Writing Smart Contracts are hard. Writing secure Smart Contracts is even harder. Automatic code generation is by many considered the ”holy grail” in the field of computer science \cite{PGL-010}. Recent works have applied transformers for code generation and program synthesis, achieving state-of-the-art results. For example, Codex by \cite{chen2021codex} fine-tunes GPT-3 \cite{brown2020language} on code data from GitHub. The results are impressive. However, these systems still face many problems, especially in regards to different biases, for example, gender and security biases. Because the model is trained on open-source code \cite{chen2021codex}, including "Public code may contain insecure coding patterns, bugs, or references to outdated APIs or idioms.", the model might "synthesize code that contains these undesirable patterns introduce vulnerabilities" \cite{copilot}. An empirical study by \textcite{pearce2021asleep} found that almost approximately 40\% of the generated code by GitHub Copilot is vulnerable. Security flaws in software results yearly in loss of tens of thousands of million dollars\todo{find real number here .}. Due to the monetary nature of blockchain, security flaws are even more severe, as exploits of vulnerabilities often directly result in the loss of funds. Further, the immutable nature prevents the possibility of correcting vulnerable code after being deployed. Therefore, the research objective is to develop a system that can generate secure smart contract code automatically, without the need for human intervention. \todo{Rewrite}. This thesis tries to address the above problems by answering the research questions defined in \cref{sec:research-questions}. this includes both investigating how 
 
 
@@ -11,21 +12,35 @@ Writing Smart Contracts are hard. Writing secure Smart Contracts is even harder.
 The research questions addressed in this thesis are:
 
 \begin{enumerate}[label=\textbf{RQ\arabic*.}, leftmargin=1.5cm]
-    \item How to automatically generate smart contract code with transformer-based language models?
-    \begin{enumerate}[label*=\textbf{\arabic*.}]
-        \item How well do pre-trained transformer-based language models work for smart contract synthesis? \todo{compare to literature review in chapter: related-works}
-        \item What impact does fine-tuning a transformer model on smart contract code have on its code generation ability?
-    \end{enumerate}
+    \item How to automatically generate \acrlong{sc} code with transformer-based language models, by inputting comments to guide the code generation?
     \item How to generate secure code with transformer-based language models?
     %\item How to reduce the vulnerability bias in the transformer model.
-    \item How to best construct inputs for automatic code generation?
 \end{enumerate}
 
 \section{Research Method and Design}
 \label{sec:research-method-and-design}
 
-The underlying foundation for how research is conducted is rooted in the research philosophy used. For this research, a positivistic research philosophy was used. A positivistic philosophy assumes that the world is not random, that it is ordered and regular, and that one can investigate it objectively. \todo{Cite - B. J. Oates, Researching information systems and computing, Sage, 2006.} A deductive research approach was used. To best facilitate the answering of the research questions defined in \cref{sec:research-questions}, experiments were selected as the research strategy. These experiments included fine-tuning pre-trained language models, as well as testing these on real data and man-made data. The results from the evaluation of the fine-tuned models are recorded as observations and quantitatively evaluated.
+%The underlying foundation for how research is conducted is rooted in the research philosophy used. For this research, a positivistic research philosophy was used. A positivistic philosophy assumes that the world is not random, that it is ordered and regular, and that one can investigate it objectively. \cite{oates2006researching} A deductive research approach was used. \todo{Remove deductive?}
 
+To best facilitate the answering of the research questions defined in \cref{sec:research-questions}, an \acrfull{dsr} was selected as the research approach. A \acrshort{dsr} focuses on the development and performance of artifacts. For this to be considered research, the work needs to demonstrate academic qualities such as analysis, explanation, argument, justification, and critical evaluation. Further, the work needs to contribute to knowledge in some way \cite{oates2006researching}.
+\acrshort{dsr} is typically an iterative process that involves five steps \cite{vaishnavi2004design}: Awareness of Problem, Suggestion, Development, Evaluation, and Conclusion.
+\begin{itemize}
+    \item \textbf{Awareness of Problem}: is the recognition and formulation of a problem. This might come from multiple sources, such as areas identified by authors for further research, reading about new developments in the industry, from other disciplines, new technological developments, etc. The output of this phase is a proposal for a new research effort, either formal or informal.
+    \item \textbf{Suggestion}: directly follows the development of a proposal based on an awareness of a problem. This is the creative step where a tentative idea of how to solve such a problem in a novel way is suggested.
+    \item \textbf{Development}: is the actual implementation of the suggested idea. This is the step where the tentative design idea is implemented and produces an artifact. The techniques used for implementation vary with the type of artifact, which could be anything from algorithms to models.
+    \item \textbf{Evaluation}: is the evaluation of the artifact. In this step, the artifact's worth is assessed, as well as potential deviations from expectations. 
+    \item \textbf{Conclusion}: is the final step where the results from the design process are determined to be "good enough". The results are written up. The knowledge gained is identified, along with any loose ends that might serve as subjects for future research.
+\end{itemize}
+
+\noindent
+For this thesis, \cref{sec:research-motivation} clearly describes the awareness of the problems this thesis aims to solve. This is the motivation behind the new research effort proposed in this thesis, conveyed as research questions defined in \cref{sec:research-questions}. The following sections;\todo{Check : or ;} \cref{sec:design-for-rq1} and \cref{sec:design-for-rq2} describe a suggestion for how to solve these research questions. \cref{chap:implementation-and-results} describes the implementation of the suggested solution for the research questions, while \cref{chap:evaluation} presents an evaluation of the implementation results. Finally, the findings and results are discussed in \cref{chap:discussion}, and areas suitable for further research are presented in \cref{chap:future-work}.
+%
+%The next section describes the suggestion step. The next section describes the development step. The next section describes the %evaluation step. The next section describes the conclusion step.
+%This thesis aims to solve the research questions defined in \cref{sec:research-questions}. 
+%
+%These experiments included fine-tuning pre-trained language models, as well as testing these on real data and man-made data. The %results from the evaluation of the fine-tuned models are recorded as observations and quantitatively evaluated.
+%
+%This project employs . \acrfull{dsr} is a ... 
 
 
 
@@ -71,11 +86,20 @@ The underlying foundation for how research is conducted is rooted in the researc
 %\end{enumerate}
 %A comprehensive description of the implementation of the language models is given in \cref{chap:language-modeling}.
 
-\section{Language Model}
+
+\section{Design for RQ1}
+\label{sec:design-for-rq1}
+This section describes the design for research question 1. For constructing a comment-aided system for automatically generating smart contract code, multiple design steps are needed. The first subsection describes how comment The following the following subsections describes system that can generate secure smart contract code automatically, this project uses a deep learning approach. Further, for understanding how to put this system to use in a comment-driven approach, a comment analysis is conducted. 
+For answering this research question, this thesis explores the following:
+
+
+Ever since OpenAI introduced its first transformer model in the GPT series, this class of transformers has been touted as the state-of-the-art for text generation.
+
+\subsection{Language Model}
 \label{sec:language-model}
 As discussed in section \cref{sec:transformers-for-code-synthesis}, there are several available transformer models. However, only a few of them have open-sourced pre-trained weights. Of these, only GPT-J \cite{gpt-j} includes code in it's pre-training dataset "The Pile", described in \cref{sec:the-pile}. As GPT-J is a state-of-the-art generative pre-trained transformer model, this is the language model used in this thesis. 
 
-\subsection{Model architecture}
+\subsubsection{Model architecture}
 \label{sec:architecture}
 Ever since OpenAI introduced its first transformer model in the GPT series, this class of transformers has been touted as the state-of-the-art for text generation. Their latest model, GPT-3 \cite{brown2020language}, is their best performing model with 175 billion parameters. However, the model is not openly available at the current time. GPT-J \cite{gpt-j} with 6 billion parameters (GPT-J-6B) is currently one of the best open-source alternatives to OpenAI's GPT-3. GPT-J was released in June 2021 by EleutherAI \cite{elutherai}, a grassroots collection of researchers working to open-source AI research. The model is trained on the Pile, an 825 GiB diverse, open-source language modeling data set that consists of 22 smaller, high-quality datasets combined together. See section \cref{sec:the-pile} for a more detailed description of the Pile.
 
@@ -89,7 +113,7 @@ Being a GPT class transformer, GPT-J uses a decoder-only architecture, as can be
     \label{fig:gpt-j-architecture}
 \end{figure}
 
-\subsection{Requirements}
+\subsubsection{Requirements}
 \label{sec:requirements}
 To load the GPT-J model in float32 precision, one would need at least 2x the model size of CPU RAM: 1x for the initial weights and another 1x to load the checkpoint. So for just loading the GPT-J model, it would require at least 48GB or CPU RAM. To reduce the memory footprint, one can load the model in half-precision.
 
@@ -97,10 +121,10 @@ GPU needs around 40GB of GPU memory to load the model. For training/fine-tuning 
 
 If a GPU with mixed precision capabilities (architecture Pascal or more recent) is available, one can use mixed precision training with PyTorch 1.6.0 or later, or by installing the Apex library for previous versions. If using an NVIDIA “Ampere” GPU architecture, the Brain Floting Point (BF16) floating-point format can be used. Using mixed precision training usually results in 2x-speedup for training with the same final results.
 
-\subsection{Pre-training}
+\subsubsection{Pre-training}
 Pre-training is defined as "Training in advanced". By first training the model on a huge dataset, the model can then be fine-tuned on a much smaller dataset. This is so-called transfer learning.
 
-\subsection{The Pile}
+\subsubsection{The Pile}
 \label{sec:the-pile}
 Describe the  PILE...  It consists of among others, a lot of data from GitHub. HHowever, only x\% of the data is smart contracts (Solidity). Hence there is a need for a dataset made up of smart contracts. --> existing datasets....
 
@@ -111,18 +135,52 @@ Describe the  PILE...  It consists of among others, a lot of data from GitHub. H
     \label{fig:flowchart}
 \end{figure}
 
+\subsection{Metrics}
 
-\section{Plan of the Experiments}
-This section presents the plan for how the experiments in \cref{chap:experiments-and-results} are executed. This includes an overview of the different technologies applied, both software and hardware, as well as the different phases of the experiments.
+Several metrics were used to evaluate the results. For evaluating the performance of the smart contract generation, accuracy, BLEU score and Perplexity were used. 
 
-\subsection{Technology}
+Multiple metrics special hypothesis testing needs to be used.. Find name..
+
+in addition to the standard deviation when conducting statistical hypothesis tests.
+
+These experiments included fine-tuning pre-trained language models, as well as testing these on real data and man-made data
+
+
+
+
+\section{Design for RQ2}
+\label{sec:design-for-rq2}
+Use secure vs vulnerabile as input to the  model inorder to generate secure code. 
+Why might this idea work? Justify.
+
+
+\subsection{Metrics}
+
+Several metrics were used to evaluate the results. For evaluating the performance of the smart contract generation, accuracy, BLEU score and Perplexity were used. 
+
+Multiple metrics special hypothesis testing needs to be used.. Find name..
+
+in addition to the standard deviation when conducting statistical hypothesis tests.
+
+These experiments included fine-tuning pre-trained language models, as well as testing these on real data and man-made data
+
+
+\subsection{Project scope}
+\label{sec:project-scope}
+
+The project scope in this thesis is limited to the generation of smart contracts for the Ethereum blockchain. Further, only one language model architecture is used. Specifically, the state-of-the-art open-sourced pre-trained transformer model GPT-J-6B by ElutherAI is selected. For research questions 1 and 2, two versions of the model were created by fine-tuning it on two smart contract datasets created for this project. Due to the share size of this model (see \cref{sec:requirements}), no hyper-parameter optimization was performed. The hyper-parameters were left to defaults used during pre-training. Hence, everything but the training data is keept constant throughout the experiments. For research question 3, the primary scope is to assess variations in the actual input to the model. Thus, differences in performance due to variations of the models' inference configuration are not thoroughly explored.
+
+
+
+\section{Technology}
 \label{sec:technology}
+Following is an overview of the different technologies applied in this project, both software and hardware.
 
-\subsubsection{Software}
+\subsection{Software}
 \label{sec:software}
 During the selection of the language modeling library for use in this project, several considerations were made. Firstly, due to the huge size of the model, the library needed to support distributed GPU training. It had to be flexible and scalable, without sacrificing too much on speed. The transformers \cite{transformers} library by Hugging Face \cite{hugging-face} fulfilled these conditions. The library provides flexible and easy-to-use solutions. It also supports integration with DeepSpeed \cite{deepspeed}, a deep learning optimization library by Microsoft \cite{microsoft} that makes distributed training and inference easy, efficient, and effective. The Hugging Face ecosystem also provides the Datasets and Tokenizers libraries, streamlining and significantly simplifying the use of large datasets.
 
-\subsubsection{Hardware resources}
+\subsection{Hardware resources}
 \label{sec:hardware-resources}
 
 IDUN High Performance Computing Platforms.
@@ -134,18 +192,3 @@ IDUN full-fills the requirements defined in \cref{sec:requirements}.
     \caption{Image of IDUN todo: add ref \url{https://www.hpc.ntnu.no/idun/}}
     \label{fig:flowchart}
 \end{figure}
-
-\subsection{Experimental process}
-\label{sec:experimental-process}
-This project employs an experimental and analytical research method, as described in \cref{sec:research-method-and-design}. The standard scientific method was used for all the experiments. This included stating a hypothesis, implementing the required systems, executing the experiments, and evaluating the results. Several metrics were used to evaluate the results. For evaluating the performance of the smart contract generation, accuracy, BLEU score and Perplexity were used. 
-
-Multiple metrics special hypothesis testing needs to be used.. Find name..
-
-in addition to the standard deviation when conducting statistical hypothesis tests.
-
-These experiments included fine-tuning pre-trained language models, as well as testing these on real data and man-made data
-
-\subsection{Project scope}
-\label{sec:project-scope}
-
-The project scope in this thesis is limited to the generation of smart contracts for the Ethereum blockchain. Further, only one language model architecture is used. Specifically, the state-of-the-art open-sourced pre-trained transformer model GPT-J-6B by ElutherAI is selected. For research questions 1 and 2, two versions of the model were created by fine-tuning it on two smart contract datasets created for this project. Due to the share size of this model (see \cref{sec:requirements}), no hyper-parameter optimization was performed. The hyper-parameters were left to defaults used during pre-training. Hence, everything but the training data is keept constant throughout the experiments. For research question 3, the primary scope is to assess variations in the actual input to the model. Thus, differences in performance due to variations of the models' inference configuration are not thoroughly explored.

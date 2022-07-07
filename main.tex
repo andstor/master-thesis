@@ -10,6 +10,17 @@
 %\usepgfplotslibrary{external}
 %\tikzexternalize[prefix=figures/,optimize command away=\includepdf]
 
+%\usepackage{titlesec}
+
+%\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{5}
+
+%\titleformat{\paragraph}
+%{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+%\titlespacing*{\paragraph}
+%{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
 
 \pretitle{
     \begin{flushleft}
@@ -48,7 +59,6 @@
 \input{chapters/0b-sammendrag.tex}
 \input{chapters/0c-acknowledgement.tex}
 
-%\setcounter{tocdepth}{3}
 \tableofcontents
 \listoffigures
 \listoftables
@@ -65,10 +75,11 @@
 %\input{chapters/x-implementation.tex}
 %\input{chapters/x-data.tex}
 %\input{chapters/x-language-modeling.tex}
-\input{chapters/5-experiments-and-results.tex}
-\input{chapters/6-discussion.tex}
-\input{chapters/7-future-work.tex}
-\input{chapters/8-conclusion.tex}
+\input{chapters/5-implementation-and-results.tex}
+\input{chapters/6-evaluation.tex}
+\input{chapters/7-discussion.tex}
+\input{chapters/8-future-work.tex}
+\input{chapters/9-conclusion.tex}
 
 \chapter*{\bibname}
 \printbibliography[heading=none]
