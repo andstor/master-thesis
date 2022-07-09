@@ -13,7 +13,7 @@ The research questions addressed in this thesis are:
 
 \begin{enumerate}[label=\textbf{RQ\arabic*.}, leftmargin=1.5cm]
     \item How to automatically generate \acrlong{sc} code with transformer-based language models, by inputting comments to guide the code generation?
-    \item How to generate secure code with transformer-based language models?
+    \item How to generate secure \acrlong{sc} code with transformer-based language models?
     %\item How to reduce the vulnerability bias in the transformer model.
 \end{enumerate}
 
@@ -95,6 +95,11 @@ For answering this research question, this thesis explores the following:
 
 Ever since OpenAI introduced its first transformer model in the GPT series, this class of transformers has been touted as the state-of-the-art for text generation.
 
+\subsection{Code comments analysis}
+\label{sec:code-comments-analysis}
+\todo{Add a description of the code comments analysis. + the differrent types of comments. + different styles?}
+It is tehrefore needed to analyze the comments in order to investigate how a user can best use this auto-generating system.
+
 \subsection{Language Model}
 \label{sec:language-model}
 As discussed in section \cref{sec:transformers-for-code-synthesis}, there are several available transformer models. However, only a few of them have open-sourced pre-trained weights. Of these, only GPT-J \cite{gpt-j} includes code in it's pre-training dataset "The Pile", described in \cref{sec:the-pile}. As GPT-J is a state-of-the-art generative pre-trained transformer model, this is the language model used in this thesis. 
@@ -153,6 +158,8 @@ These experiments included fine-tuning pre-trained language models, as well as t
 Use secure vs vulnerabile as input to the  model inorder to generate secure code. 
 Why might this idea work? Justify.
 
+\subsubsection{Security conditioning}
+\todo{Write a description of the security conditioning. Something about how to label and the model might pick this up.}
 
 \subsection{Metrics}
 
@@ -165,12 +172,12 @@ in addition to the standard deviation when conducting statistical hypothesis tes
 These experiments included fine-tuning pre-trained language models, as well as testing these on real data and man-made data
 
 
-\subsection{Project scope}
+\section{Project scope}
 \label{sec:project-scope}
 
 The project scope in this thesis is limited to the generation of smart contracts for the Ethereum blockchain. Further, only one language model architecture is used. Specifically, the state-of-the-art open-sourced pre-trained transformer model GPT-J-6B by ElutherAI is selected. For research questions 1 and 2, two versions of the model were created by fine-tuning it on two smart contract datasets created for this project. Due to the share size of this model (see \cref{sec:requirements}), no hyper-parameter optimization was performed. The hyper-parameters were left to defaults used during pre-training. Hence, everything but the training data is keept constant throughout the experiments. For research question 3, the primary scope is to assess variations in the actual input to the model. Thus, differences in performance due to variations of the models' inference configuration are not thoroughly explored.
 
-
+\todo{Restricted to mainly Solidity language}
 
 \section{Technology}
 \label{sec:technology}
@@ -180,10 +187,12 @@ Following is an overview of the different technologies applied in this project, 
 \label{sec:software}
 During the selection of the language modeling library for use in this project, several considerations were made. Firstly, due to the huge size of the model, the library needed to support distributed GPU training. It had to be flexible and scalable, without sacrificing too much on speed. The transformers \cite{transformers} library by Hugging Face \cite{hugging-face} fulfilled these conditions. The library provides flexible and easy-to-use solutions. It also supports integration with DeepSpeed \cite{deepspeed}, a deep learning optimization library by Microsoft \cite{microsoft} that makes distributed training and inference easy, efficient, and effective. The Hugging Face ecosystem also provides the Datasets and Tokenizers libraries, streamlining and significantly simplifying the use of large datasets.
 
+NLTK, extensive use of Pandas, as well as Pytorch, Numpy, and Matplotlib are used for data processing and visualization. \todo{Fix}
+
 \subsection{Hardware resources}
 \label{sec:hardware-resources}
 
-IDUN High Performance Computing Platforms.
+IDUN High Performance Computing Platforms \cite{epic}.
 IDUN full-fills the requirements defined in \cref{sec:requirements}.
 
 \begin{figure}[htp]

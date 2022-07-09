@@ -2,15 +2,7 @@
 
 \chapter{Research Implementation and Results}
 \label{chap:implementation-and-results}
-This chapter presents the experiments and results that have been conducted. The data and language modeling process needed for all of the experiments is presented in the first two sections, respectively. Then, the experiments are presented one by one. 
-
-The experiments are grouped by research question. Experiment \textbf{E1} takes on research question 1 regarding automatic smart contract code synthesis. Expand to \textbf{E1.1} and \textbf{E1.2}It explores the performance of a pre-trained transformer-based language model on the verified smart contract dataset. Experiment \textbf{E2} focuses on the security of smart contract code generation, tackling research question 2. It compares the security of a fine-tuned model utilizing security conditioning purposed in \cref{sec:security-conditioning}. This section presents three sub-experiments:
-\begin{enumerate}[label=\textbf{E2.\arabic*.}, leftmargin=1.5cm]
-    \item Compares security performance based on providing entire class context from audited verified smart contract dataset.
-    \item Compares security performance based on using only comments as input context from audited verified smart contract dataset.
-    \item Compares security performance based on testing a custom vulnerability-inclined dataset.
-\end{enumerate}
-The last experiment \textbf{E3} takes on research question 3 regarding how to best formulate the input for automatic smart contract code synthesis.
+This chapter presents the research implementation and results of the research questions. The chapter is divided into two parts. First, the implementation of research question 1 is described, concerning automatic smart contract code synthesis. The part of the chapter describes the implementation of research question 2, regarding generating secure smart contract code.
 
 \section{Implementation of RQ1}
 This section presents the implementation of research question 1. The implementation is done with the following steps:
@@ -33,9 +25,6 @@ This section presents the implementation of research question 1. The implementat
         \item Fine-tune a transformer model on the verified smart contracts dataset.
     \end{enumerate}
 \end{enumerate}
-
-Secondly, the language modeling process is divided into 2 phases:
-A comprehensive description of the implementation of the language models is given in \cref{chap:language-modeling}.
 
 \subsection{Data collection}
 \label{sec:data-collection}
@@ -121,7 +110,7 @@ The Verified Smart Contracts dataset is a dataset consisting of verified Smart C
         \bottomrule
     \end{tabularx}
 \end{table}
-
+\todo{Removeparsed from table \cref{tab:verified-smart-contracts-metrics}}
 LoC refers to the lines of source\_code. The Parsed dataset counts lines of func\_code + func\_documentation.
 
 \paragraph{Raw}
@@ -133,7 +122,7 @@ The raw dataset contains mostly the raw data from Etherscan, downloaded with the
 \paragraph{Flattened}
 \label{sec:verified-smart-contracts-flattened}
 
-The flattened dataset is a filtered version  of the Raw dataset\cref{sec:verified-smart-contracts-raw}. It contains smart contracts, where every contract contains all required library code. Each "file" is marked in the source code with a comment stating the original file path: //File: path/to/file.sol. These are then filtered for uniqueness with a similarity threshold of 0.9. This means that all contracts whose code shares more than 90\% of the tokens will be discarded. The low uniqueness requirement is due to the often large amount of embedded library code. If the requirement is set to high, the actual contract code will be negligible compared to the library code. Most contracts will be discarded, and the resulting dataset would contain mostly unique library code. However, the dataset as a whole will have a large amount of duplicated libray code. From the 2,217,692 contracts, 2,080,723 duplications are found, giving a duplication percentage of 93.82\%. The resulting dataset consists of 136,969 contracts.
+The flattened dataset is a filtered version  of the Raw dataset\cref{sec:verified-smart-contracts-raw}. It contains smart contracts, where every contract contains all required library code. Each "file" is marked in the source code with a comment stating the original file path: //File: path/to/file.sol. These are then filtered for uniqueness with a similarity threshold of 0.9. This means that all contracts whose code shares more than 90\% of the tokens will be discarded. The low uniqueness requirement is due to the often large amount of embedded library code. If the requirement is set to high, the actual contract code will be negligible compared to the library code. Most contracts will be discarded, and the resulting dataset would contain mostly unique library code. However, the dataset as a whole will have a large amount of duplicated libray code. From the 2,217,692 contracts, 2,080,723 duplications are found, giving a duplication percentage of 93.82\%. The resulting dataset consists of 136,969 contracts. \cref{lst:flattened-dataset-instance} shows an example data instance from the dataset.
 
 %Processing: 100%|██████| 74/74 [20:22<00:00, 16.51s/it, dupes=2081081/2217692 (93.84%)]
 
@@ -144,7 +133,7 @@ The following command prooduces the flattened dataset:
 
 \begin{lstlisting}[
     caption={Solidity standard JSON Input format.},
-    label=lst:flattened-dataset-cmd,
+    label=lst:flattened-dataset-instance,
     language=JSON]
 {
   'contract_name': 'MiaKhalifaDAO',
@@ -167,7 +156,7 @@ The following command prooduces the flattened dataset:
 
 \paragraph{Inflated}
 \label{sec:verified-smart-contracts-inflated}
-The inflated dataset is also based on the raw dataset. Each contract file in the dataset is split into its original representative files. This mitigates a lot of the problems of the flattened dataset in terms of duplicated library code. The library code would, along with other imported contract files, be split into separate contract records. The 2,217,692 "raw" smart contracts are inflated to a total of 5,403,136 separate contract files. These are then grouped by "file\_name" and filtered for uniqueness with a similarity threshold of 0.9. This should produce a dataset with a large amount of unique source code, with low quantities of library code. A total of 5,216,739 duplications are found, giving a duplication percentage of 96.56\%. The resulting dataset consists of 186,397 contracts.
+The inflated dataset is also based on the raw dataset. Each contract file in the dataset is split into its original representative files. This mitigates a lot of the problems of the flattened dataset in terms of duplicated library code. The library code would, along with other imported contract files, be split into separate contract records. The 2,217,692 "raw" smart contracts are inflated to a total of 5,403,136 separate contract files. These are then grouped by "file\_name" and filtered for uniqueness with a similarity threshold of 0.9. This should produce a dataset with a large amount of unique source code, with low quantities of library code. A total of 5,216,739 duplications are found, giving a duplication percentage of 96.56\%. The resulting dataset consists of 186,397 contracts. \cref{lst:inflated-dataset-instance} shows an example data instance from the dataset.
 
 %Processing: 100%|██████| 74/74 [22:50<00:00, 18.52s/it, dupes=5217191/5403136 (96.56%)]
 
@@ -178,7 +167,7 @@ dupes=5217191/5403136 (96.56%)
 
 \begin{lstlisting}[
     caption={Solidity standard JSON Input format.},
-    label=lst:flattened-dataset-cmd,
+    label=lst:lst:inflated-dataset-instance,
     language=JSON]
     {
         'contract_name': 'PinkLemonade',
@@ -207,50 +196,193 @@ dupes=5217191/5403136 (96.56%)
 \label{sec:verified-smart-contracts-plain-text}
 For easy use of the dataset for casual language modeling training, a "plain\_text" version of both the raw, the flattened, and the inflated dataset is made available. This is done through a custom builder script for the dataset, a feature of the Dataset library by Hugging Face.
 
+\FloatBarrier
+
 \subsection{Comment analysis}
 \label{sec:comment-analysis}
+To provide some insight into how a user can best formulate a comment for guiding the code synthesis, a cluster analysis of the comments in the smart contract dataset is conducted. First, a universal Solidity parser is constructed for parsing the Solidity code and extracting "code, comment" pairs. These results are then packaged into a dataset, and a clustering analysis is conducted. The results from this analysis are then later used in the evaluation of the code synthesis in the \ref{chap:evaluation}, shedding some light on which commenting style is the best to use.
 
 \subsubsection{Universal Solidity parser}
 \label{sec:universal-solidity-parser}
+For being able to parse the Solidity \acrshort{sc}, a Solidity parser is constructed. This parser has to be universally compatible with all Solidity versions, hence the grammar used needs to be a lot less restrictive than the current official Solidity grammar available from Ethereum \cite{soliditygrammar}. ANTLR4 \cite{antlr4} is used for constructing the parser. ANTLR is a parser generator. By providing ANTLR with a formal language description called grammar, it can generate a complete parser that can automatically build parse trees. Parse trees are data structures representing how the grammar matches the input. Specifically, ANTLR4 generates a LL(*) (Left-to-right, leftmost derivation) parser \cite{parr2011llstar}. ANTLER is primarily a Java application. However, several code generation targets are available, including Java, C\#, Python, JavaScript, Go, C++, Swift, PHP and Dart \cite{antlr-targets}. In this project, the Python target is used.
 
-Generate railroad diagrams for Solidity grammar.
+Most programming language grammars available do not devote much effort to the handling of code comments. Comments are seen as unnecessary clutter and are normally discarded during lexing. For extracting the comments from the Solidity \acrshort{sc} code, the original source \cite{solidity-antlr4} for the official Solidity grammar \cite{soliditygrammar} is used. This old version is less restrictive and serves as a better starting point for ensuring support for all Solidity versions. This grammar is then simplified and made less restrictive, as well as adapted to support comments. \cref{fig:solidity-railroad-diagram} shows a railroad diagram of a subset of the main grammar rules altered for supporting comments. The complete universal Solidity parser is made available at https://github.com/andstor/solidity-universal-parser.
 
-\paragraph{Parsed dataset}
-\label{sec:verified-smart-contracts-parsed}
-Desribe the parsed dataset. Uses a custtom Solidity parser based on  Antlr4. Elaborate much more here....
-
-
-
-\subsubsection{Comment clustering}
-\label{sec:comment-clustering}
-
-\begin{figure}[ht]
+\begin{figure}[htbp]
     \centering
-    \input{figures/2d_cluster_marginals.pgf}
-    \caption{Histogram \small x of verified \acrshortpl{sc} on Ethereum}
+    %\makebox[\textwidth][c]{\includegraphics{figures/solidity-comments-railroad-diagram.pdf}}%
+    \includegraphics[width=\textwidth]{figures/solidity-comments-railroad-diagram.pdf}
+    \caption{Railroad diagrams of main code comment alteration to Solidity grammar.}
+    \label{fig:solidity-railroad-diagram}
 \end{figure}
 
-
-
-\begin{figure}[ht]
-    \centering
-    \input{figures/elbow.pgf}
-    \caption{Histogram \small x of verified \acrshortpl{sc} on Ethereum}
-\end{figure}
-
-
-\begin{figure}[ht]
-    \centering
-    \input{figures/pca_explained_variance.pgf}
-    \caption{Histogram \small x of verified \acrshortpl{sc} on Ethereum}
-\end{figure}
 
 \subsubsection{Verified Smart Contract Code Comments}
 \label{sec:verified-smart-contracts-comments}
-
 \url{https://huggingface.co/datasets/andstor/smart_contract_comments}
-See \cref{sec:code-comment-clustering} for more information.
 
+For doing the actual extraction of the "code, comment" pairs from the inflated version of the Verified Smart Contracts dataset (see \cref{sec:verified-smart-contracts-inflated}), the well-known visitor pattern \cite{visitor-pattern} is used for visiting the parse tree generated by the universal Solidity parser. ANTLER provides basic infrastructure for implementing such a visitor. The full implementation of the visitor is available at \url{https://github.com/andstor/verified-smart-contracts/blob/main/script/comment_visitor.py}. A script leveraging multiprocessing is used to parallelize the parsing of the dataset. See \url{https://github.com/andstor/verified-smart-contracts} for instructions on how to use this script. The resulting data is then filtered for functions that do not have code comments. These are simply removed and the result is then packaged as a new dataset named Verified Smart Contract Code Comments. A total of ...\todo{Add stats for comments dataset}. \cref{lst:comments-dataset-instance} shows an example data instance from the dataset.
+
+%The results are then packaged and added to the Verified Smart Contracts dataset collection (\cref{sec:verified-smart-contracts}) under the name "parsed".Verified Smart Contracts dataset collection (\cref{sec:verified-smart-contracts}).
+
+%Parsed: Total 4434014 functions, 4.44 GiB and 29965185 lines of code
+%\lstinline[language=Python]!python script/parse_data.py -s data/inflated -o data/parsed!
+
+\begin{lstlisting}[
+    caption={Solidity standard JSON Input format.},
+    label=lst:comments-dataset-instance,
+    language=JSON]
+{
+    'contract_name': 'BondedECDSAKeep',
+    'file_path': '@keep-network/keep-core/contracts/StakeDelegatable.sol',
+    'contract_address': '0x61935dc4ffc5c5f1d141ac060c0eef04a792d8ee',
+    'language': 'Solidity',
+    'class_name': 'StakeDelegatable',
+    'class_code': 'contract StakeDelegatable {\n    using OperatorParams for uint256;\n\n    mapping(address => Operator) internal operators;\n\n    struct Operator {\n        uint256 packedParams;\n        address owner;\n        address payable beneficiary;\n        address authorizer;\n    }\n\n...',
+    'class_documentation': '/// @title Stake Delegatable\n/// @notice A base contract to allow stake delegation for staking contracts.',
+    'class_documentation_type': 'NatSpecSingleLine',
+    'func_name': 'balanceOf',
+    'func_code': 'function balanceOf(address _address) public view returns (uint256 balance) {\n        return operators[_address].packedParams.getAmount();\n    }',
+    'func_documentation': '/// @notice Gets the stake balance of the specified address.\n/// @param _address The address to query the balance of.\n/// @return An uint256 representing the amount staked by the passed address.',
+    'func_documentation_type': 'NatSpecSingleLine',
+    'compiler_version': 'v0.5.17+commit.d19bba13',
+    'license_type': 'MIT',
+    'swarm_source': 'bzzr://63a152bdeccda501f3e5b77f97918c5500bb7ae07637beba7fae76dbe818bda4'
+}  
+\end{lstlisting}
+
+\subsubsection{Comment clustering}
+\label{sec:comment-clustering}
+This section is devoted to the clustering of the comments in the parsed dataset. The comments in the dataset are first preprocessed. In contrast to normal code, code comments are of a more natural language style. Normal natural language text preprocessing is therefore employed. First, the comments are lowercased and tokenized. The default English configuration of the \lstinline[language=Python]!word_tokenize! function from the popular NLTK (Natural Language Toolkit) \cite{nltk} python library is used for tokenization. Stemming is applied to the tokenized words, using the Porter Stemmer algorithm.
+
+For converting the tokenized comments into word embeddings, both the word2vec algorithm \cite{word2vec} and \acrfull{tfidf} is used. The word2vec is able to capture some semantic similarities between the words. In particular, the implementation provided by the gensim library \cite{gensim} is used. The algorithm is configured to produce 100-dimensional vectors, using a window size of 5, and a minimum count of 5. 
+%Word2Vec min_count=5,
+%                     window=5,
+%                     vector_size=100,
+%                     sample=0.001,
+%                     seed=1,
+%                     alpha=0.025,
+%                     min_alpha=0.0001, 
+%                     negative=5,
+
+To weed out the most frequent words \acrfull{tfidf} (see \cref{sec:tf-idf}) is also applied. For example, the different commenting types all start each line with a special word, such as "//", "///" or "*". By using \acrshort{tfidf}, it is possible to get more insights into the different ways of writing comments, beyond just the formatting style of the comments. The resulting word embeddings from the word2vec and \acrshort{tfidf} are multiplied. For each comment, the resulting word embeddings are averaged to form a final comment (or document) embedding.
+
+The comment embeddings are clustered using the K-means algorithm. The number of clusters \(k\) is determined by using the Elbow method for deciding the optimal number of clusters. The results from the Elbow method are presented in \cref{fig:elbow}. From the curve, it is not entirely obvious where the "elbow" is. However, a \(k\) of 4 is selected. For visually inspecting the clustered comments result, the 100-dimensional vectors are reduced to 2D using \acrfull{pca}. The clustering result is shown in \cref{fig:comment-clusters}. The explained variance captured in the 2D plot is approximately 0.64, as shown in the Scree Plot in \cref{fig:scree-plot}.
+
+%Word2Vec lifecycle event {'msg': 'training on 1431483720 raw words (762458270 effective words) took 782.9s, 973910 effective words/s', 'datetime': '2022-06-07T00:40:05.999678', 'gensim': '4.2.0', 'python': '3.7.13 (default, Apr 24 2022, 01:04:09) \n[GCC 7.5.0]', 'platform': 'Linux-5.4.188+-x86_64-with-Ubuntu-18.04-bionic', 'event': 'train'}
+%Time to train the model: 13.05 mins
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/elbow.pgf}
+    \caption{Elbow method for determining the optimal number of clusters.}
+    \label{fig:elbow}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/pca_explained_variance.pgf}
+    \caption{Scree Plot for the PCA dimensionality reduction}
+    \label{fig:scree-plot}
+\end{figure}
+
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/2d_cluster_marginals.pgf}
+    \caption{2D plot of the comment clusters.}
+    \label{fig:comment-clusters}
+\end{figure}
+
+\cref{lst:comment-cluster-0.1,lst:comment-cluster-0.2,lst:comment-cluster-1.1,lst:comment-cluster-1.2,lst:comment-cluster-2.1,lst:comment-cluster-2.2,lst:comment-cluster-3.1,lst:comment-cluster-3.2} shows two examples from each of the four clusters. Upon manual inspection of the different clusters, several patterns emerge. The cluster 0 is mainly composed of comments that is almost exclusively made up of NatSpec comments with only NatSpec fields, for example the "@parameter" and "@return" fields. Most comments also start with a brief description of the function, as for example line 1 in \cref{lst:comment-cluster-0.1}. Next, cluster 1 consists of one-liners, briefly describing what the function. Cluster 2 contains more lengthy comments that describe the function in detail. It is similar to cluster 1 but does not make significant use of the NatSpec fields. Most of these comments also add some variation of a "requirements" section, like the one in lines 4-7 in \cref{lst:comment-cluster-2.1}. Further, several of these comments are from some implementation of common libraries. For example, \cref{lst:comment-cluster-2.1} shows a comment for the implementation of a transfer function in a contract implementation of a ERC20 token. Compared to the base implementation by the OpenZeppelin library \cite{openzeppelin}, this version adds 1.7\% tax if the sender or recipient is an exchange (lines 8-10). Finally, cluster 3 contains very short comments that are more categorical by nature. For example, \cref{lst:comment-cluster-3.1} marks the function as "admin functions" and \cref{lst:comment-cluster-3.2} as "Deposit Management".
+
+
+% Natspec with almost exclusive use of parameter and return keywords.
+\begin{lstlisting}[
+    caption={NatSpec single-line comment in cluster 0.},
+    label=lst:comment-cluster-0.1,
+    language=Solidity]
+/// @dev Executes the next transaction only if the cooldown has passed and the transaction has not expired
+/// @param to Destination address of module transaction
+/// @param value Ether value of module transaction
+/// @param data Data payload of module transaction
+/// @param operation Operation type of module transaction
+/// @notice The txIndex used by this function is always 0
+\end{lstlisting}
+\begin{lstlisting}[
+    caption={NatSpec multi-line comment in cluster 0.},
+    label=lst:comment-cluster-0.2,
+    language=Solidity]
+/**
+ * @dev Gets the timestamp for the value based on ther index
+ * @param _requestID is the requestId to look up
+ * @param _index is the value index to look up
+ * @return uint timestamp
+ */   
+\end{lstlisting}
+% One-liners describing briefly the function.
+\begin{lstlisting}[
+    caption={Single-line comment in cluster 1.},
+    label=lst:comment-cluster-1.1,
+    language=Solidity]
+// Allow the owner to cash out the holdings of this contract.
+\end{lstlisting}
+\begin{lstlisting}[
+    caption={Multi-line comment in cluster 1.},
+    label=lst:comment-cluster-1.2,
+    language=Solidity]
+/* Add a contract to our list of account minters */
+\end{lstlisting}
+
+% Library function implementations. The functions are clearly written, often stating  the requirements of the function. Written out in natural  language.
+\begin{lstlisting}[
+    caption={NatSpec multi-line comment in cluster 2.},
+    label=lst:comment-cluster-2.1,
+    language=Solidity]
+/**
+ * @dev See {IERC20-transfer}.
+ *
+ * Requirements:
+ *
+ * - `recipient` cannot be the zero address.
+ * - the caller must have a balance of at least `amount`.
+ * 
+ * If recipient or sender is exchange, transaction will be taxed 1.7%
+ * Tax is sent to our taxAddress
+ */
+\end{lstlisting}
+\begin{lstlisting}[
+    caption={NatSpec multi-line comment in cluster 2.},
+    label=lst:comment-cluster-2.2,
+    language=Solidity]
+/**
+ * @dev Creates a new token for `to`. Its token ID will be automatically
+ * assigned (and available on the emitted {IERC721-Transfer} event), and the token
+ * URI is specified as a parameter.
+ *
+ * See {ERC721-_mint}.
+ *
+ * Requirements:
+ *
+ * - the caller must have the `MINTER_ROLE`.
+ */   
+\end{lstlisting}
+
+%  Categorical comments. Labels thte function withing a specific category. Eg. admin functions or 
+\begin{lstlisting}[
+    caption={Single-line comment in cluster 3.},
+    label=lst:comment-cluster-3.1,
+    language=Solidity]
+// ----- admin functions -----
+\end{lstlisting}
+\begin{lstlisting}[
+    caption={Multi-line comment in cluster 3.},
+    label=lst:comment-cluster-3.2,
+    language=Solidity]
+/* ---------- Deposit Management ---------- */
+\end{lstlisting}
+
+\clearpage %\FloatBarrier but text is cut off at the end of the page
 
 \subsection{Language Modeling}
 \label{sec:language-modeling}
@@ -263,7 +395,6 @@ This chapter presents a detailed overview of the system architecture for generat
 In this project, pre-trained weights for GPT-J-6B from ElutherAI are used. The pre-training by ElutherAI is done on the dataset The Pile, described in \cref{sec:the-pile}. Of the roughly 825GiB, 95.16 GiB (7.59\%) of The Pile is code from GitHub. Compared to many other open-source models, GPT-J-6B is one of the most promising models for the task of code generation.
 
 The specific GPT-J model configuration can be seen in \cref{tab:gpt-j-model-details}. In detail, GPT-J-6B consists of 28 layers with a model dimension of 4096, and a feedforward dimension of 16384. The model dimension is split into 16 heads, each with a dimension of 256. \acrfull{rope} is applied to 64 dimensions of each head. The model is trained with a tokenization vocabulary of 50257, using the same set of \acrfullpl{bpe} as GPT-2 and GPT-3. The weights of GPT-J-6B are licensed under version 2.0 of the Apache License.
-
 
 %Total params: 6,050,882,784
 %multi-layer perceptron (MLP)
@@ -296,13 +427,14 @@ The specific GPT-J model configuration can be seen in \cref{tab:gpt-j-model-deta
 \todo{add table notes}
 * each layer consists of one feedforward block and one self attention block
 
-
 \subsubsection{Fine-tuning}
 \label{sec:fine-tuning}
 To improve the pre-trained GPT-J-6B model's smart contract code generation performance, the model is fine-tuned on a dataset only containing real Ethereum Smart Contract code. Specifically, two models are created. The first model, named GPT-J-6B-Smart-Contract, is fine-tuned on the Verified Smart Contracts dataset \cref{sec:verified-smart-contracts}. The other model, named GPT-J-6B-Smart-Contract-Audit, is a secure version of the first model. It is fine-tuned on the Verified Smart Contracts Audit dataset \cref{sec:verified-smart-contracts-audit}, the same dataset as for the first model but with additional labeling from vulnerability analysis.
 
 Elaborate on the different scripts and how HuggingFace was used for training. This  also includes the use of DeepSpeed...
 Add link to github repos....
+
+\todo{Add graphs of trining loss and eval accuraccy (results).}
 
 \begin{table}
     %\newcolumntype{Y}{>{\centering\arraybackslash}X}
@@ -348,7 +480,6 @@ Add link to github repos....
         \bottomrule
     \end{tabularx}
 \end{table}
-
 
 \begin{table}
     %\newcolumntype{Y}{>{\centering\arraybackslash}X}
@@ -398,6 +529,7 @@ Add link to github repos....
 %TODO: What is supported by the model? How much memory to use?
 %We perform beam search with width of 5 and optimize for accuracy@1
 
+\FloatBarrier
 
 \section{Implementation of RQ2}
 This section presents the implementation of research question 2. The implementation is done with the following steps:
@@ -475,3 +607,5 @@ Describe figures and some simple analysis of the amount of vulnerable Ethereum c
 
 \subsubsection{Fine-tuning}
 \label{sec:fine-tuning}
+
+\todo{Write short description of the fine-tuning process. Same as in the previous project.}
