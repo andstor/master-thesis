@@ -1,12 +1,10 @@
 \chapter{Background}
 \label{chap:background}
-This chapter introduces the necessary background information for this study. A brief introduction to blockchain technology is provided in \cref{sec:blockchain}. Then, the concept of \acrfullpl{sc} is introduced in \cref{sec:smart-contract}. Finally, in \cref{sec:smart-contract-vulnerabilities}, the most popular \acrshort{sc} vulnerabilities are described.
-
-%\section{Transfer learning}
-%\label{sec:transfer-learning}
+This chapter introduces the necessary background information for this study. First, an introduction to natural language processing is presented in \cref{sec:natural-language-processing}. Then, a thorough description of the Transformer model is provided in \cref{sec:transformer}. Following is \cref{sec:metrics}, explaining the different metrics used in this thesis. A brief introduction to blockchain technology is provided in \cref{sec:blockchain}. Then, the concept of \acrfullpl{sc} is introduced in \cref{sec:smart-contract}. Finally, in \cref{sec:smart-contract-vulnerabilities}, the most popular \acrshort{sc} vulnerabilities are described.
 
 \section{Natural language processing}
 \label{sec:natural-language-processing}
+\todo{Used for comment clustering}
 
 \subsection{Text preprocessing}
 \label{sec:textt-preprocessing}
@@ -38,39 +36,12 @@ If one averages the word embeddings, they would  produce the same vector. Howeve
 \subsubsection{Term frequency-inverse document frequency}
 \label{sec:tf-idf}
 
-
-\section{Machine Learning}
-\label{sec:machine-learning}
-\todo{Rewrite}
-\acrfull{ml} is the study of computer algorithms that can automatically improve through the use of data. \acrshort{ml} algorithms create a model based on training data. This model is then used to predict the outcome of new unseen data without being explicitly programmed to do so.
-
-\subsection{Machine learning models}
-\label{sec:machine-learning-models}
-
-\subsection{Linear models}
-\label{sec:linear-models}
-
-\subsubsection{Logistic regression}
-\label{sec:logistic-regression}
-
-\subsubsection{Support vector machines}
-\label{sec:support-vector-machines}
-
-\subsubsection{Artificial neural networks}
-\label{sec:artificial-neural-networks}
-
-\subsection{Deep learning}
-\label{sec:deep-learning}
-
-
-Finish with RNNs and LSTM.??
-
 \section{Transformer}
 \label{sec:transformer}
 A transformer is a deep learning model. It is designed to process sequential data and adopts the mechanism of self-attention. The Transformer model architecture was introduced in \citeyear{vaswani2017attention} by \textcite{vaswani2017attention}. Unlike more traditional attention-based models such as \acrfullpl{rnn}, transformers do not include any recurrence or convolutions. This allows the model to process the entire input all at once, solely relying on attention. It solves the vanishing gradient problem of recurrent models, where long-range dependencies within the input are not accurately captured. It also allows the model to be significantly more parallelized, making training on huge datasets feasible. Because of this, pre-trained systems such as \acrfullpl{bert} and \acrshortpl{gpt} were developed. These models are pre-trained on a large corpus of text, such as Wikipedia Corpus and Common Crawl, and effectively predict the next word in a sentence. Further, the models can be fine-tuned on a new dataset to improve their performance on more specialized tasks.
 
 \subsection{Attention}
-
+\todo{Finish}
 The self-attention mechanism is a mechanism that allows the model to learn to focus on a specific part of the input sequence. For example, cosider the following sentence: 
 something somethin it..
 
@@ -100,18 +71,18 @@ The standard Transformer architecture, as describe by \citeyear{vaswani2017atten
 
 \subsubsection{Tokenization}
 \label{sec:tokenization}
-The Transformer takes in a sequence of tokens. These are generated input to the  transformer is text is first parsed into tokens by a byte pair encoding tokenizer
+For a Transformer to process the text input, the text is first tokenized. Tokenization is the process of breaking a sequence of text into a sequence of tokens. For example, the sentence \textit{I am a sentence.} is tokenized into the words \textit{I}, \textit{am}, \textit{a}, \textit{sentence}, and \textit{.}. The tokenization process is usually done by a tokenizer. Specifically, the transformer uses a byte pair encoding tokenizer.
 
 \subsubsection{Embedding and Positional Encoding}
 \label{sec:embedding-and-positional-encoding}
-For the Transformer to process the text input, the text is first parsed into tokens by a byte pair encoding tokenizer. The model then needs to understand the meaning and position of the token (word) in the sequence. This is achieved by an Embedding layer and a Positional encoding layer. The results of these two layers are combined.
+After the input text is tokenized, the next step for the model is to understand the meaning and position of the token (word) in the sequence. This is achieved by an Embedding layer and a Positional encoding layer. The results of these two layers are combined.
 
 Two embedding layers are used. The Input Embedding layer is fed the input sequence. The Output Embedding layer accepts the target sequence after shifting the target to the right by one position and inserting a start token at the first position. The embedding layers produce a numerical representation of the input sequence, mapping each token to an embedding vector.
 
 \begin{figure}[htp]
     \centering
     \input{figures/positional_embedding.pgf}
-    \caption{The 64-dimensional positonal encoding for a sentence with the maximum lenght of 512. Each row represents the embedding vector p\_t}
+    \caption{The 64-dimensional positional encoding for a sentence with the maximum length of 512. Each row represents the embedding vector p\_t}
 \end{figure}
 
 \todo{Rewrite}
@@ -153,7 +124,7 @@ The self-attention layer used in each Transformer block is named "Scaled Dot-Pro
 In order to stabilize the gradients during training, the attention weights are divided by the square root of the dimension of the key vectors, \(\sqrt{d_{k}}\). A softmax function is then applied, normalizing the scores to be positive and adding up to 1. Each value vector is then multiplied by the the softmax score. The resulting weighted value vectors are then summed up and serve as output from the attention layer.
 
 In practice, the attention calculation for all tokens can be expressed as one large matrix calculation. This significantly speeds up the training process. The queries, keys, and values are packed into separate matrices. The output matrix can be described as:
-
+\todo{T means transpose. Since this is matrix calculations, do I need to add an explanation of this?}
 \begin{equation}
     \text{Attention$(Q,K,V)$} = \text{softmax}(\frac{QK^T}{\sqrt{d_{k}}})V
 \end{equation}
@@ -161,39 +132,36 @@ In practice, the attention calculation for all tokens can be expressed as one la
 
 \subsubsection{Multi-head attention}
 \label{sec:multi-head-attention}
-By splitting the query, key, and value parameters in N-ways (logically), each with its separate weight matrix, the performance of the Transformer is increased. This is called multi-head attention. It gives the Transformer greater power to encode multiple relationships and nuances for each word. The final attention outputs for the feed-forward network are calculated by concatenating the matrixes for each attention head.
+By splitting the query, key, and value parameters in N-ways (logically), each with its separate weight matrix, the performance of the Transformer is increased. This is called multi-head attention, illustrated in \cref{fig:multihead-attention}. It gives the Transformer greater power to encode multiple relationships and nuances for each word. The final attention outputs for the feed-forward network are calculated by concatenating the matrixes for each attention head.
 
 \subsection{Training}
-\label{sec:training}
+\label{sec:transformer-training}
 A Transformer model typically undergoes something called self-supervised learning. This is an intermediary between both unsupervised- and supervised learning. This normally conforms to unsupervised pre-training the model on a large set of data. Then, the model is fine-tuned on a (usually) smaller dataset of labeled data.
 
 In contrast to the unsupervised training, where the target sequence comprises the predicted transformer output, the supervised training is done by feeding the complete input- and target language sequence directly into the Transformer. The input sequence is fed to the encoder, while the target sequence is fed to the decoder.
 
 \subsection{Inference}
 \label{sec:transformer-inference}
-For making inference, the Transformer is only fed the input sequence. The encoder is run on the input sequence, and the encoder output is fed to the decoder. Since no encoder ouput is available at the firs timestep, the decoder is fed a special "<start>" token. The decoder output is then fed back into the decoder again. This process is repeated until the decoder output encounters a special "<stop>" token.
-\todo{More concrete example to explain this. Maybe an figure?}
+For making inference, the Transformer is only fed the input sequence. The encoder is run on the input sequence, and the encoder output is fed to the decoder. Since no encoder output is available at the first timestep, the decoder is fed a special "<start>" token. The decoder output is then fed back into the decoder again. This process is repeated until the decoder output encounters a special "<stop>" token.
 
+\todo{More concrete example to explain this. Maybe a figure?}
 
-\section{Data parallelism}
-\label{sec:data-parallelism}
+\section{Metrics}
+\label{sec:metrics}
 
-\section{Performance metric}
+\subsection{Performance metric}
 \label{sec:performance-metric}
 
-\subsection{Precision}
-\label{sec:precision}
+\subsubsection{Accuracy}
+\label{sec:accuracy}
 
-\subsection{Recall}
-\label{sec:recall}
+\subsubsection{Perplexity}
+\label{sec:perplexity}
 
-\subsection{F1-score}
-\label{sec:f1-score}
-
-\section{Machine translation metrics}
+\subsection{Machine translation metrics}
 \label{sec:machine-translation-metrics}
 
-\subsection{\textsc{Bleu}}
+\subsubsection{\textsc{Bleu}}
 \label{sec:blue-score}
 \acrfullr{bleu} by \textcite{papineni2002bleu} is a metric for automatically evaluating machine-translated text. \acrshort{bleu} scores are between 0 and 1. A value of 0 means there is no overlap with the reference translation, while a value of 1 means that the translation perfectly overlaps. A score of 0.6 or 0.7 is considered the best you can achieve. The method is based on n-gram matching, where n-grams in the reference translation are matched against n-grams in the translation. The matches are position-independent. The more matches, the higher the score.\\
 
@@ -229,23 +197,12 @@ For making inference, the Transformer is only fed the input sequence. The encode
     \textsc{Bleu} = \text{Brevity Penalty} \cdot \text{Geometric Average Precision Scores $\left(N\right)$}
 \end{equation}
 
-
-
-\subsection{\textsc{CodeBleu}}
-\label{sec:code-bleu}
-https://arxiv.org/pdf/2009.10297.pdf
-
-Maybe implement this for Solidity??
-
-
-\subsection{\textsc{ROUGE}}
-\label{sec:rouge-score}
-
-\section{String metric}
+\subsection{String metric}
 \label{sec:string-metric}
 
-\subsection{Jaccard index}
+\subsubsection{Jaccard index}
 \label{sec:jaccard-index}
+TODO: Used for smart contract filtering
 
 \section{Blockchain}
 \label{sec:blockchain}
@@ -326,3 +283,30 @@ function withdraw() external {
     balances[msg.sender] = 0;
 }   
 \end{lstlisting}
+
+
+
+\section{Vulnerability detection}
+\label{sec:vulnerability-detection}
+\todo{Condence into one section, describing the different methods.. Add ontology based detection (for SoliDetector)}
+Many tools and methods for vulnerability detection have been developed over recent years. This includes both static and dynamic vulnerability techniques, as well as tools based on \acrfull{ml}. These tools can be categorized in terms of their primary function. This includes symbolic execution, syntax analysis, abstract interpretation, data flow analysis, fuzzy testing, and machine learning. In the following sections, the identified vulnerability detection tools are summarized, compared, and analyzed in detail.
+
+\subsection{Symbolic execution}
+\label{sec:symbolic-execution}
+Symbolic execution is a method for analyzing a computer program in order to determine what inputs cause each part of a program to execute. Symbolic execution requires the program to run. During the execution of the program, symbolic values are used instead of concrete values. The program execution arrives at expressions in terms of symbols for expressions and variables, as well as constraints expressed as symbols for each possible outcome of each conditional branch of the program. Finally, the possible inputs, expressed as symbols, that trigger a branch can be determined by solving the constraints.
+
+\subsubsection{Syntax analysis}
+\label{sec:syntax-analysis}
+Syntax analysis is a technique for analyzing computer programs by analyzing the syntactical features of a computer program. This usually involves some kind of pattern matching where the source code is first parsed into a tree structure. This tree is then analyzed by looking for vulnerable patterns while traversing the tree.
+
+\subsubsection{Abstract interpretation}
+\label{sec:abstract-interpretation}
+Abstract interpretation is a method to analyze computer programs by soundly approximating the semantics of a computer program. This results in a superset of the concrete program semantics. Normally, this is then used to automatically extract information about the possible executions of computer programs.
+
+\subsubsection{Data flow analysis}
+\label{sec:data-flow-analysis}
+Data flow analysis is a method for analyzing computer programs by gathering information about the flow of data through the source code. This is done by collecting all the possible set of values calculated at different points through a computer program. This method is able to analyze large programs, compared to, for example, symbolic execution.
+
+\subsubsection{Fuzzy testing}
+\label{sec:fuzzy-testing}
+Fuzzing is an automated testing technique for analyzing computer programs. The technique involves supplying invalid, unexpected, or random data inputs to a program in order to uncover bugs. The program is then monitored during execution for unexpected behavior such as crashes, errors, or failing built-in code assertions.

@@ -1,76 +1,45 @@
 \chapter{Related work}
 \label{chap:related-work}
 
-This chapter presents related research in the field of source code synthesis. This includes works related to dataset construction, model implementations, model inference guiding, and different approaches to code synthesis. 
+This chapter presents related research in the field of source code synthesis. This includes works related to dataset construction, model implementations, model inference guiding, and different approaches to code synthesis. First, various methods for source code synthesis are presented. Then follows a section on various model implementations, and on the generation of datasets, and a section on the generation of models.
 
-First, various methods for source code synthesis are presented. Then follows a section on various model implementations, and   on the generation of datasets, and a section on the generation of models.
-
-
-
-Make a literature review based on code synthesis / code auto completion. This would include both the main topic "code synthesis", as well as code comments for optimal code completion.
-
-Code completion vs code synthesis vs automatic code generation vs intellisense.
-
-Python: docstring  - structured comment first line under function  definition
-C++: Doxygen
-Java: javadoc
-JS: JSDoc
-
-TS=("code" AND ("completion" OR "generation" OR "synthesis" ))
-
-TS=("code" AND ("auto-completion" OR "generation" OR "synthesis" ) AND comment)
-
-spsp
-
-
-
-\section{Language models}
-\label{sec:language-models}
-The problem of generating code is fundamentally a language modeling problem. Language modeling is the task of predicting the next word in a text given the previous words. This section begins with presenting some of the earlier techniques, followed by surveying more recent and state-of-the-art language models.
-
-
-The first few language models came in the form of n-grams, a term first referenced by \textcite{shannon1948ngram}. An n-gram is a contiguous sequence of n items from a given sample of text. Most early approaches employed n-grams with smoothing to handle unseen n-grams \textcite{kneser1995improved}.
-
-
-
-\subsection{Non-context models}
-\subsection{Context aware models}
-
-
-
-\subsection{Word embeddings}
-
-
-
-Tomas Mikolov's Word2vec (google team),
-Stanford University's GloVe
-GN-GloVe (genderneutral) ->point tto thte bias problem off datasets -> link to insecure code on  github
-
-
-
-\subsection{Neural language models}
-N-grams
-
-CoVe (Contextualized Word Vectors) needs "fixed" prettrained dataset :: Learned in Translation: Contextualized Word Vectors
-
-ELMo biLM
-
-Universal Language Model Fine-tuning (ULMFiT) :: introduced the concept of fine-tuning the language model.
-
-OpenAI’s Gener- ative Pre-training Transformer (GPT)
-
-GPT-2, improved version of GPT. Works without fine-tuning. (concerns of it being used to generate unintended or malicious content - delayed release)
-
-Bidirectional Encoder Representations from Transformers (BERT) - > bidirectttional, in comparison to GPT
-
-BERT is a bimodal Transformer with 12 layers, 768 dimentional hidden states, and 12 attention heads.
-
------
-GPT-3 (Codex)
-
-GPT-J (Opensoursed)
-
-
+%\section{Language models}
+%\label{sec:language-models}
+%The problem of generating code is fundamentally a language modeling problem. Language modeling is the task of predicting the next word in a text given the previous words. This section begins with presenting some of the earlier techniques, followed by surveying more recent and state-of-the-art language models.
+%
+%
+%The first few language models came in the form of n-grams, a term first referenced by \textcite{shannon1948ngram}. An n-gram is a %contiguous sequence of n items from a given sample of text. Most early approaches employed n-grams with smoothing to handle unseen %n-grams \textcite{kneser1995improved}.
+%
+%\subsection{Non-context models}
+%\subsection{Context aware models}
+%\subsection{Word embeddings}
+%Tomas Mikolov's Word2vec (google team),
+%Stanford University's GloVe
+%GN-GloVe (genderneutral) ->point tto thte bias problem off datasets -> link to insecure code on  github
+%
+%\subsection{Neural language models}
+%N-grams
+%
+%CoVe (Contextualized Word Vectors) needs "fixed" prettrained dataset :: Learned in Translation: Contextualized Word Vectors
+%
+%ELMo biLM
+%
+%Universal Language Model Fine-tuning (ULMFiT) :: introduced the concept of fine-tuning the language model.
+%
+%OpenAI’s Gener- ative Pre-training Transformer (GPT)
+%
+%GPT-2, improved version of GPT. Works without fine-tuning. (concerns of it being used to generate unintended or malicious content - %delayed release)
+%
+%Bidirectional Encoder Representations from Transformers (BERT) - > bidirectttional, in comparison to GPT
+%
+%BERT is a bimodal Transformer with 12 layers, 768 dimentional hidden states, and 12 attention heads.
+%
+%-----
+%GPT-3 (Codex)
+%
+%GPT-J (Opensoursed)
+%
+%
 \section{Code synthesis}
 This section presents some of the various approaches to code synthesis. 
 
@@ -87,7 +56,7 @@ Programs can also be synthesized by leveraging the semantics of the code. \textc
 \label{sec:transformers-for-code-synthesis}
 Inspired by the success of large natural language models such as ELMo, GPT, BERT, XLNet, and RoBERa (CITATION), large-scale Transformer models have been applied in the domains of code synthesis. \textcite{feng2020codebert} proposes a new approach to code synthesis by training the BERT transformer model on Python \gls{docstring} paired with functions. The resulting 125M parameter transformer model, named CodeBERT \cite{feng2020codebert}, achieves strong results on code-search and code-to-text generation. The authors also observe that models that leverage code semantics (\acrshortpl{ast}) can produce slightly better results. CodeGPT by \cite{lu2021codexglue} provides text-to-code generation by training several monolingual GPT-2 transformer models on Python functions and Java methods. For each programming language, one model was pre-trained from scratch, while another was fine-tuned on the code corpus, using the standard GPT-2 vocabulary and natural language understanding ability. The Java models was evaluated on the CONCODE \todo{citation} dataset, achieving a state-of-the-art performance \acrshort{bleu} score \cite{papineni2002bleu} of 28.69 for the model trained from scratch, and 32.79 for the fine-tuned version. Another model version based on GPT-2 is GPT-C by \textcite{svyatkovskiy2020intellicode}. The 366M parameter-sized model is trained on a code corpus consisting of 1.2 billion lines of source code in Python, C\#, JavaScript and TypeScript programming languages. The Python-only model reportedly achieves a \gls{rouge-l} precision of 0.80 and recall of 0.86. PyMT5 \textcite{colin2020pymt5} is based on the T5 model. The model can predict whole methods from natural language documentation strings (docstrings) and summarize code into docstrings of any common style. For method generation, PyMT5 achieves a \gls{bleu} score of 8.59 and a \gls{rouge-l} F-score of 24.8 on the CodeSearchNet \todo{cite} test set.
 
-The model complexity of transformers has recently sky-rocketed, with model sizes growing to several tens of billions of parameters. GPT-J, a 6 billion parameter model trained on The Pile, an 825GB dataset. The Pile features many disparate domains, including books, GitHub repositories, webpages, chat logs, and medical, physics, math, computer science, and philosophy papers, making it one of the most extensive and diverse datasets available. The pre-trained version of GPT-J is also publicly available. Codex by \textcite{chen2021codex} is a 12 billion parameter model based on GPT. It was trained on 54 million GitHub repositories, and a production version of Codex powers GitHub Copilot \todo{cite}. The model solves 28.8\% of the problems in the HumanEval dataset \todo{cite}, while GPT-3 solves 0\% and GPT-J solves 11.4\%. Google DeepMind's AlphaCode is 41.4 billion parameters and is the first AI to reach a competitive level in programming competitions. AlphaCode was tested against challenges curated by Codeforces \todo{cite}, a competitive coding platform. It achieved an averaged ranking of 54.3\% across 10 contests. The authors found that repeated sampling on the same problem significantly increased the probability of a correct solution.
+The model complexity of transformers has recently sky-rocketed, with model sizes growing to several tens of billions of parameters. GPT-J, a 6 billion parameter model trained on The Pile, an 825GB dataset. The Pile features many disparate domains, including books, GitHub repositories, webpages, chat logs, and medical, physics, math, computer science, and philosophy papers, making it one of the most extensive and diverse datasets available. The pre-trained version of GPT-J is also publicly available. Codex by \textcite{chen2021codex} is a 12 billion parameter model based on GPT. It was trained on 54 million GitHub repositories, and a production version of Codex powers GitHub Copilot \todo{cite}. The model solves 28.8\% of the problems in the HumanEval dataset \todo{cite}, while GPT-3 solves 0\% and GPT-J solves 11.4\%. Google DeepMind's AlphaCode \cite{alphacode} is 41.4 billion parameters and is the first AI to reach a competitive level in programming competitions. AlphaCode was tested against challenges curated by Codeforces \todo{cite}, a competitive coding platform. It achieved an average ranking of 54.3\% across 10 contests. The authors found that repeated sampling on the same problem significantly increased the probability of a correct solution.
 
 
 
@@ -144,111 +113,24 @@ The model complexity of transformers has recently sky-rocketed, with model sizes
 \section{Bias in language models}
 Include security as a bias. Discuss for example gender bias (ex. male vs female jobs) due to datasets.... Same goes with vulnerablilities.. Include stats from gitthub securitty??
 
-
-
-\section{Smart contract code generation}
-Some old-school models? I know various methods for programming smart contracs exists.. Maybe some graphical solutions?
-
-\section{Datasets}
-CodeXGLUE - Microsoft
-
-CodeNet - IBM
-
-
-
-
-%\begin{sidewaystable}
-\begin{ThreePartTable}
-    \todo{Add input, ouputt, meetric ,  language and model info to table}
-    \newcolumntype{Y}{>{\centering\arraybackslash}X}
-    \newcolumntype{R}{>{\raggedright\arraybackslash}X}
-    \def\arraystretch{1.5}
-    \setlength\tabcolsep{6pt} % <--- important, (default 6pt)
-    \setlength{\LTleft}{-20cm plus -1fill}
-    \setlength{\LTright}{\LTleft}
-    \footnotesize
-    \begin{center}
-    \begin{TableNotes}
-        \item[a] \label{tn:ml-name} Name of the tool or method. If no name exists, a short description or "--" is used.
-    \end{TableNotes}
-    \keepXColumns
-    \begin{tabularx}{1\textwidth}{clRRRRR}
-            \caption{Existing code datasets.}\label{tab:ml-tools}\\
-            \toprule
-            \textbf{Refs.} & \textbf{Year} & \textbf{Model\tnotex{tn:ml-name}} & \textbf{Metrics} & \textbf{Languages} &  \textbf{Input} & \textbf{Output}\\
-            \hline
-            \endfirsthead
-            \caption{(\textit{Continued}) Existing static smart contract vulnerability detection tools.}\\
-            \toprule
-            \textbf{Refs.} & \textbf{Year} & \textbf{Model\tnotex{tn:ml-name}} & \textbf{Metrics} & \textbf{Languages} &  \textbf{Input} & \textbf{Output}\\
-            \hline
-        \endhead
-            \midrule
-            \multicolumn{7}{r}{\small(\textit{Continued on next page})}\\
-        \endfoot
-            \insertTableNotes\\
-        \endlastfoot
-        
-        \cite{} & \citeyear{} & GPT & \acrshort{bleu} & Python & Docstring & Code\\
-        
-        \bottomrule
-    \end{tabularx}
-    \end{center}
-
-\end{ThreePartTable}
-%\end{sidewaystable}
-
-
+\todo{Add paper on code security}
 % vvvvvvvv VIKTIG vvvvvvvvvv
 
-autoregressive generation tasks
-see https://arxiv.org/pdf/2005.08025.pdf for structuring thesisl....!!!!
+%autoregressive generation tasks
+%see https://arxiv.org/pdf/2005.08025.pdf for structuring thesisl....!!!!
 
-see docstring analysis 2.3 of https://arxiv.org/pdf/2010.03150.pdf for clustering comments....
+%see docstring analysis 2.3 of https://arxiv.org/pdf/2010.03150.pdf for clustering comments....
 %^^^^^^^^ VIKTIG ^^^^^^^^
 
 
 \section{Code comment analysis}
 \label{sec:code-comment-analysis}
+Docstring analysis 2.3 of https://arxiv.org/pdf/2010.03150.pdf for clustering comments. Uses it to produce different kind of code comments. However, does not use it for function generation. 
 
-Several papers on generating code comments from source code are available. The following is a list of the most popular papers.
+\todo{Try to find papers that reviewe style of comments}
+%Several papers on generating code comments from source code are available. The following is a list of the most popular papers.
 
-However, to the best of my knowledge, there is no paper investigating how to best write comments for auto-generating code. There are however, 
-
-
-\section{Vulnerability detection tools}
-\label{sec:vulnerability-detection-tools}
-
-\todo{Include vulnerability detection tools table from literature reeview}
+%However, to the best of my knowledge, there is no paper investigating how to best write comments for auto-generating code. There are however, 
 
 
-SmartBugs
-
-Most of the available tools only work on special versions of Solidity. ... Why use SoliDetector?
-
-
-\section{Vulnerability detection}
-\label{sec:vulnerability-detection}
-\todo{Remove section}
-Many tools and methods for vulnerability detection have been developed over recent years. This includes both static and dynamic vulnerability techniques, as well as tools based on \acrfull{ml}. These tools can be categorized in terms of their primary function. This includes symbolic execution, syntax analysis, abstract interpretation, data flow analysis, fuzzy testing, and machine learning. In the following sections, the identified vulnerability detection tools are summarized, compared, and analyzed in detail.
-
-\subsection{Symbolic execution}
-\label{sec:symbolic-execution}
-Symbolic execution is a method for analyzing a computer program in order to determine what inputs cause each part of a program to execute. Symbolic execution requires the program to run. During the execution of the program, symbolic values are used instead of concrete values. The program execution arrives at expressions in terms of symbols for expressions and variables, as well as constraints expressed as symbols for each possible outcome of each conditional branch of the program. Finally, the possible inputs, expressed as symbols, that trigger a branch can be determined by solving the constraints.
-
-\subsubsection{syntax analysis}
-\label{sec:syntax-analysis}
-Syntax analysis is a technique for analyzing computer programs by analyzing the syntactical features of a computer program. This usually involves some kind of pattern matching where the source code is first parsed into a tree structure. This tree is then analyzed by looking for vulnerable patterns while traversing the tree.
-
-\subsubsection{Abstract interpretation}
-\label{sec:abstract-interpretation}
-Abstract interpretation is a method to analyze computer programs by soundly approximating the semantics of a computer program. This results in a superset of the concrete program semantics. Normally, this is then used to automatically extract information about the possible executions of computer programs.
-
-\subsubsection{Data flow analysis}
-\label{sec:data-flow-analysis}
-Data flow analysis is a method for analyzing computer programs by gathering information about the flow of data through the source code. This is done by collecting all the possible set of values calculated at different points through a computer program. This method is able to analyze large programs, compared to, for example, symbolic execution.
-
-\subsubsection{Fuzzy testing}
-\label{sec:fuzzy-testing}
-Fuzzing is an automated testing technique for analyzing computer programs. The technique involves supplying invalid, unexpected, or random data inputs to a program in order to uncover bugs. The program is then monitored during execution for unexpected behavior such as crashes, errors, or failing built-in code assertions.
 

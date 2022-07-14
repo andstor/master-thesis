@@ -1,14 +1,45 @@
 \chapter{Discussion}
 \label{chap:discussion}
-
-In this thesis, ...
+In this chapter, the results of the implementation and evaluation given in \cref{chap:implementation-and-results,chap:evaluation} are discussed. In \cref{sec:threats-to-validity} various threats to validity are discussed.
 
 \section{Comparison with related work}
+This section compares the results and findings with related work. First, the transformer model fine-tuned fine-tuned for \acrshort{sc} code generation is discussed. Then, the security conditioning approach developed for answering research question 2 is discussed. 
+
+%In this chapter, the findings and observations emerged from answering the research questions are discussed. First, the transformer model fine-tuned for research question 1 is discussed. Following is a discussion of the security conditioning approach developed for answering research question 2. Finally, various threats to validity are discussed.
+
+%Two transformer models are created in this thesis to answer the research questions. These have been In this chapter, the implementation results and  the  The first model is a transformer model based on the following paper:
+\todo{Remove the "Discussion of RQx" headings?s}
+\subsection{Discussion of RQ1}
+According to research question 1, this thesis has investigated how to automatically generate Smart Contract code with transformer-based language models, by inputting comments to guide the code generation. For answering the first part of the research question, one of the largest open-source transformer models was fine-tuned on real Ethereum \acrshortpl{sc}. The implementation achieves an accuracy of 0.917 and perplexity of 1.510. This is a significant improvement compared to the pre-trained model, which achieves an accuracy of 0.800 and a perplexity of 2.600. The rather high accuracy from pre-training is most likely due to the high percentage of comments in the dataset, many of which are written in natural language. \todo{Try to find another work fine-tuning on programming language and reporting accuracy+perplexity improvement}
+
+This work also considers evaluation using a comment-aided approach for generating code. In \cref{sec:eval-rq1-comment-pluss-code-context}, the model is evaluated using comments and code context. 
+
+In \cref{chap:evaluation}, the model is evaluated on method generation from comments. While most other works related to automatic function generation from comments, few have looked at extending this together with code context. As a user seldom has to create code without  the combining specific combination of comments and combined the primarily been interested in the performance of . Few works take into account how the model is used by the user. As doing user studies are a verry time consuming and difficult procedure, very few works have been able to answer the research question. The implementation of this thesis has been able to answer the research question.
+
+
+
+The  model is evakluated for function generation from code comments. Due to the lack of 
+TThis is the first model purposed for generating smart contract code. 
+
+https://minimaxir.com/2021/06/gpt-j-6b/
+
+
+
+For training such a large model, this project constructs the largest real \acrshort{sc} dataset ever created. Alternative 
+
+, and a state-of-the-art automatic smart contract code generation model.
+
+There have been several 
+Research question 1 is to implement a transformer model for generating \acrshort{sc} code automatically, using a comment-audeed approach.
 Compared to related ...  Compare BLEU score here.. make table!! 
 Small sttattement regarding the paper stating 40\% vulnerable code from copilot.
 
 
+\subsection{Discussion of RQ2}
+Too answer research question 2, this thesis has investigated how to automatically generate Smart Contract code with transformer-based language models
 
 \section{Threats to Validity}
 
 Data contamination in test and train datasets.
+
+Only use one vulnerability detection tool

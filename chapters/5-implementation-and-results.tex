@@ -38,7 +38,7 @@ The largest provider of verified \acrshortpl{sc} is Etherscan. This website prov
 
 In order to download the \acrshortpl{sc} from Etherscan, a tool we need to provide the \acrshortpl{sc} address. The address is the first part of the \acrshortpl{sc} code. The address is the first part of the \acrshortpl{sc} code.
 
-The following code snippet is a Google BigQuery query. It will select all \acrshortpl{sc} addresses on the Ethereum blockchain that has at least one transaction. This query was run on the 1st of April 2022, and the result was downloaded as a CSV file, and is available at \url{https://huggingface.co/datasets/andstor/smart_contracts/blob/main/contract_addresses.csv}. The CSV file is then used to download the \acrshortpl{sc} from Etherscan.
+The following code snippet is a Google BigQuery query. It will select all \acrshortpl{sc} addresses on the Ethereum blockchain that has at least one transaction. This query was run on the 1st of April 2022, and the result was downloaded as a CSV file, and is available on request at \url{https://huggingface.co/datasets/andstor/smart_contracts/blob/main/contract_addresses.csv}. The CSV file is then used to download the \acrshortpl{sc} from Etherscan.
 
 \begin{lstlisting}[
     caption={Google BigQuery query for selecting all \acrlong{sc} addresses on Ethereum that has at least one transaction.},
@@ -85,12 +85,13 @@ The actual code filtering is done by applying a token-based similarity algorithm
 
 \subsubsection{Verified Smart Contracts}
 \label{sec:verified-smart-contracts}
-\url{https://github.com/andstor/verified-smart-contracts}
+
 \url{https://huggingface.co/datasets/andstor/smart_contracts}
+Verified Smart Contracts is a dataset of real Ethereum Smart Contract, containing both Solidity and Vyper source code. 
+The Verified Smart Contracts dataset is a dataset consisting of verified Smart Contracts from Etherscan.io. These are real \acrshortpl{sc} that are deployed to the Ethereum blockchain. A set of 100,000 to 200,000 contracts are provided, containing both Solidity and Vyper code. In the following paragraphs, we will discuss the different dataset versions in detail. It consists of every deployed Ethereum Smart Contract as of 1st of April 2022, whose been verified on Etherescan and has a least one transaction. The dataset is available on request at \url{https://huggingface.co/datasets/andstor/verified-smart-contracts}. \cref{tab:verified-smart-contracts-metrics} shows the metrics of the various (sub)datasets.
 
-The Verified Smart Contracts dataset is a dataset consisting of verified Smart Contracts from Etherscan.io. This is real smmart contracts that are deployed to the Ethereum blockchain. A set of 100,000 to 200,000 contracts are provided, containing both Solidity and Vyper code.
 
-\cref{tab:verified-smart-contracts-metrics} shows the metrics of the various (sub)datasets.
+All processing scripts are available at \url{https://github.com/andstor/verified-smart-contracts}.
 
 \begin{table}
     %\newcolumntype{Y}{>{\centering\arraybackslash}X}
@@ -122,7 +123,7 @@ The raw dataset contains mostly the raw data from Etherscan, downloaded with the
 \paragraph{Flattened}
 \label{sec:verified-smart-contracts-flattened}
 
-The flattened dataset is a filtered version  of the Raw dataset\cref{sec:verified-smart-contracts-raw}. It contains smart contracts, where every contract contains all required library code. Each "file" is marked in the source code with a comment stating the original file path: //File: path/to/file.sol. These are then filtered for uniqueness with a similarity threshold of 0.9. This means that all contracts whose code shares more than 90\% of the tokens will be discarded. The low uniqueness requirement is due to the often large amount of embedded library code. If the requirement is set to high, the actual contract code will be negligible compared to the library code. Most contracts will be discarded, and the resulting dataset would contain mostly unique library code. However, the dataset as a whole will have a large amount of duplicated libray code. From the 2,217,692 contracts, 2,080,723 duplications are found, giving a duplication percentage of 93.82\%. The resulting dataset consists of 136,969 contracts. \cref{lst:flattened-dataset-instance} shows an example data instance from the dataset.
+The flattened dataset is a filtered version of the Raw dataset\cref{sec:verified-smart-contracts-raw}. It contains smart contracts, where every contract contains all required library code. Each "file" is marked in the source code with a comment stating the original file path: //File: path/to/file.sol. These are then filtered for uniqueness with a similarity threshold of 0.9. This means that all contracts whose code shares more than 90\% of the tokens will be discarded. The low uniqueness requirement is due to the often large amount of embedded library code. If the requirement is set to high, the actual contract code will be negligible compared to the library code. Most contracts will be discarded, and the resulting dataset would contain mostly unique library code. However, the dataset as a whole will have a large amount of duplicated library code. From the 2,217,692 contracts, 2,080,723 duplications are found, giving a duplication percentage of 93.82\%. The resulting dataset consists of 136,969 contracts. \cref{lst:flattened-dataset-instance} shows an example data instance from the dataset. The dataset is then split 80\%, 10\%, 10\% into a training, validation and test set, respectively.
 
 %Processing: 100%|██████| 74/74 [20:22<00:00, 16.51s/it, dupes=2081081/2217692 (93.84%)]
 
@@ -156,7 +157,7 @@ The following command prooduces the flattened dataset:
 
 \paragraph{Inflated}
 \label{sec:verified-smart-contracts-inflated}
-The inflated dataset is also based on the raw dataset. Each contract file in the dataset is split into its original representative files. This mitigates a lot of the problems of the flattened dataset in terms of duplicated library code. The library code would, along with other imported contract files, be split into separate contract records. The 2,217,692 "raw" smart contracts are inflated to a total of 5,403,136 separate contract files. These are then grouped by "file\_name" and filtered for uniqueness with a similarity threshold of 0.9. This should produce a dataset with a large amount of unique source code, with low quantities of library code. A total of 5,216,739 duplications are found, giving a duplication percentage of 96.56\%. The resulting dataset consists of 186,397 contracts. \cref{lst:inflated-dataset-instance} shows an example data instance from the dataset.
+The inflated dataset is also based on the raw dataset. Each contract file in the dataset is split into its original representative files. This mitigates a lot of the problems of the flattened dataset in terms of duplicated library code. The library code would, along with other imported contract files, be split into separate contract records. The 2,217,692 "raw" smart contracts are inflated to a total of 5,403,136 separate contract files. These are then grouped by "file\_name" and filtered for uniqueness with a similarity threshold of 0.9. This should produce a dataset with a large amount of unique source code, with low quantities of library code. A total of 5,216,739 duplications are found, giving a duplication percentage of 96.56\%. The resulting dataset consists of 186,397 contracts. \cref{lst:inflated-dataset-instance} shows an example data instance from the dataset. The dataset is then split 80\%, 10\%, 10\% into a training, validation and test set, respectively.
 
 %Processing: 100%|██████| 74/74 [22:50<00:00, 18.52s/it, dupes=5217191/5403136 (96.56%)]
 
@@ -167,7 +168,7 @@ dupes=5217191/5403136 (96.56%)
 
 \begin{lstlisting}[
     caption={Solidity standard JSON Input format.},
-    label=lst:lst:inflated-dataset-instance,
+    label=lst:inflated-dataset-instance,
     language=JSON]
     {
         'contract_name': 'PinkLemonade',
@@ -187,14 +188,17 @@ dupes=5217191/5403136 (96.56%)
         'implementation': '',
         'swarm_source': 'ipfs://eb0ac9491a04e7a196280fd27ce355a85d79b34c7b0a83ab606d27972a06050c'
       }
-      
-      
 \end{lstlisting}
-
 
 \paragraph{Plain text}
 \label{sec:verified-smart-contracts-plain-text}
 For easy use of the dataset for casual language modeling training, a "plain\_text" version of both the raw, the flattened, and the inflated dataset is made available. This is done through a custom builder script for the dataset, a feature of the Dataset library by Hugging Face.
+
+smart\_contracts\_dataset :: inflated\_plain\_text tokens:
+	test: 74314082
+	validation: 67064318
+	train: 687186308
+TOTAL: 828.564.708
 
 \FloatBarrier
 
@@ -204,7 +208,7 @@ To provide some insight into how a user can best formulate a comment for guiding
 
 \subsubsection{Universal Solidity parser}
 \label{sec:universal-solidity-parser}
-For being able to parse the Solidity \acrshort{sc}, a Solidity parser is constructed. This parser has to be universally compatible with all Solidity versions, hence the grammar used needs to be a lot less restrictive than the current official Solidity grammar available from Ethereum \cite{soliditygrammar}. ANTLR4 \cite{antlr4} is used for constructing the parser. ANTLR is a parser generator. By providing ANTLR with a formal language description called grammar, it can generate a complete parser that can automatically build parse trees. Parse trees are data structures representing how the grammar matches the input. Specifically, ANTLR4 generates a LL(*) (Left-to-right, leftmost derivation) parser \cite{parr2011llstar}. ANTLER is primarily a Java application. However, several code generation targets are available, including Java, C\#, Python, JavaScript, Go, C++, Swift, PHP and Dart \cite{antlr-targets}. In this project, the Python target is used.
+For being able to parse the Solidity \acrshort{sc}, a Solidity parser is constructed. This parser has to be universally compatible with all Solidity versions, hence the grammar used needs to be a lot less restrictive than the current official Solidity grammar available from Ethereum \cite{soliditygrammar}. ANTLR4 \cite{antlr4} is used for constructing the parser. ANTLR is a parser generator. By providing ANTLR with a formal language description called grammar, it can generate a complete parser that can automatically build parse trees. Parse trees are data structures representing how the grammar matches the input. Specifically, ANTLR4 generates a LL(*) (Left-to-right, leftmost derivation) parser \cite{parr2011llstar}. ANTLR is primarily a Java application. However, several code generation targets are available, including Java, C\#, Python, JavaScript, Go, C++, Swift, PHP and Dart \cite{antlr-targets}. In this project, the Python target is used.
 
 Most programming language grammars available do not devote much effort to the handling of code comments. Comments are seen as unnecessary clutter and are normally discarded during lexing. For extracting the comments from the Solidity \acrshort{sc} code, the original source \cite{solidity-antlr4} for the official Solidity grammar \cite{soliditygrammar} is used. This old version is less restrictive and serves as a better starting point for ensuring support for all Solidity versions. This grammar is then simplified and made less restrictive, as well as adapted to support comments. \cref{fig:solidity-railroad-diagram} shows a railroad diagram of a subset of the main grammar rules altered for supporting comments. The complete universal Solidity parser is made available at https://github.com/andstor/solidity-universal-parser.
 
@@ -218,7 +222,7 @@ Most programming language grammars available do not devote much effort to the ha
 
 
 \subsubsection{Verified Smart Contract Code Comments}
-\label{sec:verified-smart-contracts-comments}
+\label{sec:verified-smart-contract-code-comments}
 \url{https://huggingface.co/datasets/andstor/smart_contract_comments}
 
 For doing the actual extraction of the "code, comment" pairs from the inflated version of the Verified Smart Contracts dataset (see \cref{sec:verified-smart-contracts-inflated}), the well-known visitor pattern \cite{visitor-pattern} is used for visiting the parse tree generated by the universal Solidity parser. ANTLER provides basic infrastructure for implementing such a visitor. The full implementation of the visitor is available at \url{https://github.com/andstor/verified-smart-contracts/blob/main/script/comment_visitor.py}. A script leveraging multiprocessing is used to parallelize the parsing of the dataset. See \url{https://github.com/andstor/verified-smart-contracts} for instructions on how to use this script. The resulting data is then filtered for functions that do not have code comments. These are simply removed and the result is then packaged as a new dataset named Verified Smart Contract Code Comments. A total of ...\todo{Add stats for comments dataset}. \cref{lst:comments-dataset-instance} shows an example data instance from the dataset.
@@ -294,13 +298,13 @@ The comment embeddings are clustered using the K-means algorithm. The number of 
     \label{fig:comment-clusters}
 \end{figure}
 
-\cref{lst:comment-cluster-0.1,lst:comment-cluster-0.2,lst:comment-cluster-1.1,lst:comment-cluster-1.2,lst:comment-cluster-2.1,lst:comment-cluster-2.2,lst:comment-cluster-3.1,lst:comment-cluster-3.2} shows two examples from each of the four clusters. Upon manual inspection of the different clusters, several patterns emerge. The cluster 0 is mainly composed of comments that is almost exclusively made up of NatSpec comments with only NatSpec fields, for example the "@parameter" and "@return" fields. Most comments also start with a brief description of the function, as for example line 1 in \cref{lst:comment-cluster-0.1}. Next, cluster 1 consists of one-liners, briefly describing what the function. Cluster 2 contains more lengthy comments that describe the function in detail. It is similar to cluster 1 but does not make significant use of the NatSpec fields. Most of these comments also add some variation of a "requirements" section, like the one in lines 4-7 in \cref{lst:comment-cluster-2.1}. Further, several of these comments are from some implementation of common libraries. For example, \cref{lst:comment-cluster-2.1} shows a comment for the implementation of a transfer function in a contract implementation of a ERC20 token. Compared to the base implementation by the OpenZeppelin library \cite{openzeppelin}, this version adds 1.7\% tax if the sender or recipient is an exchange (lines 8-10). Finally, cluster 3 contains very short comments that are more categorical by nature. For example, \cref{lst:comment-cluster-3.1} marks the function as "admin functions" and \cref{lst:comment-cluster-3.2} as "Deposit Management".
+\cref{lst:comment-cluster-0,lst:comment-cluster-1,lst:comment-cluster-2,lst:comment-cluster-3} shows an example from each of the four clusters. Upon manual inspection of the different clusters, several patterns emerge. Cluster 0 is mainly composed of comments that is almost exclusively made up of NatSpec comments with only NatSpec fields, for example the "@parameter" and "@return" fields. Most comments also start with a brief description of the function, as for example line 1 in \cref{lst:comment-cluster-0}. Next, cluster 1 consists of one-liners, briefly describing what the function. Cluster 2 contains more lengthy comments that describe the function in detail. It is similar to cluster 1 but does not make significant use of the NatSpec fields. Several of these comments are from some implementation of common libraries. For example, \cref{lst:comment-cluster-2} shows a comment for the implementation of a transfer function in a contract implementation of a ERC20 token. Compared to the base implementation by the OpenZeppelin library \cite{openzeppelin}, this version adds 1.7\% tax if the sender or recipient is an exchange (lines 8-10). Finally, cluster 3 contains that presents a more "artistic" nature. For example, \cref{lst:comment-cluster-3} marks the start and end of the comments with many dashes.
 
 
 % Natspec with almost exclusive use of parameter and return keywords.
 \begin{lstlisting}[
     caption={NatSpec single-line comment in cluster 0.},
-    label=lst:comment-cluster-0.1,
+    label=lst:comment-cluster-0,
     language=Solidity]
 /// @dev Executes the next transaction only if the cooldown has passed and the transaction has not expired
 /// @param to Destination address of module transaction
@@ -309,35 +313,19 @@ The comment embeddings are clustered using the K-means algorithm. The number of 
 /// @param operation Operation type of module transaction
 /// @notice The txIndex used by this function is always 0
 \end{lstlisting}
-\begin{lstlisting}[
-    caption={NatSpec multi-line comment in cluster 0.},
-    label=lst:comment-cluster-0.2,
-    language=Solidity]
-/**
- * @dev Gets the timestamp for the value based on ther index
- * @param _requestID is the requestId to look up
- * @param _index is the value index to look up
- * @return uint timestamp
- */   
-\end{lstlisting}
+
 % One-liners describing briefly the function.
 \begin{lstlisting}[
     caption={Single-line comment in cluster 1.},
-    label=lst:comment-cluster-1.1,
+    label=lst:comment-cluster-1,
     language=Solidity]
 // Allow the owner to cash out the holdings of this contract.
-\end{lstlisting}
-\begin{lstlisting}[
-    caption={Multi-line comment in cluster 1.},
-    label=lst:comment-cluster-1.2,
-    language=Solidity]
-/* Add a contract to our list of account minters */
 \end{lstlisting}
 
 % Library function implementations. The functions are clearly written, often stating  the requirements of the function. Written out in natural  language.
 \begin{lstlisting}[
     caption={NatSpec multi-line comment in cluster 2.},
-    label=lst:comment-cluster-2.1,
+    label=lst:comment-cluster-2,
     language=Solidity]
 /**
  * @dev See {IERC20-transfer}.
@@ -351,50 +339,34 @@ The comment embeddings are clustered using the K-means algorithm. The number of 
  * Tax is sent to our taxAddress
  */
 \end{lstlisting}
-\begin{lstlisting}[
-    caption={NatSpec multi-line comment in cluster 2.},
-    label=lst:comment-cluster-2.2,
-    language=Solidity]
-/**
- * @dev Creates a new token for `to`. Its token ID will be automatically
- * assigned (and available on the emitted {IERC721-Transfer} event), and the token
- * URI is specified as a parameter.
- *
- * See {ERC721-_mint}.
- *
- * Requirements:
- *
- * - the caller must have the `MINTER_ROLE`.
- */   
-\end{lstlisting}
 
 %  Categorical comments. Labels thte function withing a specific category. Eg. admin functions or 
 \begin{lstlisting}[
-    caption={Single-line comment in cluster 3.},
-    label=lst:comment-cluster-3.1,
+    caption={Custom comment style from cluster 3},
+    label=lst:comment-cluster-3,
     language=Solidity]
-// ----- admin functions -----
-\end{lstlisting}
-\begin{lstlisting}[
-    caption={Multi-line comment in cluster 3.},
-    label=lst:comment-cluster-3.2,
-    language=Solidity]
-/* ---------- Deposit Management ---------- */
+// ------------------------------------------------------------------------
+// Returns the amount of tokens approved by the owner that can be
+// transferred to the spender's account
+//
+// THIS TOKENS ARE NOT TRANSFERRABLE.
+//
+// ------------------------------------------------------------------------
 \end{lstlisting}
 
 \clearpage %\FloatBarrier but text is cut off at the end of the page
 
 \subsection{Language Modeling}
-\label{sec:language-modeling}
-This chapter presents a detailed overview of the system architecture for generating secure Smart Contract code. The first section gives an overview of the GPT-J model architecture, followed by a section describing the pre-training of the model. The third section describes the fine-tuning process on the smart contract dataset presented in \cref{sec:verified-smart-contracts-inflated,sec:verified-smart-contracts-audit}. 
+\label{sec:rq1-language-modeling}
+This section presents a detailed overview of the system architecture for generating \acrlong{sc} code. The first section describes the specific configuration of the pre-trained model used. Following is a section that describes the fine-tuning process on the inflated Verified Smart Contract dataset presented in \cref{sec:verified-smart-contracts-inflated}. 
 
-\todo{Add figure of training process}
+\todo{Add figure of training process?}
 
 \subsubsection{Pre-training}
 \label{sec:pretraining}
-In this project, pre-trained weights for GPT-J-6B from ElutherAI are used. The pre-training by ElutherAI is done on the dataset The Pile, described in \cref{sec:the-pile}. Of the roughly 825GiB, 95.16 GiB (7.59\%) of The Pile is code from GitHub. Compared to many other open-source models, GPT-J-6B is one of the most promising models for the task of code generation.
+In this project, pre-trained weights for GPT-J-6B from ElutherAI are used. See \cref{sec:architecture} for a description of the model  architecture. The pre-training by ElutherAI is done on the dataset The Pile, described in \cref{sec:the-pile}. Of the roughly 825GiB, 95.16 GiB (7.59\%) of The Pile is code from GitHub. Compared to many other open-source models, GPT-J-6B is one of the most promising models for the task of code generation.
 
-The specific GPT-J model configuration can be seen in \cref{tab:gpt-j-model-details}. In detail, GPT-J-6B consists of 28 layers with a model dimension of 4096, and a feedforward dimension of 16384. The model dimension is split into 16 heads, each with a dimension of 256. \acrfull{rope} is applied to 64 dimensions of each head. The model is trained with a tokenization vocabulary of 50257, using the same set of \acrfullpl{bpe} as GPT-2 and GPT-3. The weights of GPT-J-6B are licensed under version 2.0 of the Apache License.
+The specific GPT-J model configuration can be seen in \cref{tab:gpt-j-model-details}. In detail, GPT-J-6B consists of 28 layers with a model dimension of 4096, and a feedforward dimension of 16384. The model dimension is split into 16 heads, each with a dimension of 256. \acrfull{rope} is applied to 64 dimensions of each head. The model is trained with a tokenization vocabulary of 50257, using the same set of \acrfullpl{bpe} as GPT-2 and GPT-3. The weights of GPT-J-6B are licensed under version 2.0 of the Apache License. When assessed on the validation split of the inflated Verified Smart Contract dataset \cref{sec:verified-smart-contracts-inflated}, the model achieves an accuracy of 0.800 and a perplexity of 2.600.
 
 %Total params: 6,050,882,784
 %multi-layer perceptron (MLP)
@@ -408,7 +380,7 @@ The specific GPT-J model configuration can be seen in \cref{tab:gpt-j-model-deta
     \label{tab:gpt-j-model-details}
     \begin{tabularx}{\textwidth}{XX}
         \toprule
-        \textbf{Hyper parameter} & \textbf{Value}\\
+        \textbf{Hyperparameter} & \textbf{Value}\\
         \midrule
         n\_parameters & 6,053,381,344\\
         n\_layers & 28*\\
@@ -424,73 +396,121 @@ The specific GPT-J model configuration can be seen in \cref{tab:gpt-j-model-deta
     \end{tabularx}
 \end{table}
 
-\todo{add table notes}
-* each layer consists of one feedforward block and one self attention block
+\todo{add table notes - * each layer consists of one feedforward block and one self attention block}
 
 \subsubsection{Fine-tuning}
-\label{sec:fine-tuning}
-To improve the pre-trained GPT-J-6B model's smart contract code generation performance, the model is fine-tuned on a dataset only containing real Ethereum Smart Contract code. Specifically, two models are created. The first model, named GPT-J-6B-Smart-Contract, is fine-tuned on the Verified Smart Contracts dataset \cref{sec:verified-smart-contracts}. The other model, named GPT-J-6B-Smart-Contract-Audit, is a secure version of the first model. It is fine-tuned on the Verified Smart Contracts Audit dataset \cref{sec:verified-smart-contracts-audit}, the same dataset as for the first model but with additional labeling from vulnerability analysis.
+\label{sec:rq1-fine-tuning}
+To improve the pre-trained GPT-J-6B model's smart contract code generation performance, the model is fine-tuned on a dataset only containing real Ethereum Smart Contract code. Specifically, the model is fine-tuned on the training split of the plain-text \cref{sec:verified-smart-contracts-plain-text} version of the inflated Verified Smart Contracts dataset \cref{sec:verified-smart-contracts-inflated}. The fine-tuning task used is the same as for the pre-training task, namely \acrfull{clm}. The model is fed a complete \acrshort{sc} all at once, and then internal masking is applied to prevent the model from cheating by looking at future tokens. For more details on the inner workings of the training procedure, see \cref{sec:transformer-training}. Before training, the dataset is randomly shuffled. For running the training process, the \acrshort{clm} script \footnote{\url{https://github.com/huggingface/transformers/blob/v4.19.0/examples/pytorch/language-modeling/run_clm.py}} provided by HuggingFace is used.
 
-Elaborate on the different scripts and how HuggingFace was used for training. This  also includes the use of DeepSpeed...
-Add link to github repos....
+Due to the huge size of the GPT-J-6B model, the deep learning optimization library DeepSpeed \cite{deepspeed} is used as a wrapper around the HuggingFace library. See \cref{par:deepspeed} for more details of the DeepSpeed library. While DeepSpeed enables the training of virtually arbitrary-sized models, there is a tradeoff between model size and training speed. In this project, several DeepSpeed configurations were tried out to successfully load and train the model without encountering an \acrfull{oom} error, while still maintaining adequate training speed. Using \acrshort{zero}-2 with CPU offloading (\acrshort{zero}-Offload), mixed-precision (\acrshort{bf16}), a batch size of 1, and 16 gradient accumulation steps, it is possible to load and efficiently train the model using 10 x NVIDIA A100 GPUs with 40GB memory \footnote{\url{https://www.nvidia.com/en-us/data-center/a100/}}. The computing node used for training has 48 CPUs available, along with 1.47 terabytes of RAM. \cref{fig:htop-optimizer-computation} shows a screenshot of the nvidia-smi program during the training of the model. As can be seen from the figure, all GPUs are at 100\% utilization. \cref{fig:htop-optimizer-computation} presents a screenshot of the htop program showing host CPU and memory activity during optimizer computation. The command for running the HuggingFace training script while using DeepSpeed is shown in \cref{lst:training-command}. A complete list of the hyperparameters used for training the model is available in \cref{tab:model-hyperparameters}, along with the DeepSpeed configuration in \cref{tab:deepspeed-config}. All training scripts and configurations used are available at \url{https://github.com/andstor/smart-contract-code-generation}.
 
-\todo{Add graphs of trining loss and eval accuraccy (results).}
+The training process is run for two epochs. At every 5 steps, the model is evaluated on 256 samples from the validation split of the Verified Smart Contracts dataset. \cref{fig:wandb-train-loss-gpt-j-smart-contract} shows a graph over the training and evaluation loss during training. \cref{fig:wandb-train-eval-gpt-j-smart-contract} shows a graph over the evaluation accuracy during training. The training is completed after 7 days and 4 hours. After completion of the training, the model is evaluated on the entire validation split, achieving a total accuracy of 0.917 and perplexity of 1.510.
+
+\begin{lstlisting}[
+    caption={Command for running the HuggingFace \acrshort{clm} training script with DeepSpeed.},
+    label=lst:training-command,
+    language=Bash]
+deepspeed --hostfile=hostfile run_clm.py \
+    --deepspeed ds_zero2_bf16.json \
+    --model_name_or_path EleutherAI/gpt-j-6B \
+    --dataset_name andstor/smart_contracts \
+    --dataset_config_name plain_text \
+    --output_dir ./out \
+    --report_to wandb \
+    --validation_split_percentage 20 \
+    --save_steps 250 \
+    --do_train --do_eval \
+    --logging_first_step --logging_steps 1 \
+    --num_train_epochs 2 \
+    --evaluation_strategy steps --eval_steps 5 \
+    --max_eval_samples 256 \
+    --block_size 1024 \
+    --bf16 \
+    --gradient_accumulation_steps 16 --eval_accumulation_steps 16 \
+    --per_device_train_batch_size 1 --per_device_eval_batch_size 1
+\end{lstlisting}
 
 \begin{table}
     %\newcolumntype{Y}{>{\centering\arraybackslash}X}
     \def\arraystretch{1.5}
     \small
     \centering
-    \caption{Hyper parameters for GPT-J model}
-    \label{tab:inclusion-exclusion-criteria}
+    \caption{Hyperparameters for GPT-J model}
+    \label{tab:model-hyperparameters}
     \begin{tabularx}{\textwidth}{XX}
         \toprule
-        \textbf{Hyper parameter} & \\
+        \textbf{Hyperparameter} & \\
         \midrule
-        \_name\_or\_path & EleutherAI/gpt-j-6B\\
-        activation\_function & gelu\_new\\
-        architectures & GPTJForCausalLM\\
-        attn\_pdrop & 0.0\\
-        bos\_token\_id & 50256\\
-        embd\_pdrop & 0.0\\
-        eos\_token\_id & 50256\\
-        gradient\_checkpointing & false\\
-        initializer\_range & 0.02\\
-        layer\_norm\_epsilon & 1e-05\\
-        model\_type & gptj\\
-        n\_embd & 4096\\
-        n\_head & 16\\
-        n\_inner & null\\
-        n\_layer & 28\\
-        n\_positions & 2048\\
-        resid\_pdrop & 0.0\\
-        rotary & true\\
-        rotary\_dim & 64\\
-        scale\_attn\_weights & true\\
-        summary\_activation & null\\
-        summary\_first\_dropout & 0.1\\
-        summary\_proj\_to\_labels & true\\
-        summary\_type & cls\_index\\
-        summary\_use\_proj & true\\
-        tie\_word\_embeddings & false\\
-        tokenizer\_class & "GPT2Tokenizer"\\
-        transformers\_version & "4.19.0.dev0"\\
-        use\_cache & true\\
-        vocab\_size & 50400\\
+        learning\_rate & 5e-05\\
+        train\_batch\_size & 1\\
+        eval\_batch\_size & 1\\
+        seed & 42\\
+        distributed\_type & multi-GPU\\
+        num\_devices & 10\\
+        gradient\_accumulation\_steps & 16\\
+        total\_train\_batch\_size & 160\\
+        total\_eval\_batch\_size & 10\\
+        optimizer & Adam with betas=(0.9,0.999) and epsilon=1e-08\\
+        lr\_scheduler\_type & linear\\
+        num\_epochs & 2.0\\
         \bottomrule
     \end{tabularx}
 \end{table}
+%\begin{table}
+%    %\newcolumntype{Y}{>{\centering\arraybackslash}X}
+%    \def\arraystretch{1.5}
+%    \small
+%    \centering
+%    \caption{Hyperparameters for GPT-J model}
+%    \label{tab:model-hyperparameters}
+%    \begin{tabularx}{\textwidth}{XX}
+%        \toprule
+%        \textbf{Hyperparameter} & \\
+%        \midrule
+%        \_name\_or\_path & EleutherAI/gpt-j-6B\\
+%        activation\_function & gelu\_new\\
+%        architectures & GPTJForCausalLM\\
+%        attn\_pdrop & 0.0\\
+%        bos\_token\_id & 50256\\
+%        embd\_pdrop & 0.0\\
+%        eos\_token\_id & 50256\\
+%        gradient\_checkpointing & false\\
+%        initializer\_range & 0.02\\
+%        layer\_norm\_epsilon & 1e-05\\
+%        model\_type & gptj\\
+%        n\_embd & 4096\\
+%        n\_head & 16\\
+%        n\_inner & null\\
+%        n\_layer & 28\\
+%        n\_positions & 2048\\
+%        resid\_pdrop & 0.0\\
+%        rotary & true\\
+%        rotary\_dim & 64\\
+%        scale\_attn\_weights & true\\
+%        summary\_activation & null\\
+%        summary\_first\_dropout & 0.1\\
+%        summary\_proj\_to\_labels & true\\
+%        summary\_type & cls\_index\\
+%        summary\_use\_proj & true\\
+%        tie\_word\_embeddings & false\\
+%        tokenizer\_class & "GPT2Tokenizer"\\
+%        transformers\_version & "4.19.0.dev0"\\
+%        use\_cache & true\\
+%        vocab\_size & 50400\\
+%        \bottomrule
+%    \end{tabularx}
+%\end{table}
 
 \begin{table}
     %\newcolumntype{Y}{>{\centering\arraybackslash}X}
     \def\arraystretch{1.5}
     \small
     \centering
-    \caption{DeepSpeed Zero config.}
-    \label{tab:inclusion-exclusion-criteria}
+    \caption{DeepSpeed Zero configuration.}
+    \label{tab:deepspeed-config}
     \begin{tabularx}{\textwidth}{XX}
         \toprule
-        \textbf{Hyper parameter} & \\
+        \textbf{Hyperparameter} & \\
         \midrule
         stage & 2\\
         contiguous\_gradients & true\\
@@ -523,7 +543,35 @@ Add link to github repos....
         \bottomrule
     \end{tabularx}
 \end{table}
+\todo{Fix deepspeed table.. Eg. cpu offloading... Use json config...}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/nvidia-smi.png}
+    \caption{Screenshot of nvidia-smi program showing 100\% GPU utilization.}
+    \label{fig:htop-optimizer-computation}
+\end{figure}
+%37565+36133+34881+36101+35659+35591+35571+35579+35595+36555  = 359230MB ~ 360GiB
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/htop-optimizer-computation.png}
+    \caption{Screenshot of htop program showing host CPU and memory activity during optimizer computation.}
+    \label{fig:htop-optimizer-computation}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/wandb-train-loss-gpt-j-smart-contract.png}
+    \caption{Training and evaluation loss during model training.}
+    \label{fig:wandb-train-loss-gpt-j-smart-contract}
+
+    \vspace*{\floatsep}% https://tex.stackexchange.com/q/26521/5764
+
+    \includegraphics[width=\textwidth]{figures/wandb-train-eval-gpt-j-smart-contract.png}
+    \caption{Evaluation accuracy during model training.}
+    \label{fig:wandb-train-eval-gpt-j-smart-contract}
+\end{figure}
 %\subsection{Inference}
 %
 %TODO: What is supported by the model? How much memory to use?
@@ -532,7 +580,7 @@ Add link to github repos....
 \FloatBarrier
 
 \section{Implementation of RQ2}
-This section presents the implementation of research question 2. The implementation is done with the following steps:
+This section presents the implementation of research question 2. Primarily, this section describes the implementation of the new technique named security conditioning, described in \cref{sec:security-conditioning}. In security conditioning, the training data is augmented with security labels, stating either secure or vulnerable. The technique is rather easy, as the main alteration needed is in the training data. The implementation is done with the following steps:
 \begin{enumerate}
     \item Create an audited version of the smart contract dataset
     \begin{enumerate}
@@ -544,68 +592,108 @@ This section presents the implementation of research question 2. The implementat
     \end{enumerate}
 \end{enumerate}
 
-\subsection{Security Conditioning}
-\label{sec:security-conditioning}
-When training a large language model on several gigabytes of open-source code, it is safe to assume that large portions of this code are not safe and contains vulnerabilities. In the case of Smart Contracts, the vulnerability analysis presented in section \ref{sec:verified-smart-contracts} shows that almost 50\% of deployed Smart Contracts contain at least one high-severity vulnerability. This will result in a biased model that may produce a lot of vulnerable code. This section introduces a technique, named security conditioning, to reduce and mitigate this problem.
-
-Vulnerability analysis is a difficult area. It is especially hard in the area of smart contracts, where the execution environment is not deterministic ????\todo{find correct wording.}... Previous works have tried to classify vulnerable code with large language models without much success \todo{Cite previous works}. In this project, instead of classifying vulnerable code, the goal is to make the model more secure by conditioning it on the presence of vulnerabilities.
-
-The security conditioning is done by appending a special security label to each of the records in the training data. This way, the model can use this token(s) to condition whether to produce safe or vulnerable code. This requires the dataset to first be labeled as secure or vulnerable. For this project, SolidityDetector is used for labeling. Further details on the dataset construction can be found in \cref{sec:verified-smart-contracts-audit}.
-
-
-\todo{Add example of security conditioning.}
-
-
-
 \subsection{Data preparation}
 \label{sec:data-preparation}
 
 \subsubsection{Vulnerability labeling}
 \label{sec:vulnerability-labeling}
+For labeling the \acrshortpl{sc} as vulnerable or secure, the Java program SoliDetector is used. The choice of using SoliDetector is due for two reasons. Firstly, as SoliDetector is ontology-based, it does not need a complete contract file with all code dependencies. \cref{Opposite to eg. ...}This makes it possible to use the inflated dataset version (see \cref{sec:verified-smart-contracts-inflated}). Other vulnerability detection tools that for example use symbolic analysis would only work on the flattened dataset version (see \cref{sec:verified-smart-contracts-flattened}). Secondly, SoliDetector works with any Solidity version. 
+
+\todo{What vulnerabilities can tthis detect? ++ make table}
+
+SoliDetector takes in a \acrshort{sc} file and outputs the vulnerability analysis results as a text file. However, due to the large number of contracts needed to be labeled in this project, SoliDetector is run in parallel. A python script is created that leverages multiprocessing to run SoliDetector in parallel. Since SoliDetector is a Java program, it is run as a child process and controlled with the help of the python module Pexpect \cite{pexpect}. Since starting and stopping Java applications are time-consuming, extra care is taken to ensure that each instantiated Solidity process is kept alive for as long as possible and only restarted when necessary. \cref{fig:solidetector-vulnerability-labeling} shows a screenshot from running the processing script using 40 processes. The vulnerability processing scripts are available at \url{https://github.com/andstor/verified-smart-contracts-audit}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/solidetector-run.png}
+    \caption{Screenshot from the vulnerability labeling process with SoliDetector.}
+    \label{fig:solidetector-vulnerability-labeling}
+\end{figure}
 
 \subsubsection{Verified Smart Contracts Audit}
 \label{sec:verified-smart-contracts-audit}
-
-\url{https://github.com/andstor/verified-smart-contracts-audit}
-\url{https://huggingface.co/datasets/andstor/smart_contracts_audit}
+The results of the vulnerability labeling are packed into a dataset named Verified Smart Contracts Audit. This is done for both the flattened and inflated dataset versions. The finished dataset is available at \url{https://huggingface.co/datasets/andstor/smart_contracts_audit}. Both dataset versions keep the original split into a training, validation and test set (80\%, 10\%, 10\%). \cref{lst:audit-flattened-dataset-instance} shows an example data instance from the audited flattened dataset.
 
 
-Use  SoliDetector for labeling the dataset. The choice of using SoliDetector is due to its ability to any solidity version. As discussed in \cref{sec:vulnerability-detection}, several of the other vulnerability detection tools have many shortcomings. Both in terms of speed and accuracy.....More...
+smart\_contracts\_dataset-audit :: inflated\_solidetector\_embedded tokens:
+	test: 74332721
+	validation: 67082958
+	train: 687335426
+TOTAL: 828.751.105
 
-Describe figures and some simple analysis of the amount of vulnerable Ethereum code. Also, state the dataset used is balanced by 50/50.
+
+\begin{lstlisting}[
+    caption={Solidity standard JSON Input format.},
+    label=lst:audit-flattened-dataset-instance,
+    language=JSON]
+{
+    'contract_name': 'OceanWorld',
+    'file_path': 'OceanWorld.sol',
+    'contract_address': '0xe19c5ea08f26af53bf7da7da5e727bb2c5c69f95',
+    'language': 'Solidity',
+    'source_code': 'pragma solidity ^0.8.0; contract OceanWorld is ERC721Enumerable...',
+    'defects': '[{"defect": "Nest_Call", "type": "Business_logic", "severity": "High", "lines": ["193", "125", "165"]}, {"defect": "Frozen_Ether", "type": "Code_specification", "severity": "Medium", "lines": ["3"]}, {"defect": "Exceed_authority_access", "type": "Access_control", "severity": "Medium", "lines": ["31"]}]',
+    'compiler_version': 'v0.8.7+commit.e28d00a7',
+    'license_type': 'MIT',
+    'swarm_source': 'ipfs://36f4cbcbeca01a804a52ae73931c970301e46d79022cdf26e6e6158d9105fe83'
+}
+\end{lstlisting}
+
+\cref{fig:flattened_security_levels} shows a doughnut chart over the distribution of the vulnerability severities in the flattened dataset at different granularity levels, where each level occurs at least once in the \acrshort{sc}. The outer ring shows the additional security levels for each contract. For example, "HML" means that the contract has at least three vulnerabilities with the corresponding "High", "Medium", and "Low" security levels. As can be seen in the figure, almost three-quarters of the contracts contain at least one high-risk vulnerability. \cref{fig:flattened_vulnerabilities_bar} shows the distribution of the different types of vulnerabilities in the flattened dataset, categorized by severity level. Notably, a significant portion of the high-severity vulnerabilities is integer overflow and underflow vulnerabilities. \cref{fig:inflated_security_levels,fig:inflated_vulnerabilities_bar} presents the same vulnerability distribution chart for the audited contracts in the inflated dataset. The distribution of vulnerability types follows the same characteristics as for the flattened dataset. However, only around half of the contracts contain at least one high-risk vulnerability. As described in \cref{sec:verified-smart-contracts-inflated}, the main intention behind the inflated dataset is to reduce the amount of library. Hence, one can deduce that a significant portion of the vulnerabilities come from various \acrshort{sc} libraries.
+
+\paragraph{Embedded}
+\label{sec:verified-smart-contracts-audit-embedded}
+For easy use of the labeled dataset for \acrfull{clm} training, an
+"embedded" version of both the flattened and the inflated dataset is made
+available. This is done through a custom builder script for the dataset, a feature
+of the Dataset library by Hugging Face. The builder script parses the contract audit and determines whether the contract is secure or vulnerable. Based on this analysis, it then prepends "<|secure|>" or "<|vulnerable|>" to the top of the contract source code. In this project, a contract is considered secure if it does not contain any high-risk vulnerabilities. Otherwise, the contract is considered vulnerable. This also makes the inflated dataset balanced, as about 50\% of the contracts are secure and 50\% are vulnerable (see \cref{fig:inflated_security_levels}).
+
+\todo{Add example listing of security conditioning.}
+
 
 \begin{figure}[htbp]
     \centering
     \input{figures/flattened_security_levels.pgf}
-    \caption{Doughnut chart over the distribution of the vulnerability severities in the flattened dataset at different granularity levels, where each level occurs at least once in the \acrshort{sc}. The outer ring shows the additional security levels for each contract. For example, "HML" means that the contract has at least three vulnerabilities with the corresponding "High", "Medium", and "Low" security levels.}
-\end{figure}
-
-
-\begin{figure}[htbp]
-    \centering
+    \caption{Doughnut chart over the distribution of the vulnerability severities in the flattened dataset at different granularity levels, where each level occurs at least once in the \acrshort{sc}.}
+    \label{fig:flattened_security_levels}
+    \vspace*{\floatsep}% https://tex.stackexchange.com/q/26521/5764
     \input{figures/flattened_vulnerabilities_bar.pgf}
     \caption{Distribution of vulnerabilities in the flattened dataset.}
+    \label{fig:flattened_vulnerabilities_bar}
 \end{figure}
-
-
 
 \begin{figure}[htbp]
     \centering
     \input{figures/inflated_security_levels.pgf}
-    \caption{Doughnut chart over the distribution of the vulnerability severities in the inflated dataset at different granularity levels, where each level occurs at least once in the \acrshort{sc}. The inner ring shows the distribution of the occurrences of each level. The outer ring shows the additional security levels for each contract. For example, "HML" means that the contract has at least three vulnerabilities with the corresponding "High", "Medium", and "Low" security levels.}
-\end{figure}
+    \caption{Doughnut chart over the distribution of the vulnerability severities in the inflated dataset at different granularity levels, where each level occurs at least once in the \acrshort{sc}.}
+    \label{fig:inflated_security_levels}
+    
+    \vspace*{\floatsep}% https://tex.stackexchange.com/q/26521/5764
 
-
-\begin{figure}[htbp]
-    \centering
     \input{figures/inflated_vulnerabilities_bar.pgf}
     \caption{Distribution of vulnerabilities in the inflated dataset.}
+    \label{fig:inflated_vulnerabilities_bar}
 \end{figure}
 
 \subsection{Language Modeling}
-\label{sec:language-modeling}
+\label{sec:rq2-language-modeling}
+This section presents the language modeling procedure using the security conditioning technique proposed in \cref{sec:security-conditioning} for generating secure \acrlong{sc} code. In security conditioning, the training data is augmented with security labels, stating either secure or vulnerable. This data augmentation is implemented by the embedded version of the Verified Smart Contracts Audit dataset \cref{sec:verified-smart-contracts-audit-embedded}, by adding "<|secure|>" or "<|vulnerable|>" to secure or vulnerable contracts. To make the most use of the security labels, a small alteration to the tokenizer is made, as described in the following section. Otherwise, the language modeling procedure is more or less identical to the one used for RQ1 \cref{sec:rq1-language-modeling}.
+
+\subsubsection{Tokenizer}
+Depending on the security labels and the type of tokenizer used, the tokenizer might decide to split the security label into multiple, already pre-trained, tokens. For example, the "<|secure|>" label is tokenized into five different tokens: '<', '|', 'secure', '|', '>' with corresponding ids: 27, 91, 22390, 91, 29. These tokens might also be part of making up other words. This might confuse the model during training, making it harder for it to successfully condition on the labels. To mitigate this, the security labels "<|secure|>" and "<|vulnerable|>" are added as special tokens to the tokenizer, effectively expanding the vocabulary. The "<|secure|>" label is now instead tokenized as "<|secure|>" with id 50400. This change also requires resizing the model's embedding matrix. The two added embeddings are randomly initialized.
 
 \subsubsection{Fine-tuning}
-\label{sec:fine-tuning}
+For fine-tuning the model on the embedded version of the Verified Smart Contracts Audit dataset \cref{sec:verified-smart-contracts-audit-embedded}, the same procedure and hyperparameters as in RQ1 \label{sec:rq1-fine-tuning} are used. The training process is run for two epochs. At every 5 steps, the model is evaluated on 256 samples from the validation split of the Verified Smart Contracts Audit dataset. \cref{fig:wandb-train-loss-gpt-j-smart-contract-audit} shows a graph of the training and evaluation loss during training. \cref{fig:wandb-train-eval-gpt-j-smart-contract-audit} shows a graph over the evaluation accuracy during training. The training is completed after 7 days and 4 hours. After completion of the training, the model is evaluated on the entire validation split, achieving a total accuracy of 0.917 and perplexity of 1.511. Compared to the fine-tuned model without security conditioning (see \cref{sec:rq1-fine-tuning}), the technique does not introduce any significant performance decrease in terms of neither accuracy nor perplexity.
 
-\todo{Write short description of the fine-tuning process. Same as in the previous project.}
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/wandb-train-loss-gpt-j-smart-contract-audit.png}
+    \caption{Training and evaluation loss during training of model with security conditioning.}
+    \label{fig:wandb-train-loss-gpt-j-smart-contract-audit}
+
+    \vspace*{\floatsep}% https://tex.stackexchange.com/q/26521/5764
+
+    \includegraphics[width=\textwidth]{figures/wandb-train-eval-gpt-j-smart-contract-audit.png}
+    \caption{Evaluation plot of accuracy during training of model with security conditioning.}
+    \label{fig:wandb-train-eval-gpt-j-smart-contract-audit}
+\end{figure}
