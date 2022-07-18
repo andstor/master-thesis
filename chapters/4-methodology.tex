@@ -1,10 +1,12 @@
 \chapter{Research Methodology}
-\label{chap:method}
+\label{chap:research-methodoloy}
 This chapter presents the research methodology used in this thesis. Firstly, the research motivation is presented in \cref{sec:research-motivation}, followed by the research questions defined for this thesis in \cref{sec:research-questions}. The research method and design are explained in \cref{sec:research-method-and-design}. Then, \cref{sec:design-for-rq1,sec:design-for-rq2} presents the research design for RQ1 and RQ2, respectively. \cref{sec:project-scope} describes the project scope. Finally, \cref{sec:technology} presents the various software libraries and hardware used in this thesis.
 
 \section{Research Motivation}
 \label{sec:research-motivation}
-Writing Smart Contracts are hard. Writing secure Smart Contracts is even harder. Automatic code generation is by many considered the ”holy grail” in the field of computer science \cite{PGL-010}. Ever since OpenAI introduced its first transformer model in the GPT series, this class of transformers has been touted as the state-of-the-art for text generation. Recent works have applied transformers for code generation and program synthesis, achieving state-of-the-art results. For example, Codex by \cite{chen2021codex} fine-tunes GPT-3 \cite{brown2020language} on code data from GitHub. The results are impressive. However, these systems still face many problems, especially in regards to different biases, for example, gender and security biases. Because the model is trained on open-source code \cite{chen2021codex}, including "Public code may contain insecure coding patterns, bugs, or references to outdated APIs or idioms.", the model might "synthesize code that contains these undesirable patterns introduce vulnerabilities" \cite{copilot}. An empirical study by \textcite{pearce2021asleep} found that almost approximately 40\% of the generated code by GitHub Copilot is vulnerable. Security flaws in software results yearly in loss of tens of thousands of million dollars\todo{find real number here .}. Due to the monetary nature of blockchain, security flaws are even more severe, as exploits of vulnerabilities often directly result in the loss of funds. Further, the immutable nature prevents the possibility of correcting vulnerable code after being deployed. Therefore, the research objective is to develop a system that can generate secure smart contract code automatically, without the need for human intervention. \todo{Add comment-aided  approach arguments}. This thesis tries to address the above problems by answering the research questions defined in \cref{sec:research-questions}.
+Writing Smart Contracts are hard. Writing secure Smart Contracts is even harder. Automatic code generation is by many considered the ”holy grail” in the field of computer science \cite{PGL-010}. Ever since OpenAI introduced its first transformer model in the GPT series, this class of transformers has been touted as the state-of-the-art for text generation. Recent works have applied transformers for code generation and program synthesis, achieving state-of-the-art results. For example, Codex by \textcite{chen2021codex} fine-tunes GPT-3 \cite{brown2020language} on code data from GitHub. The results are impressive. \todo{Add comment-aided approach motivation}
+
+These systems still face many problems, especially in regards to different biases, for example, gender and security biases. Because the model is trained on open-source code \cite{chen2021codex}, including "Public code may contain insecure coding patterns, bugs, or references to outdated APIs or idioms.", the model might "synthesize code that contains these undesirable patterns introduce vulnerabilities" \cite{copilot}. An empirical study by \textcite{pearce2021asleep} found that almost approximately 40\% of the generated code by GitHub Copilot is vulnerable. Security flaws in software results yearly in loss of tens of thousands of million dollars\todo{find real number here .}. Due to the monetary nature of blockchain, security flaws are even more severe, as exploits of vulnerabilities often directly result in the loss of funds. \todo{add exampleof loss} Further, the immutable nature prevents the possibility of correcting vulnerable code after being deployed. Therefore, the research objective is to develop a system that can generate secure smart contract code automatically. \todo{Add comment-aided  approach arguments}. This thesis tries to address the above problems by answering the research questions defined in \cref{sec:research-questions}.
 
 \section{Research Questions}
 \label{sec:research-questions}
@@ -90,14 +92,16 @@ For this thesis, \cref{sec:research-motivation} clearly describes the awareness 
 \label{sec:design-for-rq1}
 This section describes the design for research question 1. For constructing a comment-aided system for automatically generating smart contract code, multiple design steps are needed. The first subsection describes how comment The following subsections describe a system that can generate secure smart contract code automatically, this project uses a deep learning approach. Further, for understanding how to put this system to use in a comment-driven approach, a comment analysis is conducted.
 
+The project scope in this thesis is limited to the generation of smart contracts for the Ethereum blockchain. 
+
 \subsection{Code comments analysis}
 \label{sec:code-comments-analysis}
 \todo{Add a description of the code comments analysis. + the differrent types of comments. + different styles?}
 It is tehrefore needed to analyze the comments in order to investigate how a user can best use this auto-generating system.
 
-\subsection{Language Model}
+\subsection{Language Model to use}
 \label{sec:language-model}
-As discussed in section \cref{sec:transformers-for-code-synthesis}, there are several available transformer models. However, only a few of them have open-sourced pre-trained weights. Of these, GPT-J \cite{gpt-j} is the largest model that includes code in its pre-training dataset "The Pile", described in \cref{sec:the-pile}. The research community has found these models to outperform existing open-source GPT systems in qualitative programming evaluations \cite{wolf2021}. These findings are further backed by \cref{chen2021codex}. Because of this, the state-of-the-art generative pre-trained transformer model GPT-J is the language model used in this thesis.
+As discussed in section \cref{sec:transformers-for-code-synthesis}, there are several available transformer models. However, only a few of them have open-sourced pre-trained weights. Of these, GPT-J \cite{gpt-j} is the largest model that includes code in its pre-training dataset "The Pile", described in \cref{sec:the-pile}. The research community has found these models to outperform existing open-source GPT systems in qualitative programming evaluations \cite{wolf2021}. These findings are further backed by \cite{chen2021codex}. Because of this, the state-of-the-art generative pre-trained transformer model GPT-J is the language model used in this thesis.
 
 \subsubsection{Model architecture}
 \label{sec:architecture}
@@ -115,14 +119,19 @@ Being a GPT class transformer, GPT-J uses a decoder-only architecture, as can be
 
 \subsubsection{Requirements}
 \label{sec:requirements}
-To load the GPT-J model in float32 precision, one would need at least 2x the model size of CPU RAM: 1x for the initial weights and another 1x to load the checkpoint. So for just loading the GPT-J model, it would require at least 48GB or CPU RAM. To reduce the memory footprint, one can load the model in half-precision.
+To load the GPT-J model in float32 precision, one would need at least 2x the model size of CPU RAM: 1x for the initial weights and another 1x to load the checkpoint. So for just loading the GPT-J model, it would require at least 48GB of CPU RAM. To reduce the memory footprint, one can load the model in half-precision.
 
-GPU needs around 40GB of GPU memory to load the model. For training/fine-tuning the model, it would require significantly more GPU RAM. For example, the Adam optimizer makes four copies of the model: model, gradients, average and the squared average of gradients. Hence, it would take 4x model size GPU memory, even with mixed precision as gradient updates are in fp32. Further, this doesn't include the activations and data batches which would require some more GPU RAM. Hence, solutions like DeepSpeed needs to be used for training/fine-tuning such large models.
+GPU needs around 40GB of GPU memory to load the model. For training/fine-tuning the model, it would require significantly more GPU RAM. For example, the Adam optimizer makes four copies of the model: model, gradients, average and the squared average of gradients. Hence, it would take 4x model size GPU memory, even with mixed precision as gradient updates are in fp32. Further, this doesn't include the activations and data batches which would require some more GPU RAM. Hence, solutions like DeepSpeed \cite{deepspeed} needs to be used for training/fine-tuning such large models.
 
 If a GPU with mixed precision capabilities (architecture Pascal or more recent) is available, one can use mixed precision training with PyTorch 1.6.0 or later, or by installing the Apex library for previous versions. If using an NVIDIA “Ampere” GPU architecture, the \acrfull{bf16} floating-point format can be used. Using mixed precision training usually results in 2x-speedup for training with the same final results.
 
 \subsubsection{Pre-training}
-Pre-training is defined as "Training in advanced". By first training the model on a huge dataset, the model can then be fine-tuned on a much smaller dataset. This is so-called transfer learning. The pre-training procedure used for GPT class models is called \acrshort{clm}. The model reads the text input in order and then tries to predict the next word. The model is fed a complete text element (input sequence) all at once, and then internal masking is applied to prevent the model from cheating by looking at future tokens. For more details on the inner workings of the training procedure, see \cref{sec:transformer-training}.
+Pre-training is defined as "Training in advanced". By first training the model on a huge dataset, the model can then be fine-tuned on a much smaller dataset. This is so-called transfer learning. The pre-training procedure used for GPT class models is called \acrfull{clm} \cite{radford2018improving}. The model reads the text input in order and then tries to predict the next word. The model is fed a complete text element (input sequence) all at once, and then internal masking is applied to prevent the model from cheating by looking at future tokens. For more details on the inner workings of the training procedure, see \cref{sec:transformer-training}.
+
+\subsubsection{Fine-tuning design}
+\label{sec:fine-tuning-design}
+
+The dataset is then split 80\%, 10\%, 10\% into a training, validation and test set, respectively.
 
 \subsubsection{The Pile}
 \label{sec:the-pile}
@@ -135,39 +144,31 @@ Describe the  PILE...  It consists of among others, a lot of data from GitHub. H
     \label{fig:flowchart}
 \end{figure}
 
-\subsection{Metrics}
-For evaluating the model performance, the accuracy and perplexity metrics are used. For evaluating the function  genertion from comments, the bleu score will be used. See \label{sec:rq1-evaluation-metrics}.
-\todo{Do i need this section? }
 
 \section{Design for RQ2}
 \label{sec:design-for-rq2}
 Use secure vs vulnerabile as input to the  model inorder to generate secure code. 
 Why might this idea work? Justify.
 
+
+
 \subsection{Security Conditioning}
 \label{sec:security-conditioning}
 \todo{Rewrite - this is a draft}
-When training a large language model on several gigabytes of open-source code, it is safe to assume that large portions of this code are not safe and contains vulnerabilities. In the case of Smart Contracts, the vulnerability analysis presented in section \ref{sec:verified-smart-contracts} shows that almost 50\% of deployed Smart Contracts contain at least one high-severity vulnerability. This will result in a biased model that may produce a lot of vulnerable code. This section introduces a technique, named security conditioning, to reduce and mitigate this problem.
+When training a large language model on several gigabytes of open-source code, it is safe to assume that large portions of this code are not safe and contains vulnerabilities. In the case of Smart Contracts, the vulnerability analysis presented in section \ref{sec:verified-smart-contracts} shows that almost 50\% of deployed Smart Contracts contain at least one high-severity vulnerability. This will result in a biased model that may produce a lot of vulnerable code. The idea of  this thesis  is to use a technique, named security conditioning, to reduce and mitigate this problem.
 
-Vulnerability analysis is a difficult area. It is especially hard in the area of smart contracts, where the execution environment is not deterministic ????\todo{find correct wording.}... Previous works have tried to classify vulnerable code with large language models without much success \todo{Cite previous works}. In this project, instead of classifying vulnerable code, the goal is to make the model more secure by conditioning it on the presence of vulnerabilities.
+Vulnerability analysis is a difficult area. It is especially hard in the area of smart contracts, where the execution environment is not deterministic ????\todo{find correct wording.}... Previous works have tried to classify vulnerable code with large language models without much success \todo{Cite previous works}. In this thesis, instead of classifying vulnerable code, the goal is to make the model more secure by conditioning it on the presence of vulnerabilities.
 
-The security conditioning is done by appending a special security label to each of the records in the training data. This way, the model can use this token(s) to condition whether to produce safe or vulnerable code. This requires the dataset to first be labeled as secure or vulnerable. For this project, SolidityDetector is used for labeling. Further details on the dataset construction can be found in \cref{sec:verified-smart-contracts-audit}.
+The security conditioning is done by appending a special security label to each of the records in the training data. This way, the model can use this token(s) to condition whether to produce safe or vulnerable code. This requires the dataset to first be labeled as secure or vulnerable.
+\subsection{Fine-tuning design}
+\label{sec:rq2-fine-tuning-design}
 
-\subsection{Metrics}
-For evaluating the model has not droppedin performance, the  accuracy and perplexity  metrics are used. 
-\todo{Do i need this section? }
-
-\section{Project scope}
-\label{sec:project-scope}
-
-The project scope in this thesis is limited to the generation of smart contracts for the Ethereum blockchain. Further, only one language model architecture is used. Specifically, the state-of-the-art open-sourced pre-trained transformer model GPT-J-6B by ElutherAI is selected. For research questions 1 and 2, two versions of the model were created by fine-tuning it on two smart contract datasets created for this project. Due to the share size of this model (see \cref{sec:requirements}), no hyper-parameter optimization was performed. The hyper-parameters were left to defaults used during pre-training. Hence, everything but the training data is kept constant throughout the experiments. For research question 3, the primary scope is to assess variations in the actual input to the model. Thus, differences in performance due to variations of the models' inference configuration are not thoroughly explored.
-
-Several options are available for tuning the code generation, including \textit{temperature}, \textit{stops}, and \textit{top p}.
-
-\todo{Restricted to mainly Solidity language}
+\todo{Rewrite - this is a draft}
+For research questions 1 and 2, two versions of the model were created by fine-tuning it on two smart contract datasets created for this project. Due to the share size of this model (see \cref{sec:requirements}), no hyper-parameter optimization was performed. The hyper-parameters were left to defaults used during pre-training. Hence, everything but the training data is kept constant throughout the experiments.
 
 \section{Technology}
 \label{sec:technology}
+\todo{Move to chap 5}
 Following is an overview of the different technologies applied in this project, both software and hardware.
 
 \subsection{Software}

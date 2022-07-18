@@ -1,0 +1,6 @@
+\ProvidesFile{listings-diff.prf}
+    [listings language file]
+
+\newcommand{\lstbg}[3][0pt]{{\fboxsep#1\colorbox{#2}{\strut #3}}}
+
+\endinput

@@ -1,45 +1,87 @@
 \chapter{Discussion}
 \label{chap:discussion}
-In this chapter, the results of the implementation and evaluation given in \cref{chap:implementation-and-results,chap:evaluation} are discussed. In \cref{sec:threats-to-validity} various threats to validity are discussed.
+In this chapter, the results of the implementation and evaluation given in \cref{chap:implementation-and-results,chap:evaluation} are discussed. First, the transformer model fine-tuned fine-tuned for \acrshort{sc} code generation is discussed in \cref{sec:rq1-discussion-results}. Then, the security conditioning approach developed for answering research question 2 is discussed in \cref{sec:rq2-discussion-results}.
 
-\section{Comparison with related work}
-This section compares the results and findings with related work. First, the transformer model fine-tuned fine-tuned for \acrshort{sc} code generation is discussed. Then, the security conditioning approach developed for answering research question 2 is discussed. 
+\section{Discussion of RQ1 Results}
+\label{sec:rq1-discussion-results}
+According to research question 1, this thesis has investigated how to automatically generate Smart Contract code with transformer-based language models, by inputting comments to guide the code generation. In the following sections, the results of the implementation and evaluation of research question 1 are discussed.
+
+\subsection{Comparison with related work}
+\label{sec:rq1-comparison-with-related-work}
+For answering the first part of the research question, one of the largest open-source transformer models was fine-tuned on real Ethereum \acrshortpl{sc}. The implementation achieves an accuracy of 0.917 and perplexity of 1.510. This is a significant improvement compared to the pre-trained model, which achieves an accuracy of 0.800 and a perplexity of 2.600. The rather high accuracy from pre-training is most likely due to the high percentage of comments in the dataset, many of which are written in natural language. \todo{Try to find another work fine-tuning on programming language and reporting accuracy+perplexity improvement}
+
+A side product of the fine-tuned model is the construction of the currently largest dataset of real \acrshort{sc} ever created, consisting of 186.397. The largest competing dataset \cite{ren2021empirical} contains 45,622 real-world \acrshortpl{sc}, filtered down from 1.5 million contracts by comparing the MD5 hash of the contracts. However, since they fail to inflate the contracts to remove library code, it is unfit for use in deep learning applications.
+
+The pre-trained model and the fine-tuned model were then evaluated in \cref{chap:evaluation}. In \cref{sec:eval-rq1-comment-pluss-code-context}, the comment-aided approach was evaluated. Firstly, the fine-tuning process of the GPT-J-6B from ElutherAI results in a \acrshort{bleu} score of 0.557, an increase of over 100\%, up from 0.258. This is a significant improvement and can provide developers with substantial help for constructing \acrshortpl{sc}. In \cref{sec:rq1-comment-only}, the standard approach used by e.g. \todo{refs} was evaluated, using only comments for generating code. As discovered, the best performing clusters (2 and 3) contained a lot of library code. As a lot of smart contract code is the implementation of libraries, the fine-tuned model could be a valuable resource for \acrshort{sc} developers. For comparing the two approaches, the average \acrshort{bleu} score from clusters 0 and 1 is used. This results in an average score of 0.034 for the pre-trained model, and 0.2245 for the fine-tuned model. Comparing the results from the two approaches, the comment-aided approach produces significantly better results. The pre-trained model reports a staggering 770\% increase in the \acrshort{bleu} score, and a fine-tuned model reports a 248\% increase. This clearly shows the power of the comment-aided code generation approach.
+
+%0,0335 0,2245
+
+Compared to other works reporting \acrshort{bleu} score as metric, the results from this thesis outperform the state-of-the-art. For example, PyMT5 achieves a bleu score of 0.0859 \cite{colin2020pymt5}. Unfortunately, more recent works like Codex and AlphaCode do not evaluate their model using \acrshort{bleu} score but use functional correctness instead (discussed in \cref{sec:rq1-evaluation-metrics}). Codex evaluates the functional correctness performance of the pre-trained GPT-J-6B model. They report GPT-J solves 11.6\% Python problems \cite{chen2021codex}, while Codex solves 28.8\% \cite{chen2021codex}. As this work achieves over 100\% improvement in the \acrshort{bleu} score from the pre-trained model, it is not unreasonable to expect at least similar results to Codex, a 12 Billion parameter model (twice the size of GPT-J). 
 
 %In this chapter, the findings and observations emerged from answering the research questions are discussed. First, the transformer model fine-tuned for research question 1 is discussed. Following is a discussion of the security conditioning approach developed for answering research question 2. Finally, various threats to validity are discussed.
 
 %Two transformer models are created in this thesis to answer the research questions. These have been In this chapter, the implementation results and  the  The first model is a transformer model based on the following paper:
-\todo{Remove the "Discussion of RQx" headings?s}
-\subsection{Discussion of RQ1}
-According to research question 1, this thesis has investigated how to automatically generate Smart Contract code with transformer-based language models, by inputting comments to guide the code generation. For answering the first part of the research question, one of the largest open-source transformer models was fine-tuned on real Ethereum \acrshortpl{sc}. The implementation achieves an accuracy of 0.917 and perplexity of 1.510. This is a significant improvement compared to the pre-trained model, which achieves an accuracy of 0.800 and a perplexity of 2.600. The rather high accuracy from pre-training is most likely due to the high percentage of comments in the dataset, many of which are written in natural language. \todo{Try to find another work fine-tuning on programming language and reporting accuracy+perplexity improvement}
+\subsection{Implication to academia and industry}
+\label{sec:rq1-implication-to-academia-and-industry}
+Several of the results from research question 1 can have a major impact on both academia and industry. First, the transformer model fine-tuned for \acrshort{sc} code generation can rather accurately generate \acrshort{sc} code. Using this model in an industry setting has the potential to greatly reduce the efforts needed for creating \acrshortpl{sc}. It can also help reduce the expertise level required for the development of \acrshortpl{sc}, as the contract can in large parts be generated from natural language comment description. As a lot of smart contract code is the implementation of libraries, the fine-tuned model could be a valuable resource for \acrshort{sc} developers.
 
-This work also considers evaluation using a comment-aided approach for generating code. In \cref{sec:eval-rq1-comment-pluss-code-context}, the model is evaluated using comments and code context. 
+As code-synthesis using transformers is a rather new area, not a lot of attention has been devoted to exploring \textit{how} to best make use of these systems. This thesis proposes a novel comment-aided approach for guiding the code generation. As discussed in \cref{sec:comparison-with-related-work}, using this approach greatly increase the performance of the model. This method can most likely also be applied to other programming languages and models,  greatly increasing the performance of such solutions. Further, these results are a great motivate further research, investigating other ways to guide code generation.
 
-In \cref{chap:evaluation}, the model is evaluated on method generation from comments. While most other works related to automatic function generation from comments, few have looked at extending this together with code context. As a user seldom has to create code without  the combining specific combination of comments and combined the primarily been interested in the performance of . Few works take into account how the model is used by the user. As doing user studies are a verry time consuming and difficult procedure, very few works have been able to answer the research question. The implementation of this thesis has been able to answer the research question.
+\subsection{Threats to validity}
+\label{sec:rq1-threats-to-validity}
 
+Considering internal threats to validity, the main threat is cross-contamination between the splits of the datasets. this applies to both the performance of the fine-tuned model, as well as the evaluation of the comment-aided code generation approach. As described in \cref{sec:data-collection}, a lot of the \acrshortpl{sc} contains duplicated code. If these duplications make up a too large percentage of the dataset, this would lead to overly-optimistic estimates of the model's performance. To reduce the likelihood of this, several counter measurements are taken. Primarily, extensive filtering of the contracts based on similarity is done in \cref{sec:duplication-filtering}. To further aid this filtering, the contract files were inflated, as described in \cref{sec:verified-smart-contracts-inflated}. As over 5 million contracts are filtered down to 186.397 contracts, it can be assumed that the risk of cross-contamination is rather low.
 
-
-The  model is evakluated for function generation from code comments. Due to the lack of 
-TThis is the first model purposed for generating smart contract code. 
-
-https://minimaxir.com/2021/06/gpt-j-6b/
+Concerning the external validity of the comment-aided code generation approach, it is likely that the approach can be used for other programming languages as well as other models. The approach does not rely on any specifics of \acrshort{sc} language. However, the approach requires the code context used to be relevant to the comment. As \acrshortpl{sc} are smaller and less complex than other languages, there might be some restrictions on the generalizability of the approach. For example, trying to use the approach to generate a Python function from a comment using a completely unrelated function as code context will probably not work well.
 
 
-
-For training such a large model, this project constructs the largest real \acrshort{sc} dataset ever created. Alternative 
-
-, and a state-of-the-art automatic smart contract code generation model.
-
-There have been several 
-Research question 1 is to implement a transformer model for generating \acrshort{sc} code automatically, using a comment-audeed approach.
-Compared to related ...  Compare BLEU score here.. make table!! 
-Small sttattement regarding the paper stating 40\% vulnerable code from copilot.
+%In \cref{chap:evaluation}, the model is evaluated on method generation from comments. While most other works related to automatic function generation from comments, few have looked at extending this together with code context. As a user seldom has to create code without  the combining specific combination of comments and combined the primarily been interested in the performance of . Few works take into account how the model is used by the user. As doing user studies are a verry time consuming and difficult procedure, very few works have been able to answer the research question. The implementation of this thesis has been able to answer the research question.
 
 
-\subsection{Discussion of RQ2}
-Too answer research question 2, this thesis has investigated how to automatically generate Smart Contract code with transformer-based language models
+%
+%The  model is evakluated for function generation from code comments. Due to the lack of 
+%TThis is the first model purposed for generating smart contract code. 
+%
+%https://minimaxir.com/2021/06/gpt-j-6b/
+%
+%
+%
+%For training such a large model, this project constructs the largest real \acrshort{sc} dataset ever created. %Alternative 
+%
+%, and a state-of-the-art automatic smart contract code generation model.
+%
+%There have been several 
+%Research question 1 is to implement a transformer model for generating \acrshort{sc} code automatically, using a %comment-audeed approach.
+%Compared to related ...  Compare BLEU score here.. make table!! 
+%Small sttattement regarding the paper stating 40\% vulnerable code from copilot.
+%
 
-\section{Threats to Validity}
+\subsection{Discussion of RQ2 results}
+\label{sec:rq2-discussion-results}
+According to research question 2, this thesis has investigated how to automatically generate secure Smart Contract code with transformer-based language models. For answering this, a novel security conditioning technique was developed. In the following sections, the results of the implementation and evaluation of research question 2 are discussed.
 
-Data contamination in test and train datasets.
+\subsection{Comparison with related work}
+\label{sec:rq2-comparison-with-related-work}
+For testing the technique, the pre-trained model used in RQ1 was fine-tuned using security conditioning. The implementation achieves similar scores to that achieved in RQ1, with an accuracy of 0.917 and perplexity of 1.510. Further, the code generation performance of the fine-tuned model using the security conditioning technique is compared to that of the fine-tuned model in \cref{sec:rq2-performance-degradation-evaluation}. As reported, the variations in \acrshort{bleu} score are negligible, with a difference of 0.003. Hence, the technique introduces no performance degradation. 
 
-Only use one vulnerability detection tool
+%The security conditioning technique developed for RQ2 is then evaluated in \cref{sec:rq2-evaluation}. Firstly, 
+The security of the code generated using the security conditioning technique is evaluated in \cref{sec:eval-rq2-comment-pluss-code-context}. First, the technique is automatically evaluated using the comment-aided approach. The results of the evaluation indicate that the security conditioning technique does work. However, the reduction of vulnerabilities compared to the total number of vulnerabilities is rather low. As described in \cref{sec:eval-rq2-comment-pluss-code-context}, this might be because the code used as context already contains a lot of vulnerabilities. Therefore, some manual tests were performed in \cref{sec:eval-manual}. The manual testing further strengthens the findings from the automatic evaluation. For example, the model with security conditioning produces significantly fewer "integer overflow and underflow" vulnerabilities. As shown in \cref{fig:inflated_vulnerabilities_bar}, this is also by far the most common \acrshort{sc} vulnerability. For the less common vulnerabilities such as "reentrancy" and "unchecked send" vulnerabilities, the differences are more subtle. It is rather hard to make any of the models generate one of these less common high-risk vulnerabilities. However, when sufficiently provoked to generate a vulnerability, the model with security conditioning almost always generates a safe alternative.
+
+%The area of code synthesis with transformer models is very new. Compared to other works concerned with vulnerabilities in code generation, only. Further, to the best of my abilities, no one have investigated how to countermeassure the generation of vulnerabilities. 
+
+\todo{Fix this}
+As discussed in \cref{sec:bias-in-language-models} vulnerabilities can be considered as a form of bias in language models. Other works have tried to reduce bias in transformer models. However, with very mixed results. \cite{Silva2021TowardsAC} have tried to mitigate societal bias in text using a loss regularizer to “de-bias” a RoBERTa model. However, many of these techniques fail, results in a significant performance decrease. Some even report an increase in bias. In contrast, the security conditioning does seem to work, without introduce any bias, nor any performance degradation.
+
+\subsection{Implication to academia and industry}
+\label{sec:rq2-implication-to-academia-industry}
+As reported by \textcite{pearch2021asleep}, existing code synthesis solutions based on transformers produce a lot of vulnerabilities. Being able to reduce this number would be of great value to the industry. This applies especially to the creation of \acrshortpl{sc}, as vulnerabilities can not be fixed after it has been deployed to the blockchain. From the evaluation in \cref{sec:rq2-evaluation}, the model with security conditioning can be used to generate  mostly \acrshortpl{sc} code.
+
+The security conditioning technique can also serve as the basis for a lot of further research. Not only for vulnerability analysis but also in other areas. As discussed in \cref{sec:bias-in-language-models} vulnerabilities can be considered as a form of bias in language models. Hence, the technique could maybe be generalized to handle other types of biases, for example, gender bias. Since the technique primarily relies on augmenting the dataset, the method should also be transferable to other models as well.
+
+From the results of the vulnerability analysis of the \acrshort{sc} datasets in \cref{sec:verified-smart-contracts-audit}, a very large percentage of the \acrshortpl{sc} contracts are vulnerable. This is a very interesting finding and can both aid and motivate future research on \acrshort{sc} vulnerabilities.
+
+\subsection{Threats to validity}
+\label{sec:rq2-threats-to-validity}
+As seen from the evaluation of \cref{sec:eval-rq2-comment-pluss-code-context,sec:eval-manual}, evaluating the security of the model is very hard. In most of the manual generation examples, except for "integer overflow and underflow" vulnerabilities, neither of the two models produces any vulnerabilities. This could either be that the prompts are not sufficiently complex, or that the model is already secure. \textcite{pearch2021asleep} is one of very few works that investigate the security of transformer-based code generation. They conduct a vulnerability analysis of GitHub Copilot (based on Codex), reporting approximately 40\% of 1689 synthesized Python and C programs to be vulnerable. It is therefore not very likely that the fine-tuned developed for RQ1 mostly produces secure code. To evaluate the security conditioning technique more thoroughly, one could adopt the same approach as used by \cite{pearch2021asleep}. This would require the creation of a manual dataset, where the code is carefully crafted so that it \textit{may} produce a vulnerability.
+
+Another potential threat is the quality of the labeled data. The security conditioning technique is only as good as the labeled data. For labeling the \acrshortpl{sc}, SoliDetector was the only vulnerability detection tool used. If SoliDetector incorrectly labels a \acrshortpl{sc} as vulnerable, this could confuse the model.
