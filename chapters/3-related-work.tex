@@ -1,7 +1,7 @@
 \chapter{Related work}
 \label{chap:related-work}
 
-This chapter presents related research in the field of source code synthesis. This includes works related to dataset construction, model implementations, model inference guiding, and different approaches to code synthesis. First, various methods for source code synthesis are presented. Then follows a section on various model implementations, and on the generation of datasets, and a section on the generation of models.
+This chapter presents related research in the field of source code synthesis. \cref{sec:code-synthesis} presents various techniques for code synthesis. The section begins with presenting some of the earlier techniques, followed by surveying more recent and state-of-the-art code synthesis techniques. In \cref{sec:bias-in-language-models} works related to bias in language models are presented.
 
 %\section{Language models}
 %\label{sec:language-models}
@@ -41,23 +41,17 @@ This chapter presents related research in the field of source code synthesis. Th
 %
 %
 \section{Code synthesis}
-
-This section presents some of the various approaches to code synthesis. 
-
-Code synthesis is ... \todo{Finish}
-
-One of the earlier classical works used a probabilistic \acrfull{pcfg} \cite{allamanis2015bimodal}.
-
-\textcite{hindle2012natural} investigated whether code could be modeled by statistical language models. In particular, the authors used an n-gram model. They argue that "programs that real people actually write are mostly simple and rather repetitive, and thus they have usefully predictable statistical properties". They found that code is more predictable than natural languages. DeepCoder by \textcite{balog2017deepcoder} focused on solving programming competition-style problems. They trained a neural network for predicting properties of source code, which could be used for guiding program search.
+\label{sec:code-synthesis}
+Code synthesis is the task of generating code from a given specification. One of the earlier classical works used a probabilistic \acrfull{pcfg} \cite{allamanis2015bimodal}. \textcite{hindle2012natural} investigated whether code could be modeled by statistical language models. In particular, the authors used an n-gram model. They argue that "programs that real people actually write are mostly simple and rather repetitive, and thus they have usefully predictable statistical properties". They found that code is more predictable than natural languages. DeepCoder by \textcite{balog2017deepcoder} focused on solving programming competition-style problems. They trained a neural network for predicting properties of source code, which could be used for guiding program search.
 
 \subsection{Code synthesis based on code semantics}
 Programs can also be synthesized by leveraging the semantics of the code. \textcite{alon2018code2vec} purposes a tool named code2vec. It is a neural network model for representing snippets of code as continuously distributed vectors, or "code embeddings". The authors leverage the semantic structure of code by passing serialized \acrfullpl{ast} into a neural network. Code2seq \cite{alon2018code2seq} builds on the works of \textcite{alon2018code2vec} which focuses on natural language sequence generation from code snippets. The authors use an encoder-decoder LSTM model and rely on \acrshortpl{ast} for code snippets. The model is trained on three Java corpuses small, medium, and large, achieving a \gls{f1} score of 50.64, 53.23, and 59.19, respectively. However, the model is limited to only considering the immediately surrounding context. Pythia by \textcite{svyatkovskiy2019pyhia} is able to generate ranked lists of method and API recommendations to be used by software developers at edit time. The code completion system is based on \acrshortpl{ast} and uses Word2vec for producing code embeddings of Python code. These code embeddings are then used to train a \gls{lstm} model. The model is evaluated on a dataset of 15.8 million method calls extracted from real-world source code, achieving an accuracy of 92\%.
 
 \subsection{Code synthesis based on transformers}
 \label{sec:transformers-for-code-synthesis}
-Inspired by the success of large natural language models such as \acrfullr{elmo} \cite{peters2018deep}, \acrfullr{gpt} \cite{radford2018improving}, \acrfullr{bert} \cite{devlin2018bert}, XLNet \cite{yang2019xlnet}, and RoBERTa \cite{liu2019roberta}, large-scale Transformer models have been applied in the domains of code synthesis. \textcite{feng2020codebert} proposes a new approach to code synthesis by training the BERT transformer model on Python \gls{docstring} paired with functions. The resulting 125M parameter transformer model, named CodeBERT \cite{feng2020codebert}, achieves strong results on code-search and code-to-text generation. The authors also observe that models that leverage code semantics (\acrshortpl{ast}) can produce slightly better results. CodeGPT by \cite{lu2021codexglue} provides text-to-code generation by training several monolingual GPT-2 transformer models on Python functions and Java methods. For each programming language, one model was pre-trained from scratch, while another was fine-tuned on the code corpus, using the standard GPT-2 vocabulary and natural language understanding ability. The Java models was evaluated on the CONCODE \todo{citation} dataset, achieving a state-of-the-art performance \acrshort{bleu} score \cite{papineni2002bleu} of 28.69 for the model trained from scratch, and 32.79 for the fine-tuned version. Another model version based on GPT-2 is GPT-C by \textcite{svyatkovskiy2020intellicode}. The 366M parameter-sized model is trained on a code corpus consisting of 1.2 billion lines of source code in Python, C\#, JavaScript and TypeScript programming languages. The Python-only model reportedly achieves a \gls{rouge-l}\todo{add acronym} precision of 0.80 and recall of 0.86. PyMT5 \textcite{colin2020pymt5} is based on the T5 model. The model can predict whole methods from natural language documentation strings (docstrings) and summarize code into docstrings of any common style. For method generation, PyMT5 achieves a \gls{bleu} score of 8.59 and a \gls{rouge-l} F-score of 24.8 on the CodeSearchNet \todo{cite} test set.
+Inspired by the success of large natural language models such as \acrfullr{elmo} \cite{peters2018deep}, \acrfullr{gpt} \cite{radford2018improving}, \acrfullr{bert} \cite{devlin2018bert}, XLNet \cite{yang2019xlnet}, and RoBERTa \cite{liu2019roberta}, large-scale Transformer models have been applied in the domains of code synthesis. \textcite{feng2020codebert} proposes a new approach to code synthesis by training the BERT transformer model on Python \gls{docstring} paired with functions. The resulting 125M parameter transformer model, named CodeBERT \cite{feng2020codebert}, achieves strong results on code-search and code-to-text generation. The authors also observe that models that leverage code semantics (\acrshortpl{ast}) can produce slightly better results. PyMT5 \textcite{colin2020pymt5} is based on the T5 model. The model can predict whole methods from natural language documentation strings (docstrings) and summarize code into docstrings of any common style. For method generation, PyMT5 achieves a \gls{bleu} score of 0.0859 and a F-score of 24.8 on the CodeSearchNet \cite{codesearchnet} test set. GPT-C by \textcite{svyatkovskiy2020intellicode} is a model based on GPT-2. The 366M parameter-sized model is trained on a code corpus consisting of 1.2 billion lines of source code in Python, C\#, JavaScript and TypeScript programming languages. The Python-only model reportedly achieves a ROUGE-L precision of 0.80 and recall of 0.86.
 
-The model complexity of transformers has recently sky-rocketed, with model sizes growing to several tens of billions of parameters. GPT-J is a 6 billion parameter model trained on The Pile, which is an 825GB dataset. \todo{move to thepile section} The Pile features many disparate domains, including books, GitHub repositories, webpages, chat logs, and medical, physics, math, computer science, and philosophy papers, making it one of the most extensive and diverse datasets available. The pre-trained version of GPT-J is also publicly available. Codex by \textcite{chen2021codex} is a 12 billion parameter model based on GPT. It was trained on 54 million GitHub repositories, and a production version of Codex powers GitHub Copilot \cite{copilot}. The model solves 28.8\% of the problems in the HumanEval dataset \cite{chen2021codex}, while GPT-3 solves 0\% and GPT-J solves 11.4\%. Google DeepMind's AlphaCode \cite{alphacode} is 41.4 billion parameters and is the first AI to reach a competitive level in programming competitions. AlphaCode was tested against challenges curated by Codeforces \todo{cite}, a competitive coding platform. It achieved an average ranking of 54.3\% across 10 contests. The authors found that repeated sampling on the same problem significantly increased the probability of a correct solution.
+The model complexity of transformers has recently sky-rocketed, with model sizes growing to several tens of billions of parameters. GPT-J is a 6 billion parameter model trained on The Pile, which is an 825GB dataset. The pre-trained version of GPT-J is also publicly available. Codex by \textcite{chen2021codex} is a 12 billion parameter model based on GPT. It was trained on 54 million GitHub repositories, and a production version of Codex powers GitHub Copilot \cite{copilot}. The model solves 28.8\% of the problems in the HumanEval dataset \cite{chen2021codex}, while GPT-3 solves 0\% and GPT-J solves 11.4\%. Google DeepMind's AlphaCode \cite{alphacode} is 41.4 billion parameters and is the first AI to reach a competitive level in programming competitions. AlphaCode was tested against challenges curated by Codeforces \cite{codeforces}, a competitive coding platform. It achieved an average ranking of 54.3\% across 10 contests. The authors found that repeated sampling on the same problem significantly increased the probability of a correct solution.
 
 
 \newcommand*\emptycirc[1][1ex]{\tikz\draw (0,0) circle (#1);} 
@@ -71,7 +65,6 @@ The model complexity of transformers has recently sky-rocketed, with model sizes
 
 %\begin{sidewaystable}
 \begin{ThreePartTable}
-    \todo{Add input, ouputt, meetric ,  language and model info to table}
     \newcolumntype{Y}{>{\centering\arraybackslash}X}
     \newcolumntype{R}{>{\raggedright\arraybackslash}X}
     \def\arraystretch{1.5}
@@ -80,29 +73,28 @@ The model complexity of transformers has recently sky-rocketed, with model sizes
     \setlength{\LTright}{\LTleft}
     \footnotesize
     \begin{center}
-    \begin{TableNotes}
-        \item[a] \label{tn:ml-name} Name of the tool or method. If no name exists, a short description or "--" is used.
-    \end{TableNotes}
     \keepXColumns
     \begin{tabularx}{1\textwidth}{clRRRRR}
             \caption{Existing language models.}\label{tab:code-synthesis-models}\\
             \toprule
-            \textbf{Refs.} & \textbf{Year} & \textbf{Model\tnotex{tn:ml-name}} & \textbf{Metrics} & \textbf{Languages} &  \textbf{Input} & \textbf{Output}\\
+            \textbf{Refs.} & \textbf{Year} & \textbf{Model} & \textbf{Metrics} & \textbf{Languages} &  \textbf{Input} & \textbf{Output}\\
             \hline
             \endfirsthead
             \caption{(\textit{Continued}) Existing static smart contract vulnerability detection tools.}\\
             \toprule
-            \textbf{Refs.} & \textbf{Year} & \textbf{Model\tnotex{tn:ml-name}} & \textbf{Metrics} & \textbf{Languages} &  \textbf{Input} & \textbf{Output}\\
+            \textbf{Refs.} & \textbf{Year} & \textbf{Model} & \textbf{Metrics} & \textbf{Languages} &  \textbf{Input} & \textbf{Output}\\
             \hline
         \endhead
             \midrule
             \multicolumn{7}{r}{\small(\textit{Continued on next page})}\\
         \endfoot
-            \insertTableNotes\\
         \endlastfoot
         
-        \cite{} & \citeyear{} & GPT & \acrshort{bleu} & Python  & Docstring & Code\\
-        
+        \cite{feng2020codebert} & \citeyear{feng2020codebert} & CodeBERT & \acrshort{bleu} & Python  & Code & Docstring\\
+        \cite{colin2020pymt5} & \citeyear{colin2020pymt5} & PyMT5 & \acrshort{bleu} & Python & Docstring & Code\\
+        \cite{svyatkovskiy2020intellicode} & \citeyear{svyatkovskiy2020intellicode} & GPT-C & \acrshort{bleu} & Python, C\#, JavaScript, TypeScript &  & \\
+        \cite{chen2021codex} & \citeyear{chen2021codex} & Codex & Functional correctness & Python & Docstring & Code\\
+        \cite{alphacode} & \citeyear{alphacode} & AlphaCode & Functional correctness & Python, C++, Java & Problem  description & Code\\
         \bottomrule
     \end{tabularx}
     \end{center}
@@ -110,28 +102,15 @@ The model complexity of transformers has recently sky-rocketed, with model sizes
 \end{ThreePartTable}
 %\end{sidewaystable}
 
-As can be seen from \cref{tab:code-synthesis-models}, most of the models are concerned with Python code. However, none have attempted to generate \acrfullpl{sc} code. \acrshort{sc} code is quite different from most of the other popular languages such as Python, JavaScript, PHP and Java. Investigating how transformer models perform on \acrshort{sc} code would give valuable insight into the future of code synthesis. Further, all of the works listed in \cref{tab:code-synthesis-models} that are concerned with text-to-code generation, only consider using comments in isolation. There is therefore a need for an investigation of a code generation approach that uses both comments and code for generating functions. \todo{finish}
- 
-Docstring analysis 2.3 of https://arxiv.org/pdf/2010.03150.pdf for clustering comments. Uses it to produce different kind of code comments. However, does not use it for function generation. 
+As can be seen from \cref{tab:code-synthesis-models}, most of the models are concerned with Python code. However, none have attempted to generate \acrfullpl{sc} code. \acrshort{sc} code is quite different from most of the other popular languages such as Python, JavaScript, and Java. Investigating how transformer models perform on \acrshort{sc} code would give valuable insight into the future of code synthesis. Further, all of the works listed in \cref{tab:code-synthesis-models} that are concerned with text-to-code generation, only consider using comments in isolation. There is therefore a need for an investigation of a code generation approach that uses both comments and code for generating functions.
 
 \section{Bias in language models}
 \label{sec:bias-in-language-models}
-Include security as a bias. Discuss for example gender bias (ex. male vs female jobs) due to datasets.... Same goes with vulnerablilities.. Include stats from gitthub securitty??
+One of the main problems with language models is that they often contain bias \cite{li2021detecting}. This can be everything from producing gender-specific jobs to favoring a certain race. There have been several works related to mitigating this in language models. However, with varying success. \textcite{Silva2021TowardsAC} tried to mitigate societal bias in text generation using a loss regularizer to “de-bias” a RoBERTa model. However, their approach was not successful and conclude there is a need for more robust bias testing in transformers. Several works are devoted to using adversarial methods to reduce bias. \textcite{laftr2018} propose LAFTER, an adversarial method to modify the training objective based on a desired fairness measure. \textcite{zhang2018mitigating} also tries to reduce bias using adversarial training. However, \cite{zhang2018mitigating} states that the adversarial training method is hard to get right and is often touchy. \textcite{mitigating2021} investigates bias in visual transformer models, as they find existing approaches such as LAFTR unable to maintain high performance. They propose TADeT, a targeted alignment strategy for debasing transformers that aims to discover and remove bias primarily from query matrix features. 
 
-\todo{TTODOOOO}
-https://arxiv.org/pdf/2110.15733.pdf
-Accompanying the release of Copilot, OpenAI published
-a technical report evaluating various aspects of “several early
-Codex models, whose descendants power GitHub Copilot” [2].
-This work does include a discussion (in Appendix G.3) of
-insecure code generated by Codex. However, this investigation
-was limited to one type of weakness (insecure crypto
-parameters, namely short RSA key sizes and using AES in
-ECB mode). T
-There seems to be very little research on the security of synthesized code using transformers. \cite{chen2021codex} brief exploration on the generation of cryptographic functionsbrief evaluation of  \textcite{pearch2021asleep} conducts a vulnerability analysis of GitHub Copilot (based on Codex), reporting approximately 40\% of 1689 synthesized Python and C programs to be vulnerable. Hence, one could expect the security conditioning reduction. 
+In the area of code synthesis, vulnerabilities can be considered a form of bias in language models. However, there seems to be very little research on the security of synthesized code using transformers. \cite{chen2021codex} provide a brief discussion of insecure code generated by Codex. However, this investigation was limited to the exploration of the generation of cryptographic functions. \textcite{pearch2021asleep} acknowledge this gap in research and conduct a vulnerability analysis of GitHub Copilot (based on Codex). They construct a manual dataset of incomplete python and C code that \textit{may} produce a vulnerability. From their analysis of 1689 synthesized Python and C programs, they conclude with approximately 40\% are vulnerable. This shows there is a dire need for reducing the number of vulnerabilities generated with language models.
 
 
-\todo{Add paper on code security}
 % vvvvvvvv VIKTIG vvvvvvvvvv
 
 %autoregressive generation tasks

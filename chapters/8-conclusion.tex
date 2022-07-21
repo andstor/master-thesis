@@ -1,0 +1,66 @@
+\chapter{Conclusion and Future Work}
+\label{chap:conclusion}
+In this thesis, ways for generating \acrfull{sc} code with transformer models have been explored. This includes both how to guide the code generation by inputting comments, as well as how to generate secure \acrshort{sc} code. In this chapter, the results and findings from the thesis are concluded in \cref{sec:conclusion}, along with potential future works in \cref{sec:future-works}.
+
+\section{Conclusion}
+\label{sec:conclusion}
+To generate \acrfull{sc} code with a transformer model, this thesis fine-tunes a state-of-the-art open-source 6 billion parameter transformer model on \acrshort{sc} code. To facilitate the training of this large model, the currently largest dataset of \acrshortpl{sc} is constructed, containing over 186,397 real verified \acrshortpl{sc}. Further, this thesis proposes a novel comment-aided approach to guide the code synthesis. From evaluating the approach by generating 10.000 functions with the fine-tuned model, a \acrshort{bleu} score of 0.557 is achieved, outperforming the state-of-the-art.
+
+In order to produce secure \acrshort{sc} code with a transformer model, this thesis proposes a novel security technique named security conditioning. By using special tokens as labels during the training of a transformer model, it can condition on secure or vulnerable code. As this technique requires the \acrshortpl{sc} to be labeled as secure or vulnerable, the 186,397 \acrshort{sc} are labeled with a vulnerability detection tool named SolDetector, resulting in the currently largest audited \acrshort{sc} dataset. In this thesis, the effectiveness of security conditioning is demonstrated by fine-tuning a transformer model using security conditioning. From both automatic and manual evaluation of the technique, there are good indications that security conditioning does produce fewer vulnerabilities without performance degradation. Especially improvement is seen for common vulnerabilities, such as integer overflows and underflows.
+
+To summarize, this thesis is the first to generate \acrshort{sc} code with transformer-based language models. Further, the code generation is improved by using a novel comment-aided approach, achieving state-of-the-art results. Finally, the security of the generated code is improved by a novel security conditioning technique.
+
+\section{Future work}
+\label{sec:future-works}
+There are several interesting ideas and observations arising from this thesis. Following are some potential improvements and suggestions of topics for future work:
+\begin{itemize}
+    \item Conduct a user study on the effects of using the comment-aided approach for code generation.
+    \item Evaluate how hyperparameter tuning affects security conditioning.
+    \item Use multiple vulnerability detection tools for labeling \acrshort{sc} and study how it affects performance.
+    \item How to automatically evaluate \textit{potential} security vulnerabilities in synthesized code.
+\end{itemize}
+
+
+%By labeling the \acrshort{sc} data as vulnerable or secure, the model learns to condition using special tokens durin training oof 
+%
+%How to automatically generate Smart Contract code with transformer-
+%based language models, by inputting comments to guide the code gen-
+%eration?
+%RQ2. How to generate secure Smart Contract code with transformer-based
+%language models?
+%
+%
+%This includes both how to guide the code synthesis using a novel comment-aided approach, as well as a novel technique for %producing secure \acrshort{sc} code. In this chapter, the results and findings from the thesis are concluded.
+%
+%
+%Consectetur ullamco dolor pariatur ad id minim sunt do occaecat. Anim commodo consectetur proident pariatur dolor. Dolor laborum %nisi id ipsum eiusmod ipsum exercitation consequat ullamco pariatur ex ut ullamco id.
+%
+%\todo{Write a conclusion}
+
+
+%This paper presents the results of a \acrlong{slr} of existing \acrlong{sc} vulnerability analysis and detection methods. The %motivation for this research was to provide a state-of-the-art overview of the current situation of the \acrshort{sc} vulnerability %detection. A total of 40 primary studies were selected based on predefined inclusion and exclusion criteria. A systematic analysis %and synthesis of the data were extracted from the papers, and comprehensive reviews were performed. Further, to the greatest %extent, this paper also identifies the current available cross-chain tools and methods. The cross-chain applicability for these %assets is investigated and analyzed.
+%
+%The findings from this study show that there are a number of methods and implemented tools readily available for vulnerability %analysis and detection. Several of these tools show great results. The most prevalent methods are static analysis tools, where %symbolic execution is among the most popular. Other methods such as syntax analysis, abstract interpretation, data flow analysis, %fuzzy testing, and machine learning are also readily used. In this paper, some potential cross-chain tools are highlighted and %discussed. Although they pose several limitations, they show significant potential for further development. Especially interesting %is the potential machine learning-based cross-chain detection methods.
+%
+%From this study, one can see that there is a significant lack of research on vulnerability detection on other blockchain platforms %than Ethereum. The hope is that the results from this study provide a starting point for future research on cross-chain analysis.
+
+%\chapter{Future work}
+%\label{chap:future-work}
+%
+%The area of \acrshort{sc} vulnerability analysis and detection has already come a long way, even though the area of blockchain is %still in its infancy. There are still many research gaps needing to be filled.
+%
+%- Imp
+%
+%Use the model itself for clustering.
+%
+%train model from scratch on only smart contract code.. Not possible  due to time and resource requirements.
+%
+%Reduce model size with knowledge distillation
+%
+%Faults in SoliDettector...
+%
+%Future work, combine multiple vulnerability detectors
+%
+%The area of vulnerability evaluation of code synthesis is 
+%
+%An efficient and sound approach for automatically evaluating the security of synthesized code is lacking. Current sound solutions %require a lot of manual effort. A custom vulnerability detection tool that could detect not just definite vulnerabilities, but %also potential vulnerabilities could be an interesting solution and is left as future work.

@@ -1,12 +1,14 @@
 \chapter{Research Methodology}
 \label{chap:research-methodoloy}
-This chapter presents the research methodology used in this thesis. Firstly, the research motivation is presented in \cref{sec:research-motivation}, followed by the research questions defined for this thesis in \cref{sec:research-questions}. The research method and design are explained in \cref{sec:research-method-and-design}. Then, \cref{sec:design-for-rq1,sec:design-for-rq2} presents the research design for RQ1 and RQ2, respectively. \cref{sec:project-scope} describes the project scope. Finally, \cref{sec:technology} presents the various software libraries and hardware used in this thesis.
+This chapter presents the research methodology used in this thesis. Firstly, the research motivation is presented in \cref{sec:research-motivation}, followed by the research questions defined for this thesis in \cref{sec:research-questions}. The research method and design are explained in \cref{sec:research-method-and-design}. Then, \cref{sec:design-for-rq1,sec:design-for-rq2} presents the research design for RQ1 and RQ2, respectively. Finally, \cref{sec:technology} presents the various software libraries and hardware used in this thesis.
 
 \section{Research Motivation}
 \label{sec:research-motivation}
-Writing Smart Contracts are hard. Writing secure Smart Contracts is even harder. Automatic code generation is by many considered the ”holy grail” in the field of computer science \cite{PGL-010}. Ever since OpenAI introduced its first transformer model in the GPT series, this class of transformers has been touted as the state-of-the-art for text generation. Recent works have applied transformers for code generation and program synthesis, achieving state-of-the-art results. For example, Codex by \textcite{chen2021codex} fine-tunes GPT-3 \cite{brown2020language} on code data from GitHub. The results are impressive. \todo{Add comment-aided approach motivation}
+Writing Smart Contracts are hard. Writing secure Smart Contracts is even harder. Automatic code generation is by many considered the ”holy grail” in the field of computer science \cite{PGL-010}. Ever since OpenAI introduced its first transformer model in the GPT series, this class of transformers has been touted as the state-of-the-art for text generation. Recent works have applied transformers for code generation and program synthesis, achieving state-of-the-art results. For example, Codex by \textcite{chen2021codex} fine-tunes GPT-3 \cite{brown2020language} on code data from GitHub. The results are impressive. However, while the models are improving at a staggering rate, it is also important to consider \textit{how} the models should be used. Works such as \cite{chen2021codex,colin2020pymt5} only consider code synthesis from comments. This is clearly problematic, as users of these systems, developers, do not normally develop code in isolation.
 
-These systems still face many problems, especially in regards to different biases, for example, gender and security biases. Because the model is trained on open-source code \cite{chen2021codex}, including "Public code may contain insecure coding patterns, bugs, or references to outdated APIs or idioms.", the model might "synthesize code that contains these undesirable patterns introduce vulnerabilities" \cite{copilot}. An empirical study by \textcite{pearce2021asleep} found that almost approximately 40\% of the generated code by GitHub Copilot is vulnerable. Security flaws in software results yearly in loss of tens of thousands of million dollars\todo{find real number here .}. Due to the monetary nature of blockchain, security flaws are even more severe, as exploits of vulnerabilities often directly result in the loss of funds. \todo{add exampleof loss} Further, the immutable nature prevents the possibility of correcting vulnerable code after being deployed. Therefore, the research objective is to develop a system that can generate secure smart contract code automatically. \todo{Add comment-aided  approach arguments}. This thesis tries to address the above problems by answering the research questions defined in \cref{sec:research-questions}.
+These systems also face many other problems, especially in regards to different biases, for example, gender and security biases. \textcite{chen2021codex} describes that because their model (Codex) is trained on open-source code, including "Public code may contain insecure coding patterns, bugs, or references to outdated APIs or idioms.", the model might "synthesize code that contains these undesirable patterns introduce vulnerabilities" \cite{copilot}. An empirical study by \textcite{pearce2021asleep} found that almost approximately 40\% of the generated code by GitHub Copilot is vulnerable. Security flaws in software can have dire consequences. According to \textcite{smith2020hidden} the estimated cost of cybercrime for 2020 is over \$1 trillion dollars. Due to the monetary nature of blockchain, security flaws are often very severe, as exploits of vulnerabilities often directly result in the loss of funds. One of the most infamous blockchain attacks was the crowdfunding project \acrfull{dao} hack. This hack resulted in an economic loss worth about 60 million dollars at the time \cite{atzei2017asurvey}. Further, the immutable nature prevents the possibility of correcting vulnerable code after being deployed.
+
+This thesis tries to address the problems and limitations described above, by answering the research questions defined in \cref{sec:research-questions}.
 
 \section{Research Questions}
 \label{sec:research-questions}
@@ -34,7 +36,7 @@ To best facilitate the answering of the research questions defined in \cref{sec:
 \end{itemize}
 
 \noindent
-For this thesis, \cref{sec:research-motivation} clearly describes the awareness of the problems this thesis aims to solve. This is the motivation behind the new research effort proposed in this thesis, conveyed as research questions defined in \cref{sec:research-questions}. The following sections;\todo{Check : or ;} \cref{sec:design-for-rq1} and \cref{sec:design-for-rq2} describe a suggestion for how to solve these research questions. \cref{chap:implementation-and-results} describes the implementation of the suggested solution for the research questions, while \cref{chap:evaluation} presents an evaluation of the implementation results. Finally, the findings and results are discussed in \cref{chap:discussion}, and areas suitable for further research are presented in \cref{chap:future-work}.
+For this thesis, \cref{sec:research-motivation} clearly describes the awareness of the problems this thesis aims to solve. This is the motivation behind the new research effort proposed in this thesis, conveyed as research questions defined in \cref{sec:research-questions}. \cref{sec:design-for-rq1} and \cref{sec:design-for-rq2} describe a suggestion for how to answer these research questions. \cref{chap:implementation-and-results} describes the implementation of the suggested solution for the research questions, while \cref{chap:evaluation} presents an evaluation of the implementation results. Finally, the findings and results are discussed in \cref{chap:discussion}, and areas suitable for further research are presented in \cref{chap:conclusion}.
 %
 %The next section describes the suggestion step. The next section describes the development step. The next section describes the %evaluation step. The next section describes the conclusion step.
 %This thesis aims to solve the research questions defined in \cref{sec:research-questions}. 
@@ -90,22 +92,42 @@ For this thesis, \cref{sec:research-motivation} clearly describes the awareness 
 
 \section{Design for RQ1}
 \label{sec:design-for-rq1}
-This section describes the design for research question 1. For constructing a comment-aided system for automatically generating smart contract code, multiple design steps are needed. The first subsection describes how comment The following subsections describe a system that can generate secure smart contract code automatically, this project uses a deep learning approach. Further, for understanding how to put this system to use in a comment-driven approach, a comment analysis is conducted.
+This section describes the design for research question 1. For constructing a comment-aided system for automatically generating smart contract code, multiple design steps are needed. First, the design for a code comment analysis is described in \cref{sec:code-comments-analysis}. Then the following \cref{sec:language-model} describes the language model selected for use in this thesis. Finally, the design of the fine-tuning process is described in \cref{sec:rq1-fine-tuning-design}
 
-The project scope in this thesis is limited to the generation of smart contracts for the Ethereum blockchain. 
+%The project scope in this thesis is limited to the generation of smart contracts for the Ethereum blockchain. 
 
 \subsection{Code comments analysis}
 \label{sec:code-comments-analysis}
-\todo{Add a description of the code comments analysis. + the differrent types of comments. + different styles?}
-It is tehrefore needed to analyze the comments in order to investigate how a user can best use this auto-generating system.
+Code comments come in different shapes and styles. Solidity, the primary \acrshort{sc} language of Ethereum, has no less than 4 different standard comment types. For example, one can use single- or multi-line NatSpec comments. These are comments that can provide rich documentation for functions, return variables and more \cite{natspec}. An example of this is shown in \cref{lst:method-natspec-comment-example}. To provide some insight into how a user can formulate a comment for guiding the code synthesis, a comment analysis is conducted of how these look like in real \acrshort{sc} code. Specifically, a clustering analysis of the comments is conducted. Such an analysis can also be used for providing insight into the performance of the models developed in this project.
+
+\begin{lstlisting}[
+    caption={Example of a NatSpec comment.},
+    label=lst:method-natspec-comment-example,
+    language=Solidity]
+/// @title A token implementation
+/// @author André Storhaug
+/// @notice This is an example implementation
+/// @dev All function calls are currently implemented without side effects
+\end{lstlisting}
 
 \subsection{Language Model to use}
 \label{sec:language-model}
-As discussed in section \cref{sec:transformers-for-code-synthesis}, there are several available transformer models. However, only a few of them have open-sourced pre-trained weights. Of these, GPT-J \cite{gpt-j} is the largest model that includes code in its pre-training dataset "The Pile", described in \cref{sec:the-pile}. The research community has found these models to outperform existing open-source GPT systems in qualitative programming evaluations \cite{wolf2021}. These findings are further backed by \cite{chen2021codex}. Because of this, the state-of-the-art generative pre-trained transformer model GPT-J is the language model used in this thesis.
+As discussed in \cref{sec:transformers-for-code-synthesis}, there are several available transformer models. However, only a few of them have open-sourced pre-trained weights. Of these, GPT-J \cite{gpt-j} is the largest model that includes code in its pre-training dataset "The Pile", described in \cref{sec:the-pile}. The research community has found these models to outperform existing open-source GPT systems in qualitative programming evaluations \cite{wolf2021}. These findings are further backed by \cite{chen2021codex}. Because of this, the state-of-the-art generative pre-trained transformer model GPT-J is the language model used in this thesis.
+
+\subsubsection{The Pile}
+\label{sec:the-pile}
+The Pile \cite{gao2021thepile} is an 825 GiB open source dataset for language modeling. The Pile features many disparate domains, including books, GitHub repositories, webpages, chat logs, and medical, physics, math, computer science, and philosophy papers, making it one of the most extensive and diverse datasets available. \cref{fig:treemap-the-pile} shows a treemap of the different parts of the dataset. Especially interesting is that 7.59\% (about 95.16 GiB) of the Pile is made up code from GitHub. Code from around 192K GitHub repositories are included, all with more than 100 stars and smaller than a gigabyte \cite{github-downloader}. Unfortunately, as of February 2022, less than 10 repositories on GitHub contain Solidity code and have over 100 stars \footnote{\url{https://github.com/search?o=desc&q=language\%3ASolidity&type=Repositories}}. Hence there is a need for a dataset made up of \acrshortpl{sc}.
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/Treemap-of-Pile-components-by-effective-size.png}
+    \caption{Treemap of the Pile components by effective size. Source: \cite{gao2021thepile}}
+    \label{fig:treemap-the-pile}
+\end{figure}
 
 \subsubsection{Model architecture}
 \label{sec:architecture}
-Ever since OpenAI introduced its first transformer model in the GPT series, this class of transformers has been touted as the state-of-the-art for text generation. Their latest model, GPT-3 \cite{brown2020language}, is their best performing model with 175 billion parameters. However, the model is not openly available at the current time. GPT-J \cite{gpt-j} with 6 billion parameters (GPT-J-6B) is currently one of the best open-source alternatives to OpenAI's GPT-3. GPT-J was released in June 2021 by EleutherAI \cite{elutherai}, a grassroots collection of researchers working to open-source AI research. The model is trained on the Pile, an 825 GiB diverse, open-source language modeling data set that consists of 22 smaller, high-quality datasets combined together. See section \cref{sec:the-pile} for a more detailed description of the Pile.
+Ever since OpenAI introduced its first transformer model in the GPT series, this class of transformers has been touted as the state-of-the-art for text generation. Their latest model, GPT-3 \cite{brown2020language}, is their best performing model with 175 billion parameters. However, the model is not openly available at the current time. GPT-J \cite{gpt-j} with 6 billion parameters (GPT-J-6B) is currently one of the best open-source alternatives to OpenAI's GPT-3. GPT-J was released in June 2021 by EleutherAI \cite{eleutherai}, a grassroots collection of researchers working to open-source AI research. The model is trained on the Pile, an 825 GiB diverse, open-source language modeling data set that consists of 22 smaller, high-quality datasets combined together. See section \cref{sec:the-pile} for a more detailed description of the Pile.
 
 Being a GPT class transformer, GPT-J uses a decoder-only architecture, as can be seen in \cref{fig:gpt-j-architecture}. The GPT-J introduces some notable differences from standard transformer models. Firstly, instead of computing attention and feed-forward layers in sequential order, they are computed in parallel and the results are added together. This decreases communication during distributed training, resulting in increased throughput. Secondly, GPT-J uses \acrfull{rope} \cite{su2021roformer} for position encoding. Opposite to sinusoidal encoding used in standard transformer models (see \cref{sec:embedding-and-positional-encoding}), this is shown to result in better model quality in tasks with long text \cite{su2021roformer}.
 
@@ -126,56 +148,35 @@ GPU needs around 40GB of GPU memory to load the model. For training/fine-tuning 
 If a GPU with mixed precision capabilities (architecture Pascal or more recent) is available, one can use mixed precision training with PyTorch 1.6.0 or later, or by installing the Apex library for previous versions. If using an NVIDIA “Ampere” GPU architecture, the \acrfull{bf16} floating-point format can be used. Using mixed precision training usually results in 2x-speedup for training with the same final results.
 
 \subsubsection{Pre-training}
-Pre-training is defined as "Training in advanced". By first training the model on a huge dataset, the model can then be fine-tuned on a much smaller dataset. This is so-called transfer learning. The pre-training procedure used for GPT class models is called \acrfull{clm} \cite{radford2018improving}. The model reads the text input in order and then tries to predict the next word. The model is fed a complete text element (input sequence) all at once, and then internal masking is applied to prevent the model from cheating by looking at future tokens. For more details on the inner workings of the training procedure, see \cref{sec:transformer-training}.
+Pre-training is defined as "Training in advance". By first training the model on a huge dataset, the model can then be fine-tuned on a much smaller dataset. This is so-called transfer learning. The pre-training procedure used for GPT class models is called \acrfull{clm} \cite{radford2018improving}. The model reads the text input in order and then tries to predict the next word. The model is fed a complete text element (input sequence) all at once, and then internal masking is applied to prevent the model from cheating by looking at future tokens. For more details on the inner workings of the training procedure, see \cref{sec:transformer-training}.
 
-\subsubsection{Fine-tuning design}
-\label{sec:fine-tuning-design}
-
-The dataset is then split 80\%, 10\%, 10\% into a training, validation and test set, respectively.
-
-\subsubsection{The Pile}
-\label{sec:the-pile}
-Describe the  PILE...  It consists of among others, a lot of data from GitHub. However, only x\% of the data is smart contracts (Solidity). Hence there is a need for a dataset made up of smart contracts. --> existing datasets....
-
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=\textwidth]{figures/Treemap-of-Pile-components-by-effective-size.png}
-    \caption{Treemap of Pile components by effective size. SOURCE FROM THEPILE paper}
-    \label{fig:flowchart}
-\end{figure}
-
+\subsection{Fine-tuning design}
+\label{sec:rq1-fine-tuning-design}
+To refine the pre-trained GPT-J-6B model for generating \acrshort{sc} code, the model needs to be fine-tuned on \acrshortpl{sc}. This should allow the model to adapt its existing knowledge gained from the pre-training procedure to produce high-quality \acrshort{sc} code. The fine-tuning procedure used is similar to that of the pre-training procedure. However, instead of using the Pile, a custom dataset of \acrshortpl{sc} needs to be constructed for use. The dataset then needs to be shuffled, before \acrshortpl{sc} are fed to the model for training. To ensure the validity of the model's performance, the dataset used needs to be split into separate sets for training, validation and testing. In this thesis, 80\% of the data will be used for testing, 10\% for validation, and 10\% for testing. After the model is fine-tuned, it should be able to auto-regressively generate \acrshortpl{sc} code. Due to the share size of the selected model (see \cref{sec:requirements}), no hyper-parameter optimization was performed. All hyper-parameters were set to their default values, as used for pre-training.
 
 \section{Design for RQ2}
 \label{sec:design-for-rq2}
-Use secure vs vulnerabile as input to the  model inorder to generate secure code. 
-Why might this idea work? Justify.
-
-
+This section describes the design for research question 2. The proposed method for generating secure \acrshort{sc} code with transformer models is described in \cref{sec:security-conditioning}. Then, the design of the fine-tuning process is described in \cref{sec:rq1-fine-tuning-design}.
 
 \subsection{Security Conditioning}
 \label{sec:security-conditioning}
-\todo{Rewrite - this is a draft}
-When training a large language model on several gigabytes of open-source code, it is safe to assume that large portions of this code are not safe and contains vulnerabilities. In the case of Smart Contracts, the vulnerability analysis presented in section \ref{sec:verified-smart-contracts} shows that almost 50\% of deployed Smart Contracts contain at least one high-severity vulnerability. This will result in a biased model that may produce a lot of vulnerable code. The idea of  this thesis  is to use a technique, named security conditioning, to reduce and mitigate this problem.
+When training a large language model on several gigabytes of open-source code, it is safe to assume that large portions of this code are not safe and contains vulnerabilities. For example, \textcite{durieux2020empirical} analyzed 47.587 real \acrshortpl{sc} with 9 automatic analysis tools. From these, 97\% of the contracts are tagged as vulnerable. This can result in a biased model that may produce a lot of vulnerable code. The idea of this thesis is to use a technique, named security conditioning, to reduce and mitigate this problem. 
 
-Vulnerability analysis is a difficult area. It is especially hard in the area of smart contracts, where the execution environment is not deterministic ????\todo{find correct wording.}... Previous works have tried to classify vulnerable code with large language models without much success \todo{Cite previous works}. In this thesis, instead of classifying vulnerable code, the goal is to make the model more secure by conditioning it on the presence of vulnerabilities.
+The security conditioning is done by prepending a special security label to each of the records in the training data. This way, the model can learn to associate these tokens with either secure or vulnerable code. This way, by also using the labels when generating code, the model may be able to condition whether to produce safe or vulnerable code.
 
-The security conditioning is done by appending a special security label to each of the records in the training data. This way, the model can use this token(s) to condition whether to produce safe or vulnerable code. This requires the dataset to first be labeled as secure or vulnerable.
 \subsection{Fine-tuning design}
 \label{sec:rq2-fine-tuning-design}
+For fine-tuning the pre-trained model with security conditioning, much of the same procedure as in \cref{sec:rq1-fine-tuning-design} is used. This makes it possible to validate the technique, by comparing the secured model with the "unsecured" model developed in RQ1. The primary difference is that the dataset records need to be labeled as secure or vulnerable. Before training, the dataset is shuffled and the \acrshortpl{sc} are fed to the model for training. To ensure the validity of the model's performance, the dataset needs to be split into separate sets for training, validation and testing. In this thesis, 80\% of the data will be used for testing, 10\% for validation, and 10\% for testing. To be able to The same hyperparameters used for as in \cref{sec:rq1-fine-tuning-design} no hyper-parameter optimization was performed. All hyper-parameters were set to their default values, as used for pre-training.
 
-\todo{Rewrite - this is a draft}
-For research questions 1 and 2, two versions of the model were created by fine-tuning it on two smart contract datasets created for this project. Due to the share size of this model (see \cref{sec:requirements}), no hyper-parameter optimization was performed. The hyper-parameters were left to defaults used during pre-training. Hence, everything but the training data is kept constant throughout the experiments.
+After the model is fine-tuned, it should be able to auto-regressively generate \acrshortpl{sc} code. To invoke the security conditioning, one only needs to prepend the security label to the input text.
 
 \section{Technology}
 \label{sec:technology}
-\todo{Move to chap 5}
 Following is an overview of the different technologies applied in this project, both software and hardware.
 
 \subsection{Software}
 \label{sec:software}
 During the selection of the language modeling library for use in this project, several considerations were made. Firstly, due to the huge size of the model, the library needed to support distributed GPU training. It had to be flexible and scalable, without sacrificing too much on speed. The transformers \cite{transformers} library by Hugging Face \cite{huggingface} fulfilled these conditions. The library provides flexible and easy-to-use solutions. It also supports integration with DeepSpeed \cite{deepspeed}, a deep learning optimization library by Microsoft \cite{microsoft} that makes distributed training and inference easy, efficient, and effective. The Hugging Face ecosystem also provides the Datasets and Tokenizers libraries, streamlining and significantly simplifying the use of large datasets.
-
-NLTK, extensive use of Pandas, as well as Pytorch, Numpy, and Matplotlib are used for data processing and visualization. For traching training experiments, WANDB is used.\todo{Fix}
 
 \paragraph{DeepSpeed}
 \label{par:deepspeed}
@@ -193,12 +194,11 @@ For training exceptionally large models, DeepSpeed also provides heterogeneous m
 \subsection{Hardware resources}
 \label{sec:hardware-resources}
 
-IDUN High Performance Computing Platforms \cite{epic}.
-IDUN full-fills the requirements defined in \cref{sec:requirements}.
-\todo{Describe more in detail}
+The High Performance Computing Platform IDUN \cite{epic} is used for a lot of the tasks in this thesis, especially for the training of the model. IDUN full-fills the requirements defined in \cref{sec:requirements}.
+
 \begin{figure}[htp]
     \centering
     \includegraphics[width=\textwidth]{figures/idun.jpeg}
-    \caption{Image of IDUN todo: add ref \url{https://www.hpc.ntnu.no/idun/}}
-    \label{fig:flowchart}
+    \caption{Image of IDUN \cite{idun2}}
+    \label{fig:idun}
 \end{figure}

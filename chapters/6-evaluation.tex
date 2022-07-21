@@ -11,9 +11,6 @@ This section evaluates the performance of the implementation developed for resea
 \subsection{Evaluation Method}
 \label{sec:rq1-evaluation-method}
 
-\todo{Fix!!!}
-Several options are available for tuning the code generation, including \textit{temperature}, \textit{stops}, and \textit{top p}.
-
 The evaluation strategy employed is to measure the similarity between generated code and original code. This evaluation strategy captures how such a system would perform in real life. The conceptual evaluation strategy consists of four steps:
 \begin{enumerate}
     \item Some code from a real \acrshort{sc} is extracted.
@@ -22,8 +19,61 @@ The evaluation strategy employed is to measure the similarity between generated 
     \item The generated output is then compared to the target value to calculate their similarities.
 \end{enumerate}
 
-\todo{Clear up}
-As RQ1 is concerned with the use of a comment-aided approach for generating code, all evaluation runs include the use of comments as the primary input. Hence, the split is done between a function and its comment. However, the amount of context (supporting code) is varied. First, an evaluation run is done in \cref{sec:rq1-comment-only} using the normal way of generating functions from comments, meaning only comments are used as input. \cref{sec:eval-rq1-comment-pluss-code-context} runs an evaluation utilizing all the available code context, the core of the comment-aided approach. Since the model is auto-regressive, a custom stopping strategy based on matching braces is implemented for generating well-formed functions.
+As RQ1 is concerned with the use of a comment-aided approach for generating code, all evaluation runs include the use of comments as the primary input. Hence, the split is done between a function and its comment. However, the amount of context (supporting code) is varied. \cref{lst:contract-parts} demonstrates how the different parts of a contract are used in the evaluation. Lines 1-11 are used as the code context, while lines 13-14 are the comment. The target code is in lines 15-20. All consecutive lines of code are discarded. In \cref{lst:contract-parts}, this would only be line 21. First, an evaluation run is done in \cref{sec:rq1-comment-only} using the normal way of generating functions from comments, meaning only comments are used as input. \cref{sec:eval-rq1-comment-pluss-code-context} runs an evaluation utilizing all the available code context, the core of the comment-aided approach. Since the model is auto-regressive, a custom stopping strategy based on matching braces is implemented for generating well-formed functions. Further, all code generations use the default \textit{temperature} of 1.
+
+\begin{lstlisting}[
+    caption={Different contract parts.},
+    label=lst:contract-parts,
+    language=Solidity,
+    belowskip=0pt,
+    escapechar=`]
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity >= 0.7.0;
+
+contract Coin {
+    // Sends an amount of newly created coins to an address
+    // Can only be called by the contract creator
+    function mint(address receiver, uint amount) public {
+        require(msg.sender == minter);
+        require(amount < 1e60);
+        balances[receiver] += amount;
+    }
+    
+\end{lstlisting}
+\begin{lstlisting}[
+    frame=bottomline,
+    firstnumber=13,
+    aboveskip=0pt,
+    language=Solidity,
+    escapechar=`
+    ]
+    // Sends an amount of existing coins
+    // from any caller to an address
+\end{lstlisting}
+\begin{lstlisting}[
+    frame=bottomline,
+    firstnumber=15,
+    aboveskip=0pt,
+    language=Solidity,
+    escapechar=`
+    ]
+    function send(address receiver, uint amount) public {
+        require(amount <= balances[msg.sender], "Insufficient balance.");
+        balances[msg.sender] -= amount;
+        balances[receiver] += amount;
+        emit Sent(msg.sender, receiver, amount);
+    }
+\end{lstlisting}
+\begin{lstlisting}[
+    frame=bottomline,
+    firstnumber=15,
+    aboveskip=0pt,
+    language=Solidity,
+    escapechar=`
+    ]
+}
+\end{lstlisting}
+
 
 %\begin{enumerate}
 %    \item Some code from a real \acrshort{sc} is extracted.
@@ -47,12 +97,11 @@ For comparing the generated code to the original code as described in \cref{sec:
 
 \subsection{Comment only evaluation}
 \label{sec:rq1-comment-only}
-\todo{Make figure}
 To provide some insights into how to best formulate the comments for the model, an evaluation run is done using only comments as input, without any supporting code context. First, the testing split of the Verified Smart Contract Code Comments dataset is filtered according to the four clusters identified in \cref{sec:comment-clustering}. From each of these clusters, a total of 10.000 random samples are drawn. However, only 4000 samples from cluster 3 (zero-indexed) were available in the testing split. From the samples, only the function comment is fed into the model as input. The function from the sample is then compared to the generated function by calculating the \gls{bleu} score. This evaluation procedure is done for both the pre-trained model and the fine-tuned model.
 
 \cref{fig:performance-comments} shows a density histogram of the \acrshort{bleu} score results of the evaluation. The left column of plots shows the \acrshort{bleu} score distribution of the pre-trained model, while the right column shows the \acrshort{bleu} score distribution of the fine-tuned model. The first row of plots shows the results from cluster 0, the second row from cluster 1, the third row from cluster 2, and the fourth row from cluster 3. Generating function code using only comments is an exceptionally hard task as the search area for a potential solution is extremely large. It is therefore expected to see a lot of \acrshort{bleu} scores of 0. Indeed, this is the case in all of the plots. However, from the plots, it is clear that the fine-tuned model performs significantly better than the pre-trained model, as the pre-trained model is almost not able to produce any scores above 0.025. The averaged \acrshort{bleu} scores of each cluster can be seen in \cref{tab:comments-bleu-score}.
 
-The performance for the fine-tuned model is ranked from worst to best as follows: cluster 1, cluster 0, cluster 3 and cluster 2. For the fine-tuned model, Cluster 0 and cluster 1 show similar distribution characteristics, with Cluster 1 performing a bit better. A large part of the comments in cluster 0 is devoted to function parameter descriptions (see \cref{lst:comment-cluster-0}). These parameter description results in about a 55\% increase of the \acrshort{bleu} score. However, both cluster 2 and cluster 3 significantly outperform cluster 0, as can be seen from \cref{tab:comments-bleu-score}. Cluster 2 is the best performing of all the clusters. As discovered in \cref{sec:comment-clustering}, this cluster contains a lot of library code implementations. Therefore, it is reasonable to assume that the model excels in generating code for the implementation of popular libraries, as it might have memorized parts of these libraries. Cluster 3 also performs rather well. However, it presents a rather interesting distribution with some large peaks to the far right. Upon manual inspection, this is clear that most of these spikes are part of a popular ERC20 \footnote{\url{https://eips.ethereum.org/EIPS/eip-20}} token implementation from an old tutorial \cite{moritz2017how} from 2017. This is also the case in the pre-training plot. As there are multiple forks of this code available on GitHub, it is most likely included in The Pile (see \cref{sec:the-pile}).
+The performance for the fine-tuned model is ranked from worst to best as follows: cluster 1, cluster 0, cluster 3 and cluster 2. For the fine-tuned model, Cluster 0 and cluster 1 show similar distribution characteristics, with Cluster 1 performing a bit better. A large part of the comments in cluster 0 is devoted to function parameter descriptions (see \cref{lst:comment-cluster-0}). These parameter description results in about a 55\% increase of the \acrshort{bleu} score. However, both cluster 2 and cluster 3 significantly outperform cluster 0, as can be seen from \cref{tab:comments-bleu-score}. Cluster 2 is the best performing of all the clusters. As discovered in \cref{sec:comment-clustering}, this cluster contains a lot of library code implementations. Therefore, it is reasonable to assume that the model excels in generating code for the implementation of popular libraries, as it might have memorized parts of these libraries. Cluster 3 also performs rather well. However, it presents a rather interesting distribution with some large peaks to the far right. Upon manual inspection, it is clear that most of these spikes are part of a popular ERC20 \footnote{\url{https://eips.ethereum.org/EIPS/eip-20}} token implementation from an old tutorial \cite{moritz2017how} from 2017. This is also the case for the pre-training plot. As there are multiple forks of this code available on GitHub, it is most likely included in The Pile (see \cref{sec:the-pile}).
 
 \begin{figure}[htp]
     \centering
@@ -128,9 +177,6 @@ The performance for the fine-tuned model is ranked from worst to best as follows
 \label{sec:eval-rq1-comment-pluss-code-context}
 Normally, during the inference of transformer models, the longer the input sequence (context) - the better the performance. For evaluating the "optimal-case" performance of the model, an evaluation run is done by providing extensive code context to the input. This is a typical use-case scenario of the system, where a user already has written some code and wants to extend it. The user can then simply write a new comment describing the desired new functionality, and then ask the model to suggest some automatically generated code, using everything the user has typed so far as input.
 
-\todo{Make figure  and reewrite a bit}
-\todo{Add figure of code context + comment + target function}
-
 A total of 10.000 random samples are drawn from the test split of the Verified Smart Contract Code Comments dataset. Each drawn sample contains function "code, comment" pairs, as well as the complete contract code from which the function was extracted. The original contract code is then cut at the end of the sampled function comment. This is then fed into the model as input to generate code, and the \gls{bleu} score is calculated by comparing the generated code against the actual function. This evaluation procedure is done for both the pre-trained model and the fine-tuned model. 
 
 \cref{fig:performance-code-context_pretrained,fig:performance-code-context_finetuned} shows a histogram of the \acrshort{bleu} score results of the evaluation. Comparing the two figures, it is clear that the fine-tuned model performs much better than the pre-trained model. The distribution of the \acrshort{bleu} scores of the pre-trined model (\cref{fig:performance-code-context_pretrained}) shows two interesting characteristics. First, almost half of the 10.000 samples achieve a \acrshort{bleu} score close to 0. This means that the generated output is completely different from the target code. Second, the rest of the histogram presents a rather uniform distribution of low \acrshort{bleu} scores. Hence, the pre-trained model does not perform well for generating \acrshortpl{sc}. The results from the fine-tuned model (\cref{fig:performance-code-context_finetuned}) are much better. The number of samples with a \acrshort{bleu} score close to 0 is more than half compared to the pre-trained model. The rest of the scores resemble a normal distribution skewed towards the far right, peaking around a score of 0.85. This is a very good sign that the fine-tuned model performs well. Averaging the \acrshort{bleu} scores for each of the two models, the pre-trained model achieves a score of 0.258, while the fine-tuned model achieves 0.557. This is over a 100\% improvement from the pre-trained model.
@@ -146,17 +192,11 @@ A total of 10.000 random samples are drawn from the test split of the Verified S
     \label{fig:performance-code-context_finetuned}
 \end{figure}
 
-
-\subsection{Transfer learning}
-Until now, the focus has been on Solidity. However, the training data also contains a very small amount of Vyper code. 
-\todo{example}
-
-
 %\subsection{Pre-trained model}
 %\label{sec:eval-pre-trained-model}
 %The pre-trained model is used to generate code for a smart contract. This shows wether such mudels are able to generate code for a smart contracts, even thoug they are trained on a very limited set of smart contract code. This serves to answer research  question 1.1. This also serves as the baseline for comparison in experiment E1.2
 %
-%Use the pre-trained GPT-J-6B model from ElutherAI, as described in \cref{sec:pretraining}.
+%Use the pre-trained GPT-J-6B model from EleutherAI, as described in \cref{sec:pretraining}.
 %
 %Report accuracy?
 %
@@ -165,9 +205,22 @@ Until now, the focus has been on Solidity. However, the training data also conta
 
 \section{Evaluation of RQ2}
 \label{sec:rq2-evaluation}
-For evaluating the implementation for research question 2, it is analyzed how secure the generated code is. This is done by comparing the security of a fine-tuned model with and without utilizing security conditioning purposed in \cref{sec:security-conditioning}. First, the method used for this evaluation is described in detail in \cref{sec:rq2-evaluation-method}. Then, the results are presented in \cref{sec:eval-rq2-comment-pluss-code-context,sec:eval-manual}.
+For evaluating the implementation for research question 2, it is analyzed how secure the generated code is. This is done by comparing the security of a fine-tuned model with and without utilizing security conditioning purposed in \cref{sec:security-conditioning}. However,  first an evaluation of potential performance degradation is done in \cref{sec:rq2-performance-degradation-evaluation}. Then the method used for the security evaluation is described in detail in \cref{sec:rq2-evaluation-method}. Finally, the results are presented in \cref{sec:eval-rq2-comment-pluss-code-context,sec:eval-manual}.
 
-\subsection{Evaluation method}
+
+\subsection{Performance degradation evaluation}
+\label{sec:rq2-performance-degradation-evaluation}
+For ensuring the security conditioning method does not affect the performance of the code generation, the same evaluation procedure as for the fine-tuned model in \cref{sec:eval-rq1-comment-pluss-code-context} is done. The "<|secure|>" label is prepended to the input, and fed to the model for code generation. The result can be seen in \cref{fig:performance-code-context_audit_secure}. Compared to \cref{fig:performance-code-context_finetuned}, there is no significant difference in the distribution of the \acrshort{bleu} score. Further, the average \acrshort{bleu} score is also very close to that of the pre-trained model, measuring 0.554 instead of 0.557. This is a negligible difference, meaning the security conditioning method does not degrade the model performance.
+
+\begin{figure}[htp]
+    \centering
+    \input{figures/evaluation/context_audit_secure_performance_histogram.pgf}
+    \caption{\acrshort{bleu} score frequency distribution of 10.000 generated functions with fine-tuned model with security conditioning using comment-aided approach.}
+    \label{fig:performance-code-context_audit_secure}
+\end{figure}
+
+
+\subsection{Security evaluation method}
 \label{sec:rq2-evaluation-method}
 For evaluating how secure the generated outputs are, this project use counting as the evaluation metric. The number of vulnerabilities introduced by the generated code is simply counted and compared to the number of vulnerabilities in the original code. The conceptual method builds upon the one used for evaluating RQ1 (see \cref{sec:rq1-evaluation-method}), and is as follows:
 %\begin{enumerate}
@@ -178,8 +231,7 @@ For evaluating how secure the generated outputs are, this project use counting a
 %    \item The two prepended code parts are fed into a vulnerability detection tool.
 %    \item The number of vulnerabilities from the two analyses are counted and compared.
 %\end{enumerate}
-\todo{Add figure of the method}
-Comment + code context is sampled from a contract. The code for the next function is then generated with both the fine-tuned model developed for RQ1 and the fine-tuned model with security conditioning developed for RQ2. Since security conditioning uses two labels "<|secure|>" and "<|vulnerable|>" for distinguishing secure and vulnerable code, the model should technically also be capable of generating vulnerable code. Hence, for evaluation, both configurations are tested. The model w/ security conditioning using "<|secure|>" will be addressed as the "secure" model, and the model w/o security conditioning using "<|vulnerable|>" will be addressed as the "vulnerable" model. The three results are then run through SoliDetector for vulnerability analysis, and the results are compared.
+Comment + code context is sampled from a contract. The code for the next function is then generated with both the fine-tuned model developed for RQ1 and the fine-tuned model with security conditioning developed for RQ2. Since security conditioning uses two labels "<|secure|>" and "<|vulnerable|>" for distinguishing secure and vulnerable code, the model should technically also be capable of generating vulnerable code. Hence, for evaluation, both configurations are tested. The model w/ security conditioning using "<|secure|>" will be addressed as the "secure" model, and the model w/o security conditioning using "<|vulnerable|>" will be addressed as the "vulnerable" model. The three results are then run through SolDetector \cite{soldetector} for vulnerability analysis, and the results are compared.
 
 \cref{sec:eval-rq2-comment-pluss-code-context} presents the evaluation results using the method above on real contracts from the test split of the Verified Smart Contract Code Comments dataset, using all available code context (supporting code). In addition, a manual evaluation is performed in \cref{sec:eval-manual}, using much of the same method as above to further validate the results.
 
@@ -195,21 +247,9 @@ Comment + code context is sampled from a contract. The code for the next functio
 %    \item The generated output is then compared to the target value, using the metrics defined in \cref{sec:rq1-evaluation-metrics}.
 %\end{enumerate}
 
-\subsection{Performance degradation evaluation}
-\label{sec:rq2-performance-degradation-evaluation}
-For ensuring the security conditioning method does not affect the performance of the code generation, the same evaluation procedure as for the fine-tuned model in \cref{sec:eval-rq1-comment-pluss-code-context} is done. The "<|secure|>" label is prepended to the input, and fed to the model for code generation. The result can be seen in \cref{fig:performance-code-context_audit_secure}. Compared to \cref{fig:performance-code-context_finetuned}, there is no significant difference in the distribution of the \acrshort{bleu} score. Further, the average \acrshort{bleu} score is also very close to that of the pre-trained model, measuring 0.554 instead of 0.557. This is a negligible difference, meaning the security conditioning method does not degrade the model performance.
-
-\begin{figure}[htp]
-    \centering
-    \input{figures/evaluation/context_audit_secure_performance_histogram.pgf}
-    \caption{\acrshort{bleu} score frequency distribution of 10.000 generated functions with fine-tuned model with security conditioning using comment-aided approach.}
-    \label{fig:performance-code-context_audit_secure}
-\end{figure}
-
 \subsection{Comment + code context evaluation}
 \label{sec:eval-rq2-comment-pluss-code-context}
-For evaluating the security conditioning method, a total of 10.000 random samples are drawn from the test split of the Verified Smart Contract Code Comments dataset. From each sample comment, all code "above" the comment is prepended to the comment and fed into the model. The generated output is then run through SoliDetector, in addition to the target code. \todo{add figure}. The number of vulnerabilities is then counted. This evaluation procedure is done for the fine-tuned model with and without security conditioning. Specifically, two runs are done for the model with security conditioning. One run using the "<|secure|>" label and one with the "<|vulnerable|>" label. The results are then compared. The model w/ security conditioning using "<|secure|>" will be addressed as the "secure" mode, and the model w/o security conditioning using "<|vulnerable|>" will be addressed as the "vulnerable" mode.
-
+For evaluating the security conditioning method, a total of 10.000 random samples are drawn from the test split of the Verified Smart Contract Code Comments dataset. The samples are then evaluated according to the method described in \cref{sec:rq2-evaluation-method}.
 \cref{fig:vulnerability-count} shows the number of vulnerabilities from the evaluation, grouped by vulnerability severity. As can be seen from the figure, the number of vulnerabilities is very high. Comparing the fine-tuned model with the secure model, one can see a tiny reduction of vulnerabilities using the model w/ security conditioning. Comparing the fine-tuned model with the vulnerable model, a tiny increase in the number of vulnerabilities can be seen. \cref{fig:vulnerability-count-diff} shows the difference in the number of vulnerabilities produced by the secure and vulnerable models, relative to those produced by the fine-tuned model. The secure model produces 13 fewer high-risk vulnerabilities than the fine-tuned model, while the vulnerable model produces 23 more. Compared to the actual count of vulnerabilities, the difference is not significant. However, as discovered in \cref{sec:verified-smart-contracts-audit}, almost 50\% of the contracts used for evaluation contain high-risk vulnerabilities. Depending on the amount of code context used as input for code generation, it may be hard for the model to avoid introducing vulnerabilities, as the code context is heavily biased. For example, the generated function might (have to) make use of a function that is vulnerable.
 
 Since the security conditioning model only labels high-risk vulnerabilities as vulnerable, it is not expected to see much difference in the number of vulnerabilities for medium- and low-risk vulnerabilities. However, as can be seen from \cref{fig:vulnerability-count-diff}, there are some differences here. Especially for medium-risk vulnerabilities, the vulnerable model produces 87 more vulnerabilities compared to the fine-tuned model. This might be due to the fact that many of the contracts with high-risk vulnerabilities also contain a lot of medium- and low-risk vulnerabilities, as can be seen in \cref{fig:inflated_security_levels}. 
@@ -324,11 +364,3 @@ Send calls do not revert if an exception occurs during the execution of the tran
        }
    }
 \end{lstlisting}
-
-
-\subsection{Model weigts}
-\todo{Add this if enough time}
-Can we find structures in the weights? Neural  view? bertviz? That resembles AST equivalent?
-Answers to research questions
-Evaluation of the answers
-Get logits from a model  prediction to visualize the distribution of the predicted probabilities.
