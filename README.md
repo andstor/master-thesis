@@ -1,4 +1,4 @@
-# Secure code synthesis
+# Secure Smart Contract Code Synthesis with Transformer Models
 
 ## Abstract
 
